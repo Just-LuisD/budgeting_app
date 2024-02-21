@@ -43,18 +43,19 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   void _addNewTransaction() {
-    showModalBottomSheet(
-      elevation: 0,
-      context: context,
-      builder: (context) => const AddTransactionScreen(),
-    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddTransactionScreen()),
+    ).then((value) => refreshTransactions());
   }
 
   void _editTransaction(FinancialTransaction tappedTransaction) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EditTransactionScreen(
-              transaction: tappedTransaction,
-            )));
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+            builder: (context) => EditTransactionScreen(
+                  transaction: tappedTransaction,
+                )))
+        .then((value) => refreshTransactions());
   }
 
   @override
