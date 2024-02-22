@@ -6,8 +6,11 @@ class AddTransactionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: TransactionForm(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Add Transaction"),
+      ),
+      body: const TransactionForm(),
     );
   }
 }

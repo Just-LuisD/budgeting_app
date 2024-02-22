@@ -11,12 +11,15 @@ class TransactionForm extends StatefulWidget {
   State<TransactionForm> createState() => _TransactionFormState();
 }
 
+enum TransactionType { expense, income }
+
 class _TransactionFormState extends State<TransactionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController transactionTitleController = TextEditingController();
   TextEditingController transactionCategoryController = TextEditingController();
   TextEditingController transactionAmountController = TextEditingController();
   DateTime transactionDate = DateTime.now();
+  TransactionType transactionType = TransactionType.expense;
 
   @override
   void initState() {
@@ -79,6 +82,27 @@ class _TransactionFormState extends State<TransactionForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          SegmentedButton(
+            showSelectedIcon: false,
+            segments: const [
+              ButtonSegment(
+                value: TransactionType.expense,
+                icon: Icon(Icons.arrow_drop_down),
+                label: Text("Expense"),
+              ),
+              ButtonSegment(
+                value: TransactionType.income,
+                icon: Icon(Icons.arrow_drop_up),
+                label: Text("Income"),
+              ),
+            ],
+            selected: <TransactionType>{transactionType},
+            onSelectionChanged: (Set<TransactionType> newSelection) {
+              setState(() {
+                transactionType = newSelection.first;
+              });
+            },
+          ),
           TextFormField(
             controller: transactionTitleController,
             decoration: const InputDecoration(
