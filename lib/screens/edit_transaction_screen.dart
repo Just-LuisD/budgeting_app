@@ -2,6 +2,7 @@ import 'package:budgeting_app/data/transaction_database.dart';
 import 'package:budgeting_app/models/transaction.dart';
 import 'package:budgeting_app/widgets/transaction_form.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EditTransactionScreen extends StatelessWidget {
   final FinancialTransaction transaction;
@@ -10,7 +11,7 @@ class EditTransactionScreen extends StatelessWidget {
     required this.transaction,
   });
 
-  void _deleteTransaction(ctx) {
+  void _deleteTransaction(BuildContext ctx) {
     showDialog(
         context: ctx,
         barrierDismissible: false,
@@ -27,9 +28,9 @@ class EditTransactionScreen extends StatelessWidget {
                 child: const Text("No"),
               ),
               TextButton(
-                onPressed: () {
-                  TransactionDatabase.instance.delete(transaction.id!);
-                  Navigator.of(context).pop();
+                onPressed: () async {
+                  await TransactionDatabase.instance.delete(transaction.id!);
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
                 child: const Text("Yes"),
               ),
