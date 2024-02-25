@@ -1,4 +1,5 @@
 import 'package:budgeting_app/screens/home_screen.dart';
+import 'package:budgeting_app/themes/app_input_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        inputDecorationTheme: AppInputTheme().theme(),
       ),
       routerConfig: _router,
     );

@@ -1,5 +1,9 @@
 import 'package:budgeting_app/data/transaction_database.dart';
 import 'package:budgeting_app/models/transaction.dart';
+import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
+import 'package:budgeting_app/widgets/transaction_form/category_field.dart';
+import 'package:budgeting_app/widgets/transaction_form/title_field.dart';
+import 'package:budgeting_app/widgets/transaction_form/type_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -11,15 +15,12 @@ class TransactionForm extends StatefulWidget {
   State<TransactionForm> createState() => _TransactionFormState();
 }
 
-enum TransactionType { expense, income }
-
 class _TransactionFormState extends State<TransactionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController transactionTitleController = TextEditingController();
   TextEditingController transactionCategoryController = TextEditingController();
   TextEditingController transactionAmountController = TextEditingController();
   DateTime transactionDate = DateTime.now();
-  TransactionType transactionType = TransactionType.expense;
 
   @override
   void initState() {
@@ -79,71 +80,13 @@ class _TransactionFormState extends State<TransactionForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SegmentedButton(
-            showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(
-                value: TransactionType.expense,
-                icon: Icon(Icons.arrow_drop_down),
-                label: Text("Expense"),
-              ),
-              ButtonSegment(
-                value: TransactionType.income,
-                icon: Icon(Icons.arrow_drop_up),
-                label: Text("Income"),
-              ),
-            ],
-            selected: <TransactionType>{transactionType},
-            onSelectionChanged: (Set<TransactionType> newSelection) {
-              setState(() {
-                transactionType = newSelection.first;
-              });
-            },
-          ),
-          TextFormField(
-            controller: transactionTitleController,
-            decoration: const InputDecoration(
-              labelText: 'Title',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Your transaction must have a title.';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: transactionCategoryController,
-            decoration: const InputDecoration(
-              labelText: 'Category',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Your transaction must have a category.';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            controller: transactionAmountController,
-            decoration: const InputDecoration(
-              labelText: 'Amount',
-              prefixText: '\$',
-            ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value == null ||
-                  value.isEmpty ||
-                  double.tryParse(value) == null ||
-                  double.tryParse(value)! <= 0) {
-                return 'Your transaction amount must be a positive value.';
-              }
-              return null;
-            },
-          ),
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: <Widget>[
+          const TypeToggle(),
+          TitleField(inputController: transactionTitleController),
+          CategoryField(inputController: transactionCategoryController),
+          AmountField(inputController: transactionAmountController),
           Row(
             children: [
               Text('Date: ${DateFormat.yMMMd().format(transactionDate)}'),
@@ -153,6 +96,12 @@ class _TransactionFormState extends State<TransactionForm> {
               )
             ],
           ),
+          TextFormField(
+            maxLines: 8,
+            decoration: const InputDecoration(
+              label: Text("Notes"),
+            ),
+          ),
           ElevatedButton(
             onPressed: widget.transaction == null
                 ? _submitTransaction
@@ -161,7 +110,15 @@ class _TransactionFormState extends State<TransactionForm> {
                 ? 'Add Transaction'
                 : "Update Transaction"),
           ),
-        ],
+        ]
+            .map((child) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 4,
+                  ),
+                  child: child,
+                ))
+            .toList(),
       ),
     );
   }

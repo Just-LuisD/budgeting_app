@@ -1,6 +1,6 @@
 import 'package:budgeting_app/data/transaction_database.dart';
 import 'package:budgeting_app/models/transaction.dart';
-import 'package:budgeting_app/widgets/transaction_form.dart';
+import 'package:budgeting_app/widgets/transaction_form/transaction_form.dart';
 import 'package:flutter/material.dart';
 
 class EditTransactionScreen extends StatelessWidget {

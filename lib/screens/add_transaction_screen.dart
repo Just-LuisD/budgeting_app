@@ -1,4 +1,4 @@
-import 'package:budgeting_app/widgets/transaction_form.dart';
+import 'package:budgeting_app/widgets/transaction_form/transaction_form.dart';
 import 'package:flutter/material.dart';
 
 class AddTransactionScreen extends StatelessWidget {
