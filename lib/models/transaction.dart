@@ -1,5 +1,7 @@
 const String transactionsTable = 'transactions';
 
+enum TransactionType { expense, income }
+
 // fields for the sqlite database
 class TransactionField {
   static final List<String> colums = [
