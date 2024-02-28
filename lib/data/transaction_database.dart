@@ -33,13 +33,17 @@ class TransactionDatabase {
     const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const doubleType = 'REAL NOT NULL';
     const stringType = 'TEXT NOT NULL';
+    // TODO: Add rules to enforce only 0 or 1
+    const boolType = "INTEGER NOT NULL";
     await db.execute('''
     CREATE TABLE $transactionsTable (
       ${TransactionField.id} $idType,
+      ${TransactionField.isIncome} $boolType,
       ${TransactionField.title} $stringType,
       ${TransactionField.category} $stringType,
       ${TransactionField.amount} $doubleType,
-      ${TransactionField.date} $stringType
+      ${TransactionField.date} $stringType,
+      ${TransactionField.notes} $stringType
     )
     ''');
   }

@@ -2,6 +2,7 @@ import 'package:budgeting_app/data/transaction_database.dart';
 import 'package:budgeting_app/models/transaction.dart';
 import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/category_field.dart';
+import 'package:budgeting_app/widgets/transaction_form/notes_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/title_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/type_toggle.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +18,25 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TransactionType transactionType = TransactionType.expense;
   TextEditingController transactionTitleController = TextEditingController();
   TextEditingController transactionCategoryController = TextEditingController();
   TextEditingController transactionAmountController = TextEditingController();
   DateTime transactionDate = DateTime.now();
+  TextEditingController transactionNotesController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (widget.transaction != null) {
+      transactionType = widget.transaction!.isIncome
+          ? TransactionType.income
+          : TransactionType.expense;
       transactionTitleController.text = widget.transaction!.title;
       transactionCategoryController.text = widget.transaction!.category;
       transactionAmountController.text = widget.transaction!.amount.toString();
       transactionDate = widget.transaction!.date!;
+      transactionNotesController.text = widget.transaction!.notes ?? "";
     }
   }
 
@@ -55,10 +62,12 @@ class _TransactionFormState extends State<TransactionForm> {
     await TransactionDatabase.instance
         .create(
           FinancialTransaction(
+            isIncome: transactionType == TransactionType.income,
             title: transactionTitleController.text,
             category: transactionCategoryController.text,
             amount: double.parse(transactionAmountController.text),
             date: transactionDate,
+            notes: transactionNotesController.text,
           ),
         )
         .then((value) => Navigator.of(context).pop());
@@ -68,12 +77,20 @@ class _TransactionFormState extends State<TransactionForm> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    widget.transaction!.isIncome = transactionType == TransactionType.income;
     widget.transaction!.title = transactionTitleController.text;
     widget.transaction!.category = transactionCategoryController.text;
     widget.transaction!.amount = double.parse(transactionAmountController.text);
     widget.transaction!.date = transactionDate;
+    widget.transaction!.notes = transactionNotesController.text;
     TransactionDatabase.instance.update(widget.transaction!);
     Navigator.of(context).pop();
+  }
+
+  void onTypeToggle(TransactionType newType) {
+    setState(() {
+      transactionType = newType;
+    });
   }
 
   @override
@@ -83,7 +100,10 @@ class _TransactionFormState extends State<TransactionForm> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
-          const TypeToggle(),
+          TypeToggle(
+            active: transactionType,
+            onClick: onTypeToggle,
+          ),
           TitleField(inputController: transactionTitleController),
           CategoryField(inputController: transactionCategoryController),
           AmountField(inputController: transactionAmountController),
@@ -96,12 +116,7 @@ class _TransactionFormState extends State<TransactionForm> {
               )
             ],
           ),
-          TextFormField(
-            maxLines: 8,
-            decoration: const InputDecoration(
-              label: Text("Notes"),
-            ),
-          ),
+          NotesField(inputController: transactionNotesController),
           ElevatedButton(
             onPressed: widget.transaction == null
                 ? _submitTransaction

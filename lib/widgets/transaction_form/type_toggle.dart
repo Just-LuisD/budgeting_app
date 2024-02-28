@@ -1,16 +1,14 @@
+import 'package:budgeting_app/models/transaction.dart';
 import 'package:flutter/material.dart';
 
-class TypeToggle extends StatefulWidget {
-  const TypeToggle({super.key});
-
-  @override
-  State<TypeToggle> createState() => _TypeToggleState();
-}
-
-enum TransactionType { expense, income }
-
-class _TypeToggleState extends State<TypeToggle> {
-  TransactionType transactionType = TransactionType.expense;
+class TypeToggle extends StatelessWidget {
+  final TransactionType active;
+  final Function onClick;
+  const TypeToggle({
+    super.key,
+    required this.active,
+    required this.onClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +26,9 @@ class _TypeToggleState extends State<TypeToggle> {
           label: Text("Income"),
         ),
       ],
-      selected: <TransactionType>{transactionType},
+      selected: <TransactionType>{active},
       onSelectionChanged: (Set<TransactionType> newSelection) {
-        setState(() {
-          transactionType = newSelection.first;
-        });
+        onClick(newSelection.first);
       },
     );
   }
