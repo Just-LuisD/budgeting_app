@@ -1,3 +1,4 @@
+import 'package:budgeting_app/screens/budget_screen.dart';
 import 'package:budgeting_app/screens/transactions_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         scaffoldBody = const TransactionsScreen();
       case 2:
-        scaffoldBody = const Text("Create Budget Place Holder");
+        scaffoldBody = const BudgetScreen();
       default:
         scaffoldBody = const Text("Homescreen place holder");
     }
