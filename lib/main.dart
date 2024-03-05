@@ -1,4 +1,5 @@
 import 'package:budgeting_app/screens/home_screen.dart';
+import 'package:budgeting_app/screens/onboarding_screen.dart';
 import 'package:budgeting_app/themes/app_input_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,9 +7,13 @@ import 'package:go_router/go_router.dart';
 // GoRouter configuration
 final _router = GoRouter(
   routes: [
+    // GoRoute(
+    //   path: '/',
+    //   builder: (context, state) => const HomeScreen(),
+    // ),
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) => const OnboardingScreen(),
     ),
   ],
 );

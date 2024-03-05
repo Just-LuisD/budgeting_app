@@ -1,5 +1,5 @@
 import 'package:budgeting_app/models/budget.dart';
-import 'package:budgeting_app/widgets/budget_creation/start_budget.dart';
+import 'package:budgeting_app/widgets/onboarding/first_page.dart';
 import 'package:flutter/material.dart';
 
 class BudgetScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
   @override
   Widget build(BuildContext context) {
     if (budgetTemplates.isEmpty) {
-      content = const StartBudget();
+      content = const FirstPage();
     }
     return content;
   }
