@@ -6,16 +6,17 @@ class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.lightGreen,
+        color: Color.fromARGB(229, 245, 248, 255),
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
-              "Give you budget a name",
+              "First let's give you budget a name",
             ),
             TextField()
           ],

@@ -6,7 +6,7 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.lightGreen,
+        color: Color.fromARGB(255, 247, 239, 229),
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -15,7 +15,7 @@ class FirstPage extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
-              "Welcome to [Insert Name]",
+              "Welcome to Zen",
             ),
             Text(
                 textAlign: TextAlign.center,
