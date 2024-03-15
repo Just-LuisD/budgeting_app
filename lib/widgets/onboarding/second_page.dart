@@ -1,3 +1,4 @@
+import 'package:budgeting_app/widgets/budget_card.dart';
 import 'package:flutter/material.dart';
 
 class SecondPage extends StatelessWidget {
@@ -6,19 +7,27 @@ class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Color.fromARGB(229, 245, 248, 255),
-        child: const Column(
+        color: const Color.fromARGB(255, 247, 239, 229),
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                "You can select one of our templates to get started or build your own from scratch",
               ),
-              "First let's give you budget a name",
             ),
-            TextField()
+            BudgetCard(
+              type: BudgetTemplateType.eightyTwenty,
+            ),
+            BudgetCard(
+              type: BudgetTemplateType.fiftyThirtyTwenty,
+            ),
+            BudgetCard(
+              type: BudgetTemplateType.custom,
+            ),
           ],
         ));
   }
