@@ -1,10 +1,15 @@
 import 'package:budgeting_app/models/transaction.dart';
 
 class BudgetTemplate {
+  late String name;
+  late double monthlyIncome;
   late Map<String, double> categoryLimits;
   Map<String, List<String>>? superCategories;
 
-  BudgetTemplate({Map<String, double>? initialLimits}) {
+  BudgetTemplate(
+      {required this.name,
+      required this.monthlyIncome,
+      Map<String, double>? initialLimits}) {
     categoryLimits = initialLimits ?? <String, double>{};
   }
 
