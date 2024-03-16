@@ -1,5 +1,6 @@
 import 'package:budgeting_app/widgets/budget_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SecondPage extends StatelessWidget {
   const SecondPage({super.key});
@@ -19,14 +20,23 @@ class SecondPage extends StatelessWidget {
                 "You can select one of our templates to get started or build your own from scratch",
               ),
             ),
-            BudgetCard(
-              type: BudgetTemplateType.eightyTwenty,
+            GestureDetector(
+              onTap: () => context.go('/create-budget'),
+              child: BudgetCard(
+                type: BudgetTemplateType.eightyTwenty,
+              ),
             ),
-            BudgetCard(
-              type: BudgetTemplateType.fiftyThirtyTwenty,
+            GestureDetector(
+              onTap: () => context.go('/create-budget'),
+              child: BudgetCard(
+                type: BudgetTemplateType.fiftyThirtyTwenty,
+              ),
             ),
-            BudgetCard(
-              type: BudgetTemplateType.custom,
+            GestureDetector(
+              onTap: () => context.go('/create-budget'),
+              child: BudgetCard(
+                type: BudgetTemplateType.custom,
+              ),
             ),
           ],
         ));

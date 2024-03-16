@@ -1,3 +1,4 @@
+import 'package:budgeting_app/screens/create_budget_screen.dart';
 import 'package:budgeting_app/screens/home_screen.dart';
 import 'package:budgeting_app/screens/onboarding_screen.dart';
 import 'package:budgeting_app/themes/app_input_theme.dart';
@@ -15,6 +16,10 @@ final _router = GoRouter(
       path: '/',
       builder: (context, state) => const OnboardingScreen(),
     ),
+    GoRoute(
+      path: '/create-budget',
+      builder: (context, state) => const CreateBudgetScreen(),
+    )
   ],
 );
 
