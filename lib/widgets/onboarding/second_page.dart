@@ -21,19 +21,19 @@ class SecondPage extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => context.go('/create-budget'),
+              onTap: () => context.go('/create-budget/80-20'),
               child: BudgetCard(
                 type: BudgetTemplateType.eightyTwenty,
               ),
             ),
             GestureDetector(
-              onTap: () => context.go('/create-budget'),
+              onTap: () => context.go('/create-budget/50-30-20'),
               child: BudgetCard(
                 type: BudgetTemplateType.fiftyThirtyTwenty,
               ),
             ),
             GestureDetector(
-              onTap: () => context.go('/create-budget'),
+              onTap: () => context.go('/create-budget/custom'),
               child: BudgetCard(
                 type: BudgetTemplateType.custom,
               ),

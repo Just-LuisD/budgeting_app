@@ -17,8 +17,11 @@ final _router = GoRouter(
       builder: (context, state) => const OnboardingScreen(),
     ),
     GoRoute(
-      path: '/create-budget',
-      builder: (context, state) => const CreateBudgetScreen(),
+      path: '/create-budget/:template',
+      builder: (context, state) {
+        var template = state.pathParameters['template']!;
+        return CreateBudgetScreen(template: template);
+      },
     )
   ],
 );
