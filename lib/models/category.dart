@@ -121,4 +121,9 @@ const defaultCategories = [
     image: "assets/categories/toilet.png",
     isIncome: false,
   ),
+  Category(
+    name: "Taxes",
+    image: "assets/categories/ballot-box-with-ballot.png",
+    isIncome: false,
+  ),
 ];
