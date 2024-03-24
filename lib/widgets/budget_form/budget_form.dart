@@ -44,16 +44,57 @@ class _BudgetFormState extends State<BudgetForm> {
     });
   }
 
+  void onEditCategory(
+    Category category,
+    double amount,
+    bool isPercent,
+    Key replaceKey,
+  ) {
+    double itemAmount;
+    double income = double.tryParse(incomeInputController.text) ?? 0;
+    if (isPercent) {
+      itemAmount = (amount / 100) * income;
+    } else {
+      itemAmount = amount;
+    }
+
+    var key = UniqueKey();
+    BudgetItem newItem = BudgetItem(
+      key: key,
+      category: category,
+      amount: itemAmount,
+      onEdit: (Category c, double d) => {
+        showBudgetItemForm(
+          editCategory: c,
+          editAmount: d,
+          itemKey: key,
+        ),
+      },
+    );
+
+    setState(() {
+      var index =
+          budgetItems.indexWhere((element) => element.key == replaceKey);
+      var updatedList = [...budgetItems];
+      updatedList[index] = newItem;
+      budgetItems = updatedList;
+    });
+  }
+
   void showBudgetItemForm({
     Category? editCategory,
     double? editAmount,
     Key? itemKey,
   }) {
     var deleteFunction;
+    var editFunction;
     if (itemKey != null) {
       deleteFunction = () => {deleteCategory(itemKey)};
+      editFunction =
+          (Category c, double d, bool b) => {onEditCategory(c, d, b, itemKey)};
     } else {
       deleteFunction = null;
+      editFunction = null;
     }
 
     showModalBottomSheet(
@@ -61,6 +102,7 @@ class _BudgetFormState extends State<BudgetForm> {
       builder: (context) => AddBudgetItemScreen(
         onDelete: deleteFunction,
         onAdd: addBudgetItem,
+        onEdit: editFunction,
         initialCategory: editCategory,
         initialAmount: editAmount,
       ),

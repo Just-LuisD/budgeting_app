@@ -6,12 +6,14 @@ import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
 class AddBudgetItemScreen extends StatefulWidget {
   final Function(Category, double, bool) onAdd;
   final void Function()? onDelete;
+  final void Function(Category, double, bool)? onEdit;
   final Category? initialCategory;
   final double? initialAmount;
   const AddBudgetItemScreen({
     super.key,
     required this.onAdd,
-    required this.onDelete,
+    this.onDelete,
+    this.onEdit,
     this.initialCategory,
     this.initialAmount,
   });
@@ -49,6 +51,29 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
 
   void handleOnDelete() {
     widget.onDelete!();
+    Navigator.of(context).pop();
+  }
+
+  void handleOnEdit() {
+    if (selectedCategy == null && widget.initialCategory == null) {
+      // TODO: show modal
+      return;
+    }
+    // TODO: add check for balid ammount
+    double? selectedAmount = double.tryParse(amoutPrecentController.text);
+    if (selectedAmount == null ||
+        selectedAmount <= 0 ||
+        (selectedAmount > 100 && percent)) {
+      // TODO: show modal
+      return;
+    }
+
+    var editedCategory = selectedCategy ?? widget.initialCategory;
+    widget.onEdit!(
+      editedCategory!,
+      selectedAmount,
+      percent,
+    );
     Navigator.of(context).pop();
   }
 
@@ -158,8 +183,9 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: handleOnAdd,
-                child: Text('Add'),
+                onPressed: widget.onEdit == null ? handleOnAdd : handleOnEdit,
+                child:
+                    widget.onEdit == null ? Text('Add') : Text("Save Changes"),
               ),
             ),
           ),
