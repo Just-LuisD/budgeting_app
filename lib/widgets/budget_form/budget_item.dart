@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class BudgetItem extends StatelessWidget {
   final Category category;
   final double amount;
+  final Function(Category, double) onEdit;
   const BudgetItem({
     super.key,
     required this.category,
     required this.amount,
+    required this.onEdit,
   });
 
   @override
@@ -23,7 +25,10 @@ class BudgetItem extends StatelessWidget {
         ),
         title: Text(category.name),
         subtitle: Text("\$$amount"),
-        trailing: Icon(Icons.edit),
+        trailing: IconButton(
+          onPressed: () => {onEdit(category, amount)},
+          icon: Icon(Icons.edit),
+        ),
       ),
     );
   }

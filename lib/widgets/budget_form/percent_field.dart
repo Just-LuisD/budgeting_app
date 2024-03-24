@@ -23,8 +23,9 @@ class PercentField extends StatelessWidget {
         if (value == null ||
             value.isEmpty ||
             double.tryParse(value) == null ||
-            double.tryParse(value)! <= 0) {
-          return 'Your transaction amount must be a positive value.';
+            double.tryParse(value)! <= 0 ||
+            double.tryParse(value)! > 100) {
+          return 'Invalid Percentage';
         }
         return null;
       },

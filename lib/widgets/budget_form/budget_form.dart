@@ -29,10 +29,7 @@ class _BudgetFormState extends State<BudgetForm> {
       ..addListener(() {
         setState(() {});
       });
-    budgetItems = [
-      BudgetItem(category: defaultCategories[0], amount: 1000),
-      BudgetItem(category: defaultCategories[1], amount: 50),
-    ];
+    budgetItems = [];
   }
 
   void toggleCategories() {
@@ -41,12 +38,61 @@ class _BudgetFormState extends State<BudgetForm> {
     });
   }
 
-  void addCategory() {
-    showModalBottomSheet(
-        context: context, builder: (context) => AddBudgetItemScreen());
+  void deleteCategory(Key key) {
+    setState(() {
+      budgetItems = budgetItems.where((element) => element.key != key).toList();
+    });
   }
 
-  void deleteCategory(Key key) {}
+  void showBudgetItemForm({
+    Category? editCategory,
+    double? editAmount,
+    Key? itemKey,
+  }) {
+    var deleteFunction;
+    if (itemKey != null) {
+      deleteFunction = () => {deleteCategory(itemKey)};
+    } else {
+      deleteFunction = null;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => AddBudgetItemScreen(
+        onDelete: deleteFunction,
+        onAdd: addBudgetItem,
+        initialCategory: editCategory,
+        initialAmount: editAmount,
+      ),
+    );
+  }
+
+  void addBudgetItem(Category category, double amount, bool isPercent) {
+    double itemAmount;
+    double income = double.tryParse(incomeInputController.text) ?? 0;
+    if (isPercent) {
+      itemAmount = (amount / 100) * income;
+    } else {
+      itemAmount = amount;
+    }
+
+    var key = UniqueKey();
+    BudgetItem newItem = BudgetItem(
+      key: key,
+      category: category,
+      amount: itemAmount,
+      onEdit: (Category c, double d) => {
+        showBudgetItemForm(
+          editCategory: c,
+          editAmount: d,
+          itemKey: key,
+        ),
+      },
+    );
+    setState(() {
+      budgetItems = [newItem, ...budgetItems];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +167,7 @@ class _BudgetFormState extends State<BudgetForm> {
                   Spacer(),
                   IconButton(
                     alignment: AlignmentDirectional.centerEnd,
-                    onPressed: addCategory,
+                    onPressed: showBudgetItemForm,
                     icon: Icon(Icons.add),
                   ),
                 ],
