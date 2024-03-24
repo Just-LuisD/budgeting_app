@@ -42,8 +42,8 @@ class _BudgetFormState extends State<BudgetForm> {
   }
 
   void addCategory() {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: ((context) => (AddBudgetItemScreen()))));
+    showModalBottomSheet(
+        context: context, builder: (context) => AddBudgetItemScreen());
   }
 
   void deleteCategory(Key key) {}

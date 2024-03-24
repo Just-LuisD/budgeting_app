@@ -41,50 +41,71 @@ class _CategoryInputFieldState extends State<CategoryInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: percent
-                  ? PercentField(
-                      inputController: TextEditingController(),
-                      label: "Percentage",
-                    )
-                  : AmountField(
-                      inputController: TextEditingController(),
-                      label: "Amount",
-                    ),
-            ),
-            SegmentedButton(
-              showSelectedIcon: false,
-              segments: [
-                ButtonSegment(
-                  value: "\$",
-                  icon: Text("\$"),
-                ),
-                ButtonSegment(
-                  value: "%",
-                  icon: Text("%"),
-                ),
-              ],
-              selected: percent ? {"%"} : {"\$"},
-              onSelectionChanged: (newSelection) {
-                setState(() {
-                  percent = newSelection.first == "%";
-                });
-              },
-            ),
-          ],
-        ),
-        DropdownMenu(
-          hintText: "Select Category",
-          width: 200,
-          dropdownMenuEntries: menuItems,
-          onSelected: (value) => setState(
-            () {
-              selectedCategy = value!;
+        Container(
+          padding: EdgeInsets.all(8),
+          width: double.infinity,
+          height: 60,
+          child: SegmentedButton(
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(
+                value: "\$",
+                icon: Text("\$"),
+              ),
+              ButtonSegment(
+                value: "%",
+                icon: Text("%"),
+              ),
+            ],
+            selected: percent ? {"%"} : {"\$"},
+            onSelectionChanged: (newSelection) {
+              setState(() {
+                percent = newSelection.first == "%";
+              });
             },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              DropdownMenu(
+                hintText: "Select Category",
+                width: 220,
+                dropdownMenuEntries: menuItems,
+                onSelected: (value) => setState(
+                  () {
+                    selectedCategy = value!;
+                  },
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: percent
+                    ? PercentField(
+                        inputController: TextEditingController(),
+                        label: "Percentage",
+                      )
+                    : AmountField(
+                        inputController: TextEditingController(),
+                        label: "Amount",
+                      ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => {},
+              child: Text('Add'),
+            ),
           ),
         ),
       ],
