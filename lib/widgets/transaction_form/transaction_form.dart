@@ -106,7 +106,10 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           TitleField(inputController: transactionTitleController),
           CategoryField(inputController: transactionCategoryController),
-          AmountField(inputController: transactionAmountController),
+          AmountField(
+            label: "Amount",
+            inputController: transactionAmountController,
+          ),
           Row(
             children: [
               Text('Date: ${DateFormat.yMMMd().format(transactionDate)}'),

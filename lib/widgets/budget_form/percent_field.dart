@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AmountField extends StatelessWidget {
+class PercentField extends StatelessWidget {
   final TextEditingController inputController;
   final String label;
-  const AmountField({
+  const PercentField({
     super.key,
     required this.inputController,
     required this.label,
@@ -13,9 +13,10 @@ class AmountField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: inputController,
+      textAlign: TextAlign.end,
       decoration: InputDecoration(
         labelText: label,
-        prefixText: '\$',
+        suffixText: "%",
       ),
       keyboardType: TextInputType.number,
       validator: (value) {

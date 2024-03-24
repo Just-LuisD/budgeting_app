@@ -10,7 +10,7 @@ class FiftyThrityTwentyPiechart extends StatelessWidget {
       PieChartSectionData(
         radius: 35,
         color: Color.fromARGB(255, 203, 255, 119),
-        value: 50,
+        value: 20,
         showTitle: false,
       ),
       PieChartSectionData(
@@ -21,26 +21,8 @@ class FiftyThrityTwentyPiechart extends StatelessWidget {
       ),
       PieChartSectionData(
         radius: 35,
-        color: Color.fromARGB(255, 255, 119, 207),
-        value: 20,
-        showTitle: false,
-      ),
-      PieChartSectionData(
-        radius: 35,
-        color: Color.fromARGB(255, 255, 210, 119),
-        value: 20,
-        showTitle: false,
-      ),
-      PieChartSectionData(
-        radius: 35,
-        color: Color.fromARGB(255, 128, 119, 255),
-        value: 25,
-        showTitle: false,
-      ),
-      PieChartSectionData(
-        radius: 35,
         color: Color.fromARGB(255, 255, 119, 119),
-        value: 70,
+        value: 50,
         showTitle: false,
       ),
     ]));
