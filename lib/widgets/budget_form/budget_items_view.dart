@@ -22,18 +22,18 @@ class BudgetItemsView extends StatelessWidget {
           children: [
             IconButton(
               onPressed: toggleCategories,
-              icon: Icon(Icons.arrow_drop_down),
+              icon: const Icon(Icons.arrow_drop_down),
             ),
             const Spacer(),
             IconButton(
               alignment: AlignmentDirectional.centerEnd,
               onPressed: showBudgetItemForm,
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
             ),
           ],
         ),
         SizedBox(
-          height: 225,
+          height: 280,
           child: Center(
             child: ListView(
               children: [

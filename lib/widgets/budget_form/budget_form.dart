@@ -162,60 +162,65 @@ class _BudgetFormState extends State<BudgetForm> {
   Widget build(BuildContext context) {
     double? income = double.tryParse(incomeInputController.text);
     return Form(
-        child: ListView(
-      children: <Widget>[
-        Row(
-          children: [
-            Expanded(
-              child: AmountField(
-                label: "Income",
-                inputController: incomeInputController,
-              ),
-            ),
-            SegmentedButton(
-              showSelectedIcon: false,
-              segments: [
-                ButtonSegment(
-                  label: Text("Net"),
-                  value: IncomeType.netIncome,
+      child: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AmountField(
+                    label: "Income",
+                    inputController: incomeInputController,
+                  ),
                 ),
-                ButtonSegment(
-                  label: Text("Gross"),
-                  value: IncomeType.grossIncome,
+                SegmentedButton(
+                  showSelectedIcon: false,
+                  segments: const [
+                    ButtonSegment(
+                      label: Text("Net"),
+                      value: IncomeType.netIncome,
+                    ),
+                    ButtonSegment(
+                      label: Text("Gross"),
+                      value: IncomeType.grossIncome,
+                    ),
+                  ],
+                  selected: {selectedIncomeType},
+                  onSelectionChanged: (Set<IncomeType> newSelection) {
+                    setState(() {
+                      selectedIncomeType = newSelection.first;
+                    });
+                  },
                 ),
               ],
-              selected: {selectedIncomeType},
-              onSelectionChanged: (Set<IncomeType> newSelection) {
-                setState(() {
-                  selectedIncomeType = newSelection.first;
-                });
-              },
             ),
-          ],
-        ),
-        SizedBox(
-          height: 175,
-          child: BudgetCreationPiechart(
-            income: income,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 24),
+            child: SizedBox(
+              height: 150,
+              child: BudgetCreationPiechart(
+                income: income,
+                budgetItems: budgetItems,
+              ),
+            ),
+          ),
+          BudgetItemsView(
+            toggleCategories: toggleCategories,
+            showBudgetItemForm: showBudgetItemForm,
+            showCategories: showCategories,
             budgetItems: budgetItems,
           ),
-        ),
-        BudgetItemsView(
-          toggleCategories: toggleCategories,
-          showBudgetItemForm: showBudgetItemForm,
-          showCategories: showCategories,
-          budgetItems: budgetItems,
-        ),
-        ElevatedButton(
-          onPressed: null,
-          child: Text("Submit"),
-        ),
-      ]
-          .map((child) => Padding(
-                padding: EdgeInsets.all(10),
-                child: child,
-              ))
-          .toList(),
-    ));
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: null,
+              child: Text("Submit"),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
