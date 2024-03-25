@@ -35,10 +35,10 @@ class BudgetCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: Card(
-        surfaceTintColor: Color.fromARGB(110, 255, 254, 254),
+        surfaceTintColor: const Color.fromARGB(110, 255, 254, 254),
         elevation: 8,
-        color: Color.fromARGB(255, 210, 185, 224),
-        child: Container(
+        color: const Color.fromARGB(255, 210, 185, 224),
+        child: SizedBox(
           width: 300,
           height: 100,
           child: Row(
@@ -48,10 +48,10 @@ class BudgetCard extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Text(title),
               ),
-              Spacer(),
+              const Spacer(),
               Container(
-                padding: EdgeInsets.only(right: 16),
-                constraints: BoxConstraints.tight(Size(100, 100)),
+                padding: const EdgeInsets.only(right: 16),
+                constraints: BoxConstraints.tight(const Size(100, 100)),
                 child: icon,
               ),
             ],

@@ -1,4 +1,4 @@
-import 'package:budgeting_app/widgets/budget_card.dart';
+import 'package:budgeting_app/widgets/onboarding/budget_card.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,8 +12,8 @@ class SecondPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -22,19 +22,19 @@ class SecondPage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () => context.go('/create-budget/80-20'),
-              child: BudgetCard(
+              child: const BudgetCard(
                 type: BudgetTemplateType.eightyTwenty,
               ),
             ),
             GestureDetector(
               onTap: () => context.go('/create-budget/50-30-20'),
-              child: BudgetCard(
+              child: const BudgetCard(
                 type: BudgetTemplateType.fiftyThirtyTwenty,
               ),
             ),
             GestureDetector(
               onTap: () => context.go('/create-budget/custom'),
-              child: BudgetCard(
+              child: const BudgetCard(
                 type: BudgetTemplateType.custom,
               ),
             ),

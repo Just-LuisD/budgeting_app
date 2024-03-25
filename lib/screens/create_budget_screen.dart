@@ -14,7 +14,7 @@ class CreateBudgetScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(template),
       ),
-      body: BudgetForm(),
+      body: const BudgetForm(),
     );
   }
 }

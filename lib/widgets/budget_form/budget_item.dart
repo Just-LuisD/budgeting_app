@@ -27,7 +27,7 @@ class BudgetItem extends StatelessWidget {
         subtitle: Text("\$$amount"),
         trailing: IconButton(
           onPressed: () => {onEdit(category, amount)},
-          icon: Icon(Icons.edit),
+          icon: const Icon(Icons.edit),
         ),
       ),
     );

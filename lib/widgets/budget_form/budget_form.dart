@@ -1,7 +1,8 @@
 import 'package:budgeting_app/models/category.dart';
 import 'package:budgeting_app/screens/add_budget_item_screen.dart';
 import 'package:budgeting_app/widgets/budget_form/budget_item.dart';
-import 'package:budgeting_app/widgets/piecharts/budget_creation_piechart.dart';
+import 'package:budgeting_app/widgets/budget_form/budget_creation_piechart.dart';
+import 'package:budgeting_app/widgets/budget_form/budget_items_view.dart';
 import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
 import 'package:flutter/material.dart';
 
@@ -199,36 +200,11 @@ class _BudgetFormState extends State<BudgetForm> {
             budgetItems: budgetItems,
           ),
         ),
-        Row(
-          children: [
-            IconButton(
-              onPressed: toggleCategories,
-              icon: Icon(Icons.arrow_drop_down),
-            ),
-            Spacer(),
-            IconButton(
-              alignment: AlignmentDirectional.centerEnd,
-              onPressed: showBudgetItemForm,
-              icon: Icon(Icons.add),
-            ),
-          ],
-        ),
-        Container(
-          height: 200,
-          child: Center(
-            child: ListView(
-              children: [
-                if (showCategories)
-                  if (budgetItems.isNotEmpty)
-                    ...(budgetItems)
-                  else
-                    Text(
-                      "No Budget Items Found",
-                      textAlign: TextAlign.center,
-                    ),
-              ],
-            ),
-          ),
+        BudgetItemsView(
+          toggleCategories: toggleCategories,
+          showBudgetItemForm: showBudgetItemForm,
+          showCategories: showCategories,
+          budgetItems: budgetItems,
         ),
         ElevatedButton(
           onPressed: null,
