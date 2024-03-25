@@ -1,8 +1,8 @@
 import 'package:budgeting_app/models/category.dart';
 import 'package:budgeting_app/screens/add_budget_item_screen.dart';
 import 'package:budgeting_app/widgets/budget_form/budget_item.dart';
+import 'package:budgeting_app/widgets/piecharts/budget_creation_piechart.dart';
 import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 enum IncomeType { netIncome, grossIncome }
@@ -86,6 +86,27 @@ class _BudgetFormState extends State<BudgetForm> {
     double? editAmount,
     Key? itemKey,
   }) {
+    double? income = double.tryParse(incomeInputController.text);
+    if (income == null || income <= 0) {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: Text(
+                  "Please Enter Your Income",
+                ),
+                content: Text(
+                  "You cannod add budget items before providing your monthly income.",
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(),
+                    child: Text("Dismiss"),
+                  ),
+                ],
+              ));
+      return;
+    }
+
     var deleteFunction;
     var editFunction;
     if (itemKey != null) {
@@ -173,53 +194,40 @@ class _BudgetFormState extends State<BudgetForm> {
         ),
         SizedBox(
           height: 175,
-          child: PieChart(PieChartData(
-            centerSpaceRadius: 0,
-            sections: [
-              if (income != null)
-                PieChartSectionData(
-                  titlePositionPercentageOffset: 0,
-                  title: "Income",
-                  value: income,
-                  radius: 100,
-                  showTitle: true,
-                  color: Color.fromARGB(255, 203, 255, 119),
-                )
-              else
-                PieChartSectionData(
-                  titlePositionPercentageOffset: 0,
-                  title: "Please Add Income",
-                  value: 1,
-                  radius: 100,
-                  showTitle: true,
-                  color: Color.fromARGB(255, 158, 157, 157),
-                )
-            ],
-          )),
+          child: BudgetCreationPiechart(
+            income: income,
+            budgetItems: budgetItems,
+          ),
+        ),
+        Row(
+          children: [
+            IconButton(
+              onPressed: toggleCategories,
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            Spacer(),
+            IconButton(
+              alignment: AlignmentDirectional.centerEnd,
+              onPressed: showBudgetItemForm,
+              icon: Icon(Icons.add),
+            ),
+          ],
         ),
         Container(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: toggleCategories,
-                    icon: Icon(Icons.arrow_drop_down),
-                  ),
-                  Spacer(),
-                  IconButton(
-                    alignment: AlignmentDirectional.centerEnd,
-                    onPressed: showBudgetItemForm,
-                    icon: Icon(Icons.add),
-                  ),
-                ],
-              ),
-              if (showCategories)
-                if (budgetItems.isNotEmpty)
-                  ...(budgetItems)
-                else
-                  Text("No Budget Items Found"),
-            ],
+          height: 200,
+          child: Center(
+            child: ListView(
+              children: [
+                if (showCategories)
+                  if (budgetItems.isNotEmpty)
+                    ...(budgetItems)
+                  else
+                    Text(
+                      "No Budget Items Found",
+                      textAlign: TextAlign.center,
+                    ),
+              ],
+            ),
           ),
         ),
         ElevatedButton(
