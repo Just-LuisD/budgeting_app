@@ -131,4 +131,9 @@ const defaultCategories = [
     image: "assets/categories/wifi.png",
     isIncome: false,
   ),
+  Category(
+    name: "Fun",
+    image: "assets/categories/party-popper.png",
+    isIncome: false,
+  ),
 ];
