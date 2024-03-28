@@ -1,5 +1,7 @@
+import 'package:budgeting_app/cubits/budget_form_cubit.dart';
 import 'package:budgeting_app/widgets/budget_form/budget_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateBudgetScreen extends StatelessWidget {
   final String template;
@@ -10,11 +12,14 @@ class CreateBudgetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(template),
+    return BlocProvider(
+      create: (context) => BudgetFormCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(template),
+        ),
+        body: const BudgetForm(),
       ),
-      body: const BudgetForm(),
     );
   }
 }
