@@ -14,11 +14,8 @@ class CreateBudgetScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => BudgetFormCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(template),
-        ),
-        body: const BudgetForm(),
+      child: const Scaffold(
+        body: BudgetForm(),
       ),
     );
   }

@@ -60,7 +60,7 @@ class BudgetItemsView extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 280,
+          height: 260,
           child: Center(
             child: BlocBuilder<BudgetFormCubit, BudgetFormState>(
               builder: (context, state) {

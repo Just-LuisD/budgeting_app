@@ -15,28 +15,29 @@ class BudgetCreationPiechart extends StatelessWidget {
     if (formState.budgetItems.isNotEmpty) {
       budgetSections = [];
       for (var entry in formState.budgetItems.entries) {
-        Color randomColor =
-            Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                .withOpacity(1.0);
-        var saturantedColor =
-            HSLColor.fromColor(randomColor).withSaturation(0.80);
-        randomColor = Color.alphaBlend(
-            saturantedColor.toColor(), Color.fromARGB(255, 255, 255, 255));
-        budgetSections.add(PieChartSectionData(
-          //title: entry.key.name,
-          title:
-              (entry.value < 1 ? entry.value * formState.income : entry.value)
-                  .toString(),
-          value: entry.value < 1 ? entry.value * formState.income : entry.value,
-          radius: 100,
-          showTitle: true,
-          color: randomColor,
-        ));
+        double sectionValue =
+            entry.value < 1 ? entry.value * formState.income : entry.value;
+        budgetSections.add(
+          PieChartSectionData(
+            //title: entry.key.name,
+            title: sectionValue.toString(),
+            titlePositionPercentageOffset: 0.6,
+            value: sectionValue,
+            radius: 40,
+            showTitle: false,
+            color: entry.key.color,
+            badgeWidget: Image.asset(
+              entry.key.image,
+              scale: 2.5,
+            ),
+            badgePositionPercentageOffset: 0.5,
+          ),
+        );
       }
     }
 
     return PieChart(PieChartData(
-      centerSpaceRadius: 0,
+      centerSpaceRadius: 80,
       sections: [
         if (formState.income != 0)
           PieChartSectionData(
@@ -44,7 +45,7 @@ class BudgetCreationPiechart extends StatelessWidget {
             //title: "Income",
             title: formState.remainingIncome.toString(),
             value: formState.remainingIncome,
-            radius: 100,
+            radius: 40,
             showTitle: true,
             color: Color.fromARGB(255, 203, 255, 119),
           )
@@ -53,7 +54,7 @@ class BudgetCreationPiechart extends StatelessWidget {
             titlePositionPercentageOffset: 0,
             title: "Please Add Income",
             value: 1,
-            radius: 100,
+            radius: 40,
             showTitle: true,
             color: Color.fromARGB(255, 158, 157, 157),
           ),

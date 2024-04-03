@@ -11,54 +11,57 @@ class BudgetForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BudgetFormState formState = context.watch<BudgetFormCubit>().state;
-    return Form(
-      child: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: AmountField(label: "Income"),
-                ),
-                SegmentedButton(
-                  showSelectedIcon: false,
-                  segments: const [
-                    ButtonSegment(
-                      label: Text("Net"),
-                      value: IncomeType.netIncome,
-                    ),
-                    ButtonSegment(
-                      label: Text("Gross"),
-                      value: IncomeType.grossIncome,
-                    ),
-                  ],
-                  selected: {formState.incomeType},
-                  onSelectionChanged: (Set<IncomeType> newSelection) {
-                    context
-                        .read<BudgetFormCubit>()
-                        .setIncomeType(newSelection.first);
-                  },
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Form(
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: AmountField(label: "Income"),
+                  ),
+                  SegmentedButton(
+                    showSelectedIcon: false,
+                    segments: const [
+                      ButtonSegment(
+                        label: Text("Net"),
+                        value: IncomeType.netIncome,
+                      ),
+                      ButtonSegment(
+                        label: Text("Gross"),
+                        value: IncomeType.grossIncome,
+                      ),
+                    ],
+                    selected: {formState.incomeType},
+                    onSelectionChanged: (Set<IncomeType> newSelection) {
+                      context
+                          .read<BudgetFormCubit>()
+                          .setIncomeType(newSelection.first);
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 24),
-            child: SizedBox(
-              height: 150,
-              child: BudgetCreationPiechart(),
+            const Padding(
+              padding: EdgeInsets.only(top: 24),
+              child: SizedBox(
+                height: 200,
+                child: BudgetCreationPiechart(),
+              ),
             ),
-          ),
-          const BudgetItemsView(),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: null,
-              child: Text("Submit"),
+            const BudgetItemsView(),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: null,
+                child: Text("Submit"),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

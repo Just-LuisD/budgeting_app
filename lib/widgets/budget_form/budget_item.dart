@@ -35,20 +35,23 @@ class BudgetItem extends StatelessWidget {
     String displayedAmount = (amount < 1 ? amount * income : amount).toString();
     print(amount);
 
-    return Card(
-      child: ListTile(
-        leading: Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: Image.asset(
-            category.image,
-            scale: 1.5,
+    return Container(
+      height: 75,
+      child: Card(
+        child: ListTile(
+          leading: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Image.asset(
+              category.image,
+              scale: 2,
+            ),
           ),
-        ),
-        title: Text(category.name),
-        subtitle: Text("\$$displayedAmount"),
-        trailing: IconButton(
-          onPressed: showBudgetItemForm,
-          icon: const Icon(Icons.edit),
+          title: Text(category.name),
+          subtitle: Text("\$$displayedAmount"),
+          trailing: IconButton(
+            onPressed: showBudgetItemForm,
+            icon: const Icon(Icons.edit),
+          ),
         ),
       ),
     );
