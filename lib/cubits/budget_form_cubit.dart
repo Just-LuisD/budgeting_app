@@ -57,34 +57,68 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
           ),
         );
 
-  void setIncome(double newIncome) => emit(state.copyWith(
-        income: newIncome,
-        remainingIncome: state.income -
-            state.budgetItems.values.reduce((sum, element) => sum + element),
-      ));
+  void setIncome(double newIncome) {
+    double sum = 0;
+    for (double amount in state.budgetItems.values) {
+      sum += amount < 1 ? amount * newIncome : amount;
+    }
+    double newRemainingIncome = newIncome - sum;
+    emit(state.copyWith(
+      income: newIncome,
+      remainingIncome: newRemainingIncome,
+    ));
+  }
 
   void setIncomeType(IncomeType newType) => emit(state.copyWith(
         incomeType: newType,
       ));
 
-  void toggleCategoirs() =>
+  void toggleShowCategories() =>
       emit(state.copyWith(showCategories: !state.showCategories));
 
   void addCategory(Category newCategory, double amount) {
     Map<Category, double> newBudgetItems = Map.from(state.budgetItems);
     newBudgetItems[newCategory] = amount;
-    emit(state.copyWith(budgetItems: newBudgetItems));
+    double sum = 0;
+    for (double amount in newBudgetItems.values) {
+      sum += amount < 1 ? amount * state.income : amount;
+    }
+    double newRemainingIncome = state.income - sum;
+    emit(state.copyWith(
+      budgetItems: newBudgetItems,
+      remainingIncome: newRemainingIncome,
+    ));
   }
 
   void deleteCategory(Category targetCategory) {
     Map<Category, double> newBudgetItems = Map.from(state.budgetItems);
     newBudgetItems.remove(targetCategory);
-    emit(state.copyWith(budgetItems: newBudgetItems));
+    double sum = 0;
+    for (double amount in newBudgetItems.values) {
+      sum += amount < 1 ? amount * state.income : amount;
+    }
+    double newRemainingIncome = state.income - sum;
+    emit(state.copyWith(
+      budgetItems: newBudgetItems,
+      remainingIncome: newRemainingIncome,
+    ));
   }
 
-  void editCategory(Category category, double newAmount) {
+  void editCategory(
+      Category originalCategory, Category category, double newAmount) {
     Map<Category, double> newBudgetItems = Map.from(state.budgetItems);
+    if (originalCategory.name != category.name) {
+      newBudgetItems.remove(originalCategory);
+    }
     newBudgetItems[category] = newAmount;
-    emit(state.copyWith(budgetItems: newBudgetItems));
+    double sum = 0;
+    for (double amount in newBudgetItems.values) {
+      sum += amount < 1 ? amount * state.income : amount;
+    }
+    double newRemainingIncome = state.income - sum;
+    emit(state.copyWith(
+      budgetItems: newBudgetItems,
+      remainingIncome: newRemainingIncome,
+    ));
   }
 }

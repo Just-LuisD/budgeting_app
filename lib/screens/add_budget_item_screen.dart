@@ -1,19 +1,15 @@
+import 'package:budgeting_app/cubits/budget_form_cubit.dart';
 import 'package:budgeting_app/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:budgeting_app/widgets/budget_form/percent_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddBudgetItemScreen extends StatefulWidget {
-  final Function(Category, double, bool) onAdd;
-  final void Function()? onDelete;
-  final void Function(Category, double, bool)? onEdit;
   final Category? initialCategory;
   final double? initialAmount;
   const AddBudgetItemScreen({
     super.key,
-    required this.onAdd,
-    this.onDelete,
-    this.onEdit,
     this.initialCategory,
     this.initialAmount,
   });
@@ -41,16 +37,22 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       // TODO: show modal
       return;
     }
-    widget.onAdd(
-      selectedCategy!,
-      selectedAmount,
-      percent,
-    );
+    if (percent) {
+      selectedAmount = selectedAmount / 100;
+    }
+    context
+        .read<BudgetFormCubit>()
+        .addCategory(selectedCategy!, selectedAmount);
     Navigator.of(context).pop();
   }
 
   void handleOnDelete() {
-    widget.onDelete!();
+    Category? deletedCategory = widget.initialCategory ?? selectedCategy;
+    if (deletedCategory == null) {
+      // TODO: show modal
+      return;
+    }
+    context.read<BudgetFormCubit>().deleteCategory(deletedCategory);
     Navigator.of(context).pop();
   }
 
@@ -67,13 +69,12 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       // TODO: show modal
       return;
     }
-
-    var editedCategory = selectedCategy ?? widget.initialCategory;
-    widget.onEdit!(
-      editedCategory!,
-      selectedAmount,
-      percent,
-    );
+    if (percent) {
+      selectedAmount = selectedAmount / 100;
+    }
+    context
+        .read<BudgetFormCubit>()
+        .editCategory(widget.initialCategory!, selectedCategy!, selectedAmount);
     Navigator.of(context).pop();
   }
 
@@ -81,11 +82,16 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
   void initState() {
     super.initState();
     percent = false;
-    selectedCategy = null;
+    selectedCategy = widget.initialCategory;
     menuItems = [];
     amoutPrecentController = TextEditingController();
-    if (widget.initialAmount != null) {
-      amoutPrecentController.text = widget.initialAmount.toString();
+    double? initialAmount = widget.initialAmount;
+    if (initialAmount != null) {
+      if (initialAmount < 1) {
+        initialAmount =
+            initialAmount * context.read<BudgetFormCubit>().state.income;
+      }
+      amoutPrecentController.text = initialAmount.toString();
     }
     for (Category category in defaultCategories) {
       if (!category.isIncome) {
@@ -116,7 +122,7 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
         title: const Text("Add Budget Item"),
         actions: [
           IconButton(
-              onPressed: widget.onDelete == null ? null : handleOnDelete,
+              onPressed: widget.initialCategory == null ? null : handleOnDelete,
               icon: Icon(Icons.delete))
         ],
       ),
@@ -183,9 +189,11 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: widget.onEdit == null ? handleOnAdd : handleOnEdit,
-                child:
-                    widget.onEdit == null ? Text('Add') : Text("Save Changes"),
+                onPressed:
+                    widget.initialCategory == null ? handleOnAdd : handleOnEdit,
+                child: widget.initialCategory == null
+                    ? Text('Add')
+                    : Text("Save Changes"),
               ),
             ),
           ),
