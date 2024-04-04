@@ -4,12 +4,17 @@ import 'package:budgeting_app/widgets/budget_form/budget_creation_piechart.dart'
 import 'package:budgeting_app/widgets/budget_form/budget_items_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class BudgetForm extends StatelessWidget {
   const BudgetForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    void onSubmit() {
+      context.go("/home");
+    }
+
     BudgetFormState formState = context.watch<BudgetFormCubit>().state;
     return Padding(
       padding: const EdgeInsets.only(top: 20),
@@ -53,11 +58,11 @@ class BudgetForm extends StatelessWidget {
               ),
             ),
             const BudgetItemsView(),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed: null,
-                child: Text("Submit"),
+                onPressed: onSubmit,
+                child: const Text("Submit"),
               ),
             ),
           ],
