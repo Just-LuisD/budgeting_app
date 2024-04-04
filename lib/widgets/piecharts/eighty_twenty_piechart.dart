@@ -13,13 +13,13 @@ class EightyTwentyPiechart extends StatelessWidget {
           value: 80,
           radius: 35,
           showTitle: false,
-          color: Color.fromARGB(255, 255, 119, 119),
+          color: const Color.fromARGB(255, 255, 119, 119),
         ),
         PieChartSectionData(
           value: 20,
           radius: 35,
           showTitle: false,
-          color: Color.fromARGB(255, 142, 255, 119),
+          color: const Color.fromARGB(255, 142, 255, 119),
         ),
       ],
     ));

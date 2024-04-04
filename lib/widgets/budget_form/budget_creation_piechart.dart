@@ -48,7 +48,7 @@ class BudgetCreationPiechart extends StatelessWidget {
             value: formState.remainingIncome,
             radius: 40,
             showTitle: true,
-            color: Color.fromARGB(255, 203, 255, 119),
+            color: const Color.fromARGB(255, 203, 255, 119),
           )
         else
           PieChartSectionData(
@@ -57,7 +57,7 @@ class BudgetCreationPiechart extends StatelessWidget {
             value: 1,
             radius: 40,
             showTitle: true,
-            color: Color.fromARGB(255, 158, 157, 157),
+            color: const Color.fromARGB(255, 158, 157, 157),
           ),
         if (budgetSections != null) ...budgetSections,
       ],
