@@ -1,8 +1,10 @@
 import 'package:budgeting_app/cubits/budget_form_cubit.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+final NumberFormat currencyFormater = NumberFormat.simpleCurrency();
 
 class BudgetCreationPiechart extends StatelessWidget {
   const BudgetCreationPiechart({super.key});
@@ -40,9 +42,9 @@ class BudgetCreationPiechart extends StatelessWidget {
       sections: [
         if (formState.income != 0)
           PieChartSectionData(
-            titlePositionPercentageOffset: 0,
-            //title: "Income",
-            title: formState.remainingIncome.toString(),
+            titlePositionPercentageOffset: -2,
+            title:
+                "Remaining Income\n${currencyFormater.format(formState.remainingIncome)}",
             value: formState.remainingIncome,
             radius: 40,
             showTitle: true,
@@ -50,7 +52,7 @@ class BudgetCreationPiechart extends StatelessWidget {
           )
         else
           PieChartSectionData(
-            titlePositionPercentageOffset: 0,
+            titlePositionPercentageOffset: -2,
             title: "Please Add Income",
             value: 1,
             radius: 40,

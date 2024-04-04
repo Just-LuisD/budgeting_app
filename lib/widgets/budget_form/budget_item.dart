@@ -3,6 +3,9 @@ import 'package:budgeting_app/models/category.dart';
 import 'package:budgeting_app/screens/add_budget_item_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+final NumberFormat currencyFormater = NumberFormat.simpleCurrency();
 
 class BudgetItem extends StatelessWidget {
   final Category category;
@@ -32,10 +35,10 @@ class BudgetItem extends StatelessWidget {
       );
     }
 
-    String displayedAmount = (amount < 1 ? amount * income : amount).toString();
-    print(amount);
+    String displayedAmount =
+        currencyFormater.format(amount < 1 ? amount * income : amount);
 
-    return Container(
+    return SizedBox(
       height: 75,
       child: Card(
         child: ListTile(
@@ -47,7 +50,7 @@ class BudgetItem extends StatelessWidget {
             ),
           ),
           title: Text(category.name),
-          subtitle: Text("\$$displayedAmount"),
+          subtitle: Text(displayedAmount),
           trailing: IconButton(
             onPressed: showBudgetItemForm,
             icon: const Icon(Icons.edit),
