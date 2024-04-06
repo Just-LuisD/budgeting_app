@@ -13,21 +13,22 @@ class BudgetItemsView extends StatelessWidget {
     void showBudgetItemForm() {
       if (state.income <= 0) {
         showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: const Text(
-                    "Please Enter Your Income",
-                  ),
-                  content: const Text(
-                    "You cannod add budget items before providing your monthly income.",
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      child: const Text("Dismiss"),
-                    ),
-                  ],
-                ));
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text(
+              "Please Enter Your Income",
+            ),
+            content: const Text(
+              "You cannod add budget items before providing your monthly income.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text("Dismiss"),
+              ),
+            ],
+          ),
+        );
         return;
       }
       showModalBottomSheet(
@@ -60,7 +61,7 @@ class BudgetItemsView extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: 260,
+          height: 280,
           child: Center(
             child: BlocBuilder<BudgetFormCubit, BudgetFormState>(
               builder: (context, state) {

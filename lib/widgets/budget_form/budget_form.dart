@@ -22,32 +22,42 @@ class BudgetForm extends StatelessWidget {
         child: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: AmountField(label: "Income"),
-                  ),
-                  SegmentedButton(
-                    showSelectedIcon: false,
-                    segments: const [
-                      ButtonSegment(
-                        label: Text("Net"),
-                        value: IncomeType.netIncome,
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: AmountField(),
+                    ),
+                    const SizedBox(
+                      width: 24,
+                    ),
+                    SizedBox(
+                      width: 125,
+                      height: 45,
+                      child: SegmentedButton(
+                        showSelectedIcon: false,
+                        segments: const [
+                          ButtonSegment(
+                            label: Text("Net"),
+                            value: IncomeType.netIncome,
+                          ),
+                          ButtonSegment(
+                            label: Text("Gross"),
+                            value: IncomeType.grossIncome,
+                          ),
+                        ],
+                        selected: {formState.incomeType},
+                        onSelectionChanged: (Set<IncomeType> newSelection) {
+                          context
+                              .read<BudgetFormCubit>()
+                              .setIncomeType(newSelection.first);
+                        },
                       ),
-                      ButtonSegment(
-                        label: Text("Gross"),
-                        value: IncomeType.grossIncome,
-                      ),
-                    ],
-                    selected: {formState.incomeType},
-                    onSelectionChanged: (Set<IncomeType> newSelection) {
-                      context
-                          .read<BudgetFormCubit>()
-                          .setIncomeType(newSelection.first);
-                    },
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
             const Padding(
@@ -58,11 +68,15 @@ class BudgetForm extends StatelessWidget {
               ),
             ),
             const BudgetItemsView(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                onPressed: onSubmit,
-                child: const Text("Submit"),
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(6),
+                width: 300,
+                height: 55,
+                child: FloatingActionButton(
+                  onPressed: onSubmit,
+                  child: const Text("Submit"),
+                ),
               ),
             ),
           ],
