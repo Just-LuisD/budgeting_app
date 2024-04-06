@@ -70,7 +70,7 @@ class BudgetForm extends StatelessWidget {
             const BudgetItemsView(),
             Center(
               child: Container(
-                padding: EdgeInsets.all(6),
+                padding: const EdgeInsets.all(6),
                 width: 300,
                 height: 55,
                 child: FloatingActionButton(
