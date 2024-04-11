@@ -1,8 +1,7 @@
 import 'package:budgeting_app/cubits/budget_form_cubit.dart';
 import 'package:budgeting_app/models/category.dart';
+import 'package:budgeting_app/widgets/budget_form/amount_percent_field.dart';
 import 'package:flutter/material.dart';
-import 'package:budgeting_app/widgets/budget_form/percent_field.dart';
-import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddBudgetItemScreen extends StatefulWidget {
@@ -20,26 +19,31 @@ class AddBudgetItemScreen extends StatefulWidget {
 
 class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
   late Category? selectedCategy;
-  late bool percent;
+  late bool isPercent;
   late List<DropdownMenuEntry<Category>> menuItems;
-  late TextEditingController amoutPrecentController;
+  late TextEditingController amoutController;
+  late TextEditingController percentController;
+  late double amount;
+  late double percent;
 
   void handleOnAdd() {
     if (selectedCategy == null) {
       // TODO: show modal
       return;
     }
-    // TODO: add check for balid ammount
-    double? selectedAmount = double.tryParse(amoutPrecentController.text);
+    // TODO: add check for valid ammount
+    double? selectedAmount = double.tryParse(amoutController.text);
     if (selectedAmount == null ||
         selectedAmount <= 0 ||
-        (selectedAmount > 100 && percent)) {
+        (selectedAmount > 100 && isPercent)) {
       // TODO: show modal
       return;
     }
-    if (percent) {
+
+    if (isPercent) {
       selectedAmount = selectedAmount / 100;
     }
+
     context
         .read<BudgetFormCubit>()
         .addCategory(selectedCategy!, selectedAmount);
@@ -62,14 +66,14 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       return;
     }
     // TODO: add check for balid ammount
-    double? selectedAmount = double.tryParse(amoutPrecentController.text);
+    double? selectedAmount = double.tryParse(amoutController.text);
     if (selectedAmount == null ||
         selectedAmount <= 0 ||
-        (selectedAmount > 100 && percent)) {
+        (selectedAmount > 100 && isPercent)) {
       // TODO: show modal
       return;
     }
-    if (percent) {
+    if (isPercent) {
       selectedAmount = selectedAmount / 100;
     }
     context
@@ -81,17 +85,27 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
   @override
   void initState() {
     super.initState();
-    percent = false;
+    isPercent = false;
+    percent = 0;
+    amount = 0;
     selectedCategy = widget.initialCategory;
     menuItems = [];
-    amoutPrecentController = TextEditingController();
+    amoutController = TextEditingController();
+    percentController = TextEditingController();
     double? initialAmount = widget.initialAmount;
     if (initialAmount != null) {
       if (initialAmount < 1) {
-        initialAmount =
-            initialAmount * context.read<BudgetFormCubit>().state.income;
+        percentController.text = initialAmount.toString();
+        amoutController.text =
+            (initialAmount * context.read<BudgetFormCubit>().state.income)
+                .toString();
+      } else {
+        amoutController.text = initialAmount.toString();
+        percentController.text =
+            ((initialAmount / context.read<BudgetFormCubit>().state.income) *
+                    100)
+                .toString();
       }
-      amoutPrecentController.text = initialAmount.toString();
     }
     for (Category category in defaultCategories) {
       if (!category.isIncome) {
@@ -111,7 +125,8 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
 
   @override
   void dispose() {
-    amoutPrecentController.dispose();
+    amoutController.dispose();
+    percentController.dispose();
     super.dispose();
   }
 
@@ -123,77 +138,43 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
         actions: [
           IconButton(
               onPressed: widget.initialCategory == null ? null : handleOnDelete,
-              icon: Icon(Icons.delete))
+              icon: const Icon(Icons.delete))
         ],
       ),
       body: ListView(
         children: [
-          Container(
-            padding: EdgeInsets.all(8),
-            width: double.infinity,
-            height: 60,
-            child: SegmentedButton(
-              showSelectedIcon: false,
-              segments: [
-                ButtonSegment(
-                  value: "\$",
-                  icon: Text("\$"),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Center(
+              child: DropdownMenu(
+                hintText: "Select Category",
+                width: 325,
+                dropdownMenuEntries: menuItems,
+                initialSelection: widget.initialCategory,
+                onSelected: (value) => setState(
+                  () {
+                    selectedCategy = value!;
+                  },
                 ),
-                ButtonSegment(
-                  value: "%",
-                  icon: Text("%"),
-                ),
-              ],
-              selected: percent ? {"%"} : {"\$"},
-              onSelectionChanged: (newSelection) {
-                setState(() {
-                  percent = newSelection.first == "%";
-                });
-              },
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 26),
+            child: Center(
+              child: AmountPercentField(),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                DropdownMenu(
-                  hintText: "Select Category",
-                  width: 220,
-                  dropdownMenuEntries: menuItems,
-                  initialSelection: widget.initialCategory,
-                  onSelected: (value) => setState(
-                    () {
-                      selectedCategy = value!;
-                    },
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: percent
-                      ? PercentField(
-                          inputController: amoutPrecentController,
-                          label: "Percentage",
-                        )
-                      : AmountField(
-                          inputController: amoutPrecentController,
-                          label: "Amount",
-                        ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed:
                     widget.initialCategory == null ? handleOnAdd : handleOnEdit,
                 child: widget.initialCategory == null
-                    ? Text('Add')
-                    : Text("Save Changes"),
+                    ? const Text('Add')
+                    : const Text("Save Changes"),
               ),
             ),
           ),

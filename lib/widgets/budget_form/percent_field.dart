@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 class PercentField extends StatelessWidget {
   final TextEditingController inputController;
   final String label;
+  final bool enabled;
   const PercentField({
     super.key,
     required this.inputController,
     required this.label,
+    required this.enabled,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
       controller: inputController,
       textAlign: TextAlign.end,
       decoration: InputDecoration(

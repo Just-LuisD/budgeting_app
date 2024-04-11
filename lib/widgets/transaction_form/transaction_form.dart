@@ -109,6 +109,7 @@ class _TransactionFormState extends State<TransactionForm> {
           AmountField(
             label: "Amount",
             inputController: transactionAmountController,
+            enabled: true,
           ),
           Row(
             children: [
