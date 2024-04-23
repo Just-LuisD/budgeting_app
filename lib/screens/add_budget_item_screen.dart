@@ -30,22 +30,14 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       return;
     }
     // TODO: add check for valid ammount
-    double? selectedAmount;
-    if (isPercent) {
-      selectedAmount = double.tryParse(percentController.text);
-    } else {
-      selectedAmount = double.tryParse(amountController.text);
-    }
+    double? selectedAmount = double.tryParse(amountController.text);
 
     if (selectedAmount == null ||
         selectedAmount <= 0 ||
-        (selectedAmount > 100 && isPercent)) {
+        selectedAmount >
+            context.read<BudgetFormCubit>().state.remainingIncome) {
       // TODO: show modal
       return;
-    }
-
-    if (isPercent) {
-      selectedAmount = selectedAmount / 100;
     }
 
     context
@@ -69,17 +61,17 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       // TODO: show modal
       return;
     }
-    // TODO: add check for balid ammount
+
+    // TODO: add check for valid ammount
     double? selectedAmount = double.tryParse(amountController.text);
     if (selectedAmount == null ||
         selectedAmount <= 0 ||
-        (selectedAmount > 100 && isPercent)) {
+        selectedAmount >
+            context.read<BudgetFormCubit>().state.remainingIncome) {
       // TODO: show modal
       return;
     }
-    if (isPercent) {
-      selectedAmount = selectedAmount / 100;
-    }
+
     context
         .read<BudgetFormCubit>()
         .editCategory(widget.initialCategory!, selectedCategy!, selectedAmount);
@@ -112,18 +104,10 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
     percentController = TextEditingController(text: "0.00");
     double? initialAmount = widget.initialAmount;
     if (initialAmount != null) {
-      if (initialAmount < 1) {
-        percentController.text = initialAmount.toString();
-        amountController.text =
-            (initialAmount * context.read<BudgetFormCubit>().state.income)
-                .toString();
-      } else {
-        amountController.text = initialAmount.toString();
-        percentController.text =
-            ((initialAmount / context.read<BudgetFormCubit>().state.income) *
-                    100)
-                .toString();
-      }
+      amountController.text = initialAmount.toString();
+      percentController.text =
+          ((initialAmount / context.read<BudgetFormCubit>().state.income) * 100)
+              .toString();
     }
     for (Category category in defaultCategories) {
       if (!category.isIncome) {

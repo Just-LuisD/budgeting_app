@@ -52,7 +52,7 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
   void setIncome(double newIncome) {
     double sum = 0;
     for (double amount in state.budgetItems.values) {
-      sum += amount < 1 ? amount * newIncome : amount;
+      sum += amount;
     }
     double newRemainingIncome = newIncome - sum;
     emit(state.copyWith(
@@ -69,7 +69,7 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
     newBudgetItems[newCategory] = amount;
     double sum = 0;
     for (double amount in newBudgetItems.values) {
-      sum += amount < 1 ? amount * state.income : amount;
+      sum += amount;
     }
     double newRemainingIncome = state.income - sum;
     emit(state.copyWith(
@@ -83,7 +83,7 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
     newBudgetItems.remove(targetCategory);
     double sum = 0;
     for (double amount in newBudgetItems.values) {
-      sum += amount < 1 ? amount * state.income : amount;
+      sum += amount;
     }
     double newRemainingIncome = state.income - sum;
     emit(state.copyWith(
@@ -101,7 +101,7 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
     newBudgetItems[category] = newAmount;
     double sum = 0;
     for (double amount in newBudgetItems.values) {
-      sum += amount < 1 ? amount * state.income : amount;
+      sum += amount;
     }
     double newRemainingIncome = state.income - sum;
     emit(state.copyWith(

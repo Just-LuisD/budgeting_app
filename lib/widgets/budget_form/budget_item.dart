@@ -18,8 +18,6 @@ class BudgetItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double income = context.watch<BudgetFormCubit>().state.income;
-
     void showBudgetItemForm() {
       showModalBottomSheet(
         context: context,
@@ -35,8 +33,7 @@ class BudgetItem extends StatelessWidget {
       );
     }
 
-    String displayedAmount =
-        currencyFormater.format(amount < 1 ? amount * income : amount);
+    String displayedAmount = currencyFormater.format(amount);
 
     return SizedBox(
       height: 75,

@@ -29,7 +29,7 @@ class EditTransactionScreen extends StatelessWidget {
               TextButton(
                 onPressed: () async {
                   await TransactionDatabase.instance.delete(transaction.id!);
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.popUntil(context, ModalRoute.withName('/home'));
                 },
                 child: const Text("Yes"),
               ),
