@@ -21,10 +21,8 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
   late Category? selectedCategy;
   late bool isPercent;
   late List<DropdownMenuEntry<Category>> menuItems;
-  late TextEditingController amoutController;
+  late TextEditingController amountController;
   late TextEditingController percentController;
-  late double amount;
-  late double percent;
 
   void handleOnAdd() {
     if (selectedCategy == null) {
@@ -32,7 +30,13 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       return;
     }
     // TODO: add check for valid ammount
-    double? selectedAmount = double.tryParse(amoutController.text);
+    double? selectedAmount;
+    if (isPercent) {
+      selectedAmount = double.tryParse(percentController.text);
+    } else {
+      selectedAmount = double.tryParse(amountController.text);
+    }
+
     if (selectedAmount == null ||
         selectedAmount <= 0 ||
         (selectedAmount > 100 && isPercent)) {
@@ -66,7 +70,7 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
       return;
     }
     // TODO: add check for balid ammount
-    double? selectedAmount = double.tryParse(amoutController.text);
+    double? selectedAmount = double.tryParse(amountController.text);
     if (selectedAmount == null ||
         selectedAmount <= 0 ||
         (selectedAmount > 100 && isPercent)) {
@@ -82,25 +86,39 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
     Navigator.of(context).pop();
   }
 
+  void updateValue(String? val) {
+    if (isPercent) {
+      double value = double.tryParse(percentController.text) ?? 0;
+      double amount =
+          (value / 100) * context.read<BudgetFormCubit>().state.income;
+
+      amountController.text = amount.toStringAsFixed(2);
+    } else {
+      double value = double.tryParse(amountController.text) ?? 0;
+      double percent =
+          (value / context.read<BudgetFormCubit>().state.income) * 100;
+
+      percentController.text = percent.toStringAsFixed(2);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     isPercent = false;
-    percent = 0;
-    amount = 0;
     selectedCategy = widget.initialCategory;
     menuItems = [];
-    amoutController = TextEditingController();
-    percentController = TextEditingController();
+    amountController = TextEditingController(text: "0.00");
+    percentController = TextEditingController(text: "0.00");
     double? initialAmount = widget.initialAmount;
     if (initialAmount != null) {
       if (initialAmount < 1) {
         percentController.text = initialAmount.toString();
-        amoutController.text =
+        amountController.text =
             (initialAmount * context.read<BudgetFormCubit>().state.income)
                 .toString();
       } else {
-        amoutController.text = initialAmount.toString();
+        amountController.text = initialAmount.toString();
         percentController.text =
             ((initialAmount / context.read<BudgetFormCubit>().state.income) *
                     100)
@@ -125,7 +143,7 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
 
   @override
   void dispose() {
-    amoutController.dispose();
+    amountController.dispose();
     percentController.dispose();
     super.dispose();
   }
@@ -159,10 +177,29 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 26),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 26),
             child: Center(
-              child: AmountPercentField(),
+              child: AmountPercentField(
+                amountController: amountController,
+                percentController: percentController,
+                isPercent: isPercent,
+                onChanged: updateValue,
+                onPercent: (value) {
+                  if (value == true) {
+                    setState(() {
+                      isPercent = value!;
+                    });
+                  }
+                },
+                onAmount: (value) {
+                  if (value == true) {
+                    setState(() {
+                      isPercent = !value!;
+                    });
+                  }
+                },
+              ),
             ),
           ),
           Padding(
