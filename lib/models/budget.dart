@@ -4,7 +4,6 @@ class BudgetTemplate {
   late String name;
   late double monthlyIncome;
   late Map<String, double> categoryLimits;
-  Map<String, List<String>>? superCategories;
 
   BudgetTemplate(
       {required this.name,
