@@ -1,9 +1,7 @@
-import 'package:budgeting_app/cubits/budget_form_cubit.dart';
 import 'package:budgeting_app/widgets/budget_form/amount_field.dart';
 import 'package:budgeting_app/widgets/budget_form/budget_creation_piechart.dart';
 import 'package:budgeting_app/widgets/budget_form/budget_items_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class BudgetForm extends StatelessWidget {
@@ -15,46 +13,19 @@ class BudgetForm extends StatelessWidget {
       context.go("/home");
     }
 
-    BudgetFormState formState = context.watch<BudgetFormCubit>().state;
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Form(
         child: ListView(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(4.0),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: AmountField(),
-                    ),
-                    const SizedBox(
-                      width: 24,
-                    ),
-                    SizedBox(
-                      width: 125,
-                      height: 45,
-                      child: SegmentedButton(
-                        showSelectedIcon: false,
-                        segments: const [
-                          ButtonSegment(
-                            label: Text("Net"),
-                            value: IncomeType.netIncome,
-                          ),
-                          ButtonSegment(
-                            label: Text("Gross"),
-                            value: IncomeType.grossIncome,
-                          ),
-                        ],
-                        selected: {formState.incomeType},
-                        onSelectionChanged: (Set<IncomeType> newSelection) {
-                          context
-                              .read<BudgetFormCubit>()
-                              .setIncomeType(newSelection.first);
-                        },
-                      ),
                     ),
                   ],
                 ),

@@ -2,18 +2,14 @@ import 'package:budgeting_app/models/category.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum IncomeType { netIncome, grossIncome }
-
 class BudgetFormState extends Equatable {
   final double income;
-  final IncomeType incomeType;
   final bool showCategories;
   final Map<Category, double> budgetItems;
   final double remainingIncome;
 
   const BudgetFormState({
     required this.income,
-    required this.incomeType,
     required this.showCategories,
     required this.budgetItems,
     required this.remainingIncome,
@@ -21,14 +17,12 @@ class BudgetFormState extends Equatable {
 
   BudgetFormState copyWith({
     double? income,
-    IncomeType? incomeType,
     bool? showCategories,
     Map<Category, double>? budgetItems,
     double? remainingIncome,
   }) {
     return BudgetFormState(
       income: income ?? this.income,
-      incomeType: incomeType ?? this.incomeType,
       showCategories: showCategories ?? this.showCategories,
       budgetItems: budgetItems ?? this.budgetItems,
       remainingIncome: remainingIncome ?? this.remainingIncome,
@@ -38,7 +32,6 @@ class BudgetFormState extends Equatable {
   @override
   List<Object> get props => [
         income,
-        incomeType,
         showCategories,
         budgetItems,
         remainingIncome,
@@ -50,7 +43,6 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
       : super(
           const BudgetFormState(
             income: 0,
-            incomeType: IncomeType.netIncome,
             showCategories: true,
             budgetItems: <Category, double>{},
             remainingIncome: 0,
@@ -68,10 +60,6 @@ class BudgetFormCubit extends Cubit<BudgetFormState> {
       remainingIncome: newRemainingIncome,
     ));
   }
-
-  void setIncomeType(IncomeType newType) => emit(state.copyWith(
-        incomeType: newType,
-      ));
 
   void toggleShowCategories() =>
       emit(state.copyWith(showCategories: !state.showCategories));
