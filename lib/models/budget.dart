@@ -1,37 +1,45 @@
 import 'package:budgeting_app/models/transaction.dart';
 
+const String budgetTemplatesTable = 'budget_templates';
+
+class BudgetTemplateField {
+  static final List<String> columns = [
+    id,
+    name,
+    income,
+    categoryLimits,
+  ];
+  static const String id = '_id';
+  static const String name = 'name';
+  static const String income = 'income';
+  static const String categoryLimits = "category_limits";
+}
+
 class BudgetTemplate {
-  late String name;
-  late double monthlyIncome;
-  late Map<String, double> categoryLimits;
+  final int? id;
+  String name;
+  double income;
+  Map<String, double> categoryLimits;
 
-  BudgetTemplate(
-      {required this.name,
-      required this.monthlyIncome,
-      Map<String, double>? initialLimits}) {
-    categoryLimits = initialLimits ?? <String, double>{};
-  }
+  BudgetTemplate({
+    this.id,
+    required this.name,
+    required this.income,
+    required this.categoryLimits,
+  });
 
-  void addCategory(String category, double limit) {
-    if (!categoryLimits.containsKey(category)) {
-      return;
-    }
-    categoryLimits[category] = limit;
-  }
-
-  void removeCategory(String category) {
-    categoryLimits.remove(category);
-  }
-
-  void changeLimit(String category, double newLimit) {
-    if (!categoryLimits.containsKey(category)) {
-      return;
-    }
-    categoryLimits[category] = newLimit;
-  }
-
-  void clear() {
-    categoryLimits.clear();
+  BudgetTemplate copy({
+    int? id,
+    String? name,
+    double? income,
+    Map<String, double>? categoryLimits,
+  }) {
+    return BudgetTemplate(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      income: income ?? this.income,
+      categoryLimits: categoryLimits ?? this.categoryLimits,
+    );
   }
 }
 
