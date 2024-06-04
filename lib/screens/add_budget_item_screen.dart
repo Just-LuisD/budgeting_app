@@ -37,6 +37,9 @@ class _AddBudgetItemScreenState extends State<AddBudgetItemScreen> {
         selectedAmount >
             context.read<BudgetFormCubit>().state.remainingIncome) {
       // TODO: show modal
+      // TODO: the following condition is true when there is a cent left
+      // due to floating  point rounding
+      // selectedAmount > context.read<BudgetFormCubit>().state.remainingIncome)
       return;
     }
 
