@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateBudgetScreen extends StatelessWidget {
-  final String template;
-  const CreateBudgetScreen({
-    super.key,
-    required this.template,
-  });
+  const CreateBudgetScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:budgeting_app/screens/create_budget_screen.dart';
 import 'package:budgeting_app/screens/home_screen.dart';
-import 'package:budgeting_app/screens/onboarding_screen.dart';
 import 'package:budgeting_app/themes/app_input_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,19 +8,12 @@ import 'package:go_router/go_router.dart';
 final _router = GoRouter(
   routes: [
     GoRoute(
-      path: '/home',
+      path: '/',
       builder: (context, state) => const HomeScreen(),
     ),
     GoRoute(
-      path: '/',
-      builder: (context, state) => const OnboardingScreen(),
-    ),
-    GoRoute(
       path: '/create-budget/:template',
-      builder: (context, state) {
-        var template = state.pathParameters['template']!;
-        return CreateBudgetScreen(template: template);
-      },
+      builder: (context, state) => const CreateBudgetScreen(),
     )
   ],
 );
