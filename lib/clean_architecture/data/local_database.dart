@@ -107,6 +107,16 @@ class DatabaseHelper {
     }
   }
 
+  Future<Map<String, dynamic>> getCategory(int id) async {
+    final db = await database;
+    final maps = await db.query('Categories', where: 'id = ?', whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      return maps.first;
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
   // Delete a budget
   Future<int> deleteBudget(int budgetId) async {
     Database db = await database;

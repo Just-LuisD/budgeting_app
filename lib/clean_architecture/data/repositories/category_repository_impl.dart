@@ -7,9 +7,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
   @override
   Future<List<Category>> getCategoriesByBudgetId(int budgetId) async {
-    final db = await dbHelper.database;
-    final maps = await db
-        .query('Categories', where: 'budget_id = ?', whereArgs: [budgetId]);
+    final maps = await dbHelper.getCategories(budgetId);
     return List.generate(maps.length, (i) {
       return Category.fromMap(maps[i]);
     });
@@ -17,31 +15,22 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
   @override
   Future<Category> getCategoryById(int id) async {
-    final db = await dbHelper.database;
-    final maps = await db.query('Categories', where: 'id = ?', whereArgs: [id]);
-    if (maps.isNotEmpty) {
-      return Category.fromMap(maps.first);
-    } else {
-      throw Exception('ID $id not found');
-    }
+    final map = await dbHelper.getCategory(id);
+    return Category.fromMap(map);
   }
 
   @override
   Future<int> insertCategory(Category category) async {
-    final db = await dbHelper.database;
-    return await db.insert('Categories', category.toMap());
+    return await dbHelper.insertCategory(category.toMap());
   }
 
   @override
   Future<int> updateCategory(Category category) async {
-    final db = await dbHelper.database;
-    return await db.update('Categories', category.toMap(),
-        where: 'id = ?', whereArgs: [category.id]);
+    return await dbHelper.updateCategory(category.toMap());
   }
 
   @override
   Future<int> deleteCategory(int id) async {
-    final db = await dbHelper.database;
-    return await db.delete('Categories', where: 'id = ?', whereArgs: [id]);
+    return await dbHelper.deleteCategory(id);
   }
 }
