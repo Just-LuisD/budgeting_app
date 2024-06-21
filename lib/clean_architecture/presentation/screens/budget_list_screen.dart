@@ -3,6 +3,7 @@ import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_state.dart';
 import 'package:budgeting_app/clean_architecture/presentation/screens/add_budget_screen.dart';
+import 'package:budgeting_app/clean_architecture/presentation/widgets/budget_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,13 +26,9 @@ class BudgetListScreen extends StatelessWidget {
                     itemCount: budgets.length,
                     itemBuilder: (context, index) {
                       final budget = budgets[index];
-                      return ListTile(
-                        title: Text(budget.name),
-                        subtitle: Text(
-                            'Income: \$${budget.income.toStringAsFixed(2)}'),
-                        onTap: () {
-                          // Navigate to budget details or categories screen
-                        },
+                      return BudgetCard(
+                        key: Key(budget.id!.toString()),
+                        budget: budget,
                       );
                     },
                   );
