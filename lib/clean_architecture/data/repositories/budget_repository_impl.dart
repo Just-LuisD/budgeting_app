@@ -7,8 +7,7 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<List<Budget>> getAllBudgets() async {
-    final db = await dbHelper.database;
-    final maps = await db.query('Budgets');
+    final maps = await dbHelper.getBudgets();
     return List.generate(maps.length, (i) {
       return Budget.fromMap(maps[i]);
     });
@@ -16,31 +15,22 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<Budget> getBudgetById(int id) async {
-    final db = await dbHelper.database;
-    final maps = await db.query('Budgets', where: 'id = ?', whereArgs: [id]);
-    if (maps.isNotEmpty) {
-      return Budget.fromMap(maps.first);
-    } else {
-      throw Exception('ID $id not found');
-    }
+    final map = await dbHelper.getBudget(id);
+    return Budget.fromMap(map);
   }
 
   @override
   Future<int> insertBudget(Budget budget) async {
-    final db = await dbHelper.database;
-    return await db.insert('Budgets', budget.toMap());
+    return await dbHelper.insertBudget(budget.toMap());
   }
 
   @override
   Future<int> updateBudget(Budget budget) async {
-    final db = await dbHelper.database;
-    return await db.update('Budgets', budget.toMap(),
-        where: 'id = ?', whereArgs: [budget.id]);
+    return await dbHelper.updateBudget(budget.toMap());
   }
 
   @override
   Future<int> deleteBudget(int id) async {
-    final db = await dbHelper.database;
-    return await db.delete('Budgets', where: 'id = ?', whereArgs: [id]);
+    return await dbHelper.deleteBudget(id);
   }
 }
