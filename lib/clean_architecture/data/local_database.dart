@@ -31,7 +31,7 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE Budgets (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
+        name TEXT UNIQUE NOT NULL,
         income REAL NOT NULL
       )
     ''');
@@ -40,7 +40,7 @@ class DatabaseHelper {
       CREATE TABLE Categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         budget_id INTEGER NOT NULL,
-        name TEXT NOT NULL,
+        name TEXT UNIQUE NOT NULL,
         spending_limit REAL,
         FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
       )
