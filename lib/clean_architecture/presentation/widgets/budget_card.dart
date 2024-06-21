@@ -1,6 +1,8 @@
+import 'package:budgeting_app/clean_architecture/data/repositories/budget_repository_impl.dart';
 import 'package:budgeting_app/clean_architecture/domain/entities/budget.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
+import 'package:budgeting_app/clean_architecture/presentation/screens/budget_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +21,21 @@ class BudgetCard extends StatelessWidget {
             context.read<BudgetBloc>().add(DeleteBudget(budget.id!));
           },
           icon: const Icon(Icons.delete)),
-      onTap: () {},
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                    create: (context) => BudgetBloc(BudgetRepositoryImpl()),
+                    child: BudgetFormScreen(
+                      budget: budget,
+                    ),
+                  )),
+        );
+        if (result == true) {
+          context.read<BudgetBloc>().add(FetchBudgets());
+        }
+      },
     );
   }
 }

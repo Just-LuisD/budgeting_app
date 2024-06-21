@@ -2,7 +2,7 @@ import 'package:budgeting_app/clean_architecture/data/repositories/budget_reposi
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_state.dart';
-import 'package:budgeting_app/clean_architecture/presentation/screens/add_budget_screen.dart';
+import 'package:budgeting_app/clean_architecture/presentation/screens/budget_form_screen.dart';
 import 'package:budgeting_app/clean_architecture/presentation/widgets/budget_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,7 +45,7 @@ class BudgetListScreen extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => BlocProvider(
                       create: (context) => BudgetBloc(BudgetRepositoryImpl()),
-                      child: AddBudgetScreen(),
+                      child: BudgetFormScreen(),
                     )),
           );
           if (result == true) {
