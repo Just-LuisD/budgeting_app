@@ -17,7 +17,6 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
   Future<void> _saveBudget(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       final newBudget = Budget(
-        id: 0,
         name: _nameController.text,
         income: double.parse(_incomeController.text),
       );
