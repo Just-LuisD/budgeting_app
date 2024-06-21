@@ -1,5 +1,5 @@
 import 'package:budgeting_app/clean_architecture/domain/entities/expense.dart';
-import 'package:budgeting_app/clean_architecture/domain/repositories/expsne_repository.dart';
+import 'package:budgeting_app/clean_architecture/domain/repositories/expense_repository.dart';
 import 'package:budgeting_app/clean_architecture/data/local_database.dart';
 
 class ExpenseRepositoryImpl implements ExpenseRepository {
