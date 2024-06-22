@@ -1,6 +1,7 @@
 import 'package:budgeting_app/clean_architecture/domain/entities/budget.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
+import 'package:budgeting_app/clean_architecture/presentation/widgets/category_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +18,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _incomeController = TextEditingController();
+  List<Widget> _categoryInputs = [];
 
   @override
   void initState() {
@@ -52,41 +54,69 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Budget Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a budget name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _incomeController,
-                decoration: const InputDecoration(labelText: 'Income'),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an income amount';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _submitForm(context),
-                child: Text(widget.budget == null ? 'Save' : "Update"),
-              ),
-            ],
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Budget Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a budget name';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _incomeController,
+                  decoration: const InputDecoration(labelText: 'Income'),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an income amount';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(child: Text("Categories")),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _categoryInputs = [
+                                    CategoryInput(),
+                                    ..._categoryInputs
+                                  ];
+                                });
+                              },
+                              icon: Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                        ..._categoryInputs,
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _submitForm(context),
+                  child: Text(widget.budget == null ? 'Save' : "Update"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
