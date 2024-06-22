@@ -46,6 +46,13 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
     }
   }
 
+  void _deleteCategory(UniqueKey key) {
+    int idx = _categoryInputs.indexWhere((element) => element.key == key);
+    setState(() {
+      _categoryInputs.removeAt(idx);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,8 +102,13 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                             IconButton(
                               onPressed: () {
                                 setState(() {
+                                  final inputKey = UniqueKey();
                                   _categoryInputs = [
-                                    CategoryInput(),
+                                    CategoryInput(
+                                        key: inputKey,
+                                        onDelete: () {
+                                          _deleteCategory(inputKey);
+                                        }),
                                     ..._categoryInputs
                                   ];
                                 });
