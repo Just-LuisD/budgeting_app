@@ -14,7 +14,9 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
 
   Future<void> _onFetchBudgets(
-      FetchBudgets event, Emitter<BudgetState> emit) async {
+    FetchBudgets event,
+    Emitter<BudgetState> emit,
+  ) async {
     emit(BudgetLoading());
     try {
       final budgets = await budgetRepository.getAllBudgets();
@@ -30,13 +32,17 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
 
   Future<void> _onUpdateBudget(
-      UpdateBudget event, Emitter<BudgetState> emit) async {
+    UpdateBudget event,
+    Emitter<BudgetState> emit,
+  ) async {
     await budgetRepository.updateBudget(event.budget);
     add(FetchBudgets());
   }
 
   Future<void> _onDeleteBudget(
-      DeleteBudget event, Emitter<BudgetState> emit) async {
+    DeleteBudget event,
+    Emitter<BudgetState> emit,
+  ) async {
     await budgetRepository.deleteBudget(event.id);
     add(FetchBudgets());
   }

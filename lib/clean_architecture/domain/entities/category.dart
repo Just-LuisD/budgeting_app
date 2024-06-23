@@ -1,14 +1,15 @@
 class Category {
-  final int id;
-  final int budgetId;
+  final int? id;
+  final int? budgetId;
   final String name;
-  final double? spendingLimit;
+  final double spendingLimit;
 
-  Category(
-      {required this.id,
-      required this.budgetId,
-      required this.name,
-      this.spendingLimit});
+  Category({
+    this.id,
+    this.budgetId,
+    required this.name,
+    required this.spendingLimit,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -25,6 +26,20 @@ class Category {
       budgetId: map['budget_id'],
       name: map['name'],
       spendingLimit: map['spending_limit'],
+    );
+  }
+
+  Category copy({
+    int? id,
+    int? budgetId,
+    String? name,
+    double? spendingLimit,
+  }) {
+    return Category(
+      id: id ?? this.id,
+      budgetId: budgetId ?? this.budgetId,
+      name: name ?? this.name,
+      spendingLimit: spendingLimit ?? this.spendingLimit,
     );
   }
 }

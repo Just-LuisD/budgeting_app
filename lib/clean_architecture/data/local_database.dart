@@ -40,7 +40,7 @@ class DatabaseHelper {
       CREATE TABLE Categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         budget_id INTEGER NOT NULL,
-        name TEXT UNIQUE NOT NULL,
+        name TEXT NOT NULL,
         spending_limit REAL,
         FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
       )
@@ -128,6 +128,15 @@ class DatabaseHelper {
     Database db = await database;
     return await db
         .delete('Categories', where: 'id = ?', whereArgs: [categoryId]);
+  }
+
+  Future<int> deleteCategoryByBudgetId(int budgetId) async {
+    Database db = await database;
+    return await db.delete(
+      'Categories',
+      where: 'budget_id = ?',
+      whereArgs: [budgetId],
+    );
   }
 
   // Delete an expense

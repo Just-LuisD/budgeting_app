@@ -25,12 +25,13 @@ class BudgetCard extends StatelessWidget {
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                    create: (context) => BudgetBloc(BudgetRepositoryImpl()),
-                    child: BudgetFormScreen(
-                      budget: budget,
-                    ),
-                  )),
+            builder: (context) => BlocProvider(
+              create: (context) => BudgetBloc(BudgetRepositoryImpl()),
+              child: BudgetFormScreen(
+                budget: budget,
+              ),
+            ),
+          ),
         );
         if (result == true) {
           context.read<BudgetBloc>().add(FetchBudgets());

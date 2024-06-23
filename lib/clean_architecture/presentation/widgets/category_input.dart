@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 
 class CategoryInput extends StatelessWidget {
   final void Function()? onDelete;
-  final nameController = TextEditingController();
-  final limitController = TextEditingController();
+  final TextEditingController nameController;
+  final TextEditingController limitController;
 
-  CategoryInput({super.key, required this.onDelete});
+  CategoryInput({
+    super.key,
+    required this.onDelete,
+    required this.nameController,
+    required this.limitController,
+  });
 
   @override
   Widget build(BuildContext context) {
