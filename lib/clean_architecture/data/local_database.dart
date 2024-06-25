@@ -51,10 +51,12 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         category_id INTEGER NOT NULL,
+        budget_id INTEGER NOT NULL,
         amount REAL NOT NULL,
         date TEXT NOT NULL,
         notes TEXT,
         FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
+        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
       )
     ''');
   }
@@ -95,6 +97,12 @@ class DatabaseHelper {
     Database db = await database;
     return await db
         .query('Expenses', where: 'category_id = ?', whereArgs: [categoryId]);
+  }
+
+  Future<List<Map<String, dynamic>>> getExpensesByBudgetId(int budgetId) async {
+    Database db = await database;
+    return await db
+        .query('Expenses', where: 'budget_id = ?', whereArgs: [budgetId]);
   }
 
   Future<Map<String, dynamic>> getBudget(int id) async {

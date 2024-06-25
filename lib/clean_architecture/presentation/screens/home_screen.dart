@@ -1,8 +1,11 @@
 import 'package:budgeting_app/clean_architecture/data/repositories/budget_repository_impl.dart';
+import 'package:budgeting_app/clean_architecture/data/repositories/expense_repository_impl.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
+import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_bloc.dart';
 import 'package:budgeting_app/clean_architecture/presentation/screens/budget_list_screen.dart';
-import 'package:budgeting_app/screens/transactions_screen.dart';
+import 'package:budgeting_app/clean_architecture/presentation/screens/expense_list_screen.dart';
+import 'package:budgeting_app/screens/expense_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Widget scaffoldBody;
     switch (currentPageIndex) {
       case 1:
-        scaffoldBody = const TransactionsScreen();
+        scaffoldBody = const ExpenseListScreenOld();
       case 2:
         scaffoldBody = BlocProvider(
           create: (context) =>
@@ -29,7 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: BudgetListScreen(),
         );
       default:
-        scaffoldBody = const Text("Homescreen place holder");
+        scaffoldBody = BlocProvider(
+          create: (context) {
+            return ExpenseBloc(ExpenseRepositoryImpl());
+          },
+          child: ExpenseListScreen(),
+        );
     }
 
     return Scaffold(

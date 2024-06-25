@@ -6,6 +6,14 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   final DatabaseHelper dbHelper = DatabaseHelper();
 
   @override
+  Future<List<Expense>> getExpensesByBudgetId(int budgetId) async {
+    final maps = await dbHelper.getExpensesByBudgetId(budgetId);
+    return List.generate(maps.length, (i) {
+      return Expense.fromMap(maps[i]);
+    });
+  }
+
+  @override
   Future<List<Expense>> getExpensesByCategoryId(int categoryId) async {
     final db = await dbHelper.database;
     final maps = await db

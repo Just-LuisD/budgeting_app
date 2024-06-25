@@ -5,16 +5,16 @@ import 'package:budgeting_app/screens/edit_transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class TransactionsScreen extends StatefulWidget {
-  const TransactionsScreen({
+class ExpenseListScreenOld extends StatefulWidget {
+  const ExpenseListScreenOld({
     super.key,
   });
 
   @override
-  State<TransactionsScreen> createState() => _TransactionsScreenState();
+  State<ExpenseListScreenOld> createState() => _ExpenseListScreenOldState();
 }
 
-class _TransactionsScreenState extends State<TransactionsScreen> {
+class _ExpenseListScreenOldState extends State<ExpenseListScreenOld> {
   late List<FinancialTransaction> transactions = [];
   bool isLoading = false;
 
