@@ -1,4 +1,3 @@
-import 'package:budgeting_app/database/transaction_database.dart';
 import 'package:budgeting_app/models/transaction.dart';
 import 'package:budgeting_app/screens/add_transaction_screen.dart';
 import 'package:budgeting_app/screens/edit_transaction_screen.dart';
@@ -18,44 +17,18 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
   late List<FinancialTransaction> transactions = [];
   bool isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    refreshTransactions();
-  }
-
-  @override
-  void dispose() {
-    TransactionDatabase.instance.close();
-    super.dispose();
-  }
-
-  Future refreshTransactions() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    transactions = await TransactionDatabase.instance.readAllTransactions();
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   void _addNewTransaction() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddTransactionScreen()),
-    ).then((value) => refreshTransactions());
+    );
   }
 
   void _editTransaction(FinancialTransaction tappedTransaction) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(
-            builder: (context) => EditTransactionScreen(
-                  transaction: tappedTransaction,
-                )))
-        .then((value) => refreshTransactions());
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => EditTransactionScreen(
+              transaction: tappedTransaction,
+            )));
   }
 
   @override
