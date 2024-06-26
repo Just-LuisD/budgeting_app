@@ -1,5 +1,5 @@
+import 'package:budgeting_app/clean_architecture/presentation/screens/expense_form_screen.dart';
 import 'package:budgeting_app/models/transaction.dart';
-import 'package:budgeting_app/screens/add_transaction_screen.dart';
 import 'package:budgeting_app/screens/edit_transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +20,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
   void _addNewTransaction() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const AddTransactionScreen()),
+      MaterialPageRoute(builder: (context) => const ExpenseFormScreen()),
     );
   }
 
