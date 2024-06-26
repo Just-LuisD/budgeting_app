@@ -8,6 +8,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   @override
   Future<List<Expense>> getExpensesByBudgetId(int budgetId) async {
     final maps = await dbHelper.getExpensesByBudgetId(budgetId);
+    await dbHelper.close();
     return List.generate(maps.length, (i) {
       return Expense.fromMap(maps[i]);
     });
@@ -18,6 +19,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
     final db = await dbHelper.database;
     final maps = await db
         .query('Expenses', where: 'category_id = ?', whereArgs: [categoryId]);
+    await dbHelper.close();
     return List.generate(maps.length, (i) {
       return Expense.fromMap(maps[i]);
     });
@@ -27,6 +29,7 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   Future<Expense> getExpenseById(int id) async {
     final db = await dbHelper.database;
     final maps = await db.query('Expenses', where: 'id = ?', whereArgs: [id]);
+    await dbHelper.close();
     if (maps.isNotEmpty) {
       return Expense.fromMap(maps.first);
     } else {
@@ -37,19 +40,33 @@ class ExpenseRepositoryImpl implements ExpenseRepository {
   @override
   Future<int> insertExpense(Expense expense) async {
     final db = await dbHelper.database;
-    return await db.insert('Expenses', expense.toMap());
+    final response = await db.insert('Expenses', expense.toMap());
+    await dbHelper.close();
+    return response;
   }
 
   @override
   Future<int> updateExpense(Expense expense) async {
     final db = await dbHelper.database;
-    return await db.update('Expenses', expense.toMap(),
-        where: 'id = ?', whereArgs: [expense.id]);
+    final response = await db.update(
+      'Expenses',
+      expense.toMap(),
+      where: 'id = ?',
+      whereArgs: [expense.id],
+    );
+    await db.close();
+    return response;
   }
 
   @override
   Future<int> deleteExpense(int id) async {
     final db = await dbHelper.database;
-    return await db.delete('Expenses', where: 'id = ?', whereArgs: [id]);
+    final response = await db.delete(
+      'Expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    await db.close();
+    return response;
   }
 }
