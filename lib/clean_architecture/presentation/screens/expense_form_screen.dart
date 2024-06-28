@@ -76,8 +76,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       );
       context.read<ExpenseBloc>().add(AddExpense(newExpense));
     } else {
-      // update
+      final updatedExpense = widget.expense!
+          .copy(title: title, amount: amount, date: date, notes: notes);
+      context.read<ExpenseBloc>().add(UpdateExpense(updatedExpense));
     }
+    Navigator.pop(context, true);
   }
 
   @override
@@ -92,9 +95,12 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             : [
                 IconButton(
                   onPressed: () {
-                    // TODO: delete transaction
+                    context
+                        .read<ExpenseBloc>()
+                        .add(DeleteExpense(widget.expense!));
+                    Navigator.pop(context, true);
                   },
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                 ),
               ],
       ),

@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:budgeting_app/clean_architecture/data/repositories/expense_repository_impl.dart';
 import 'package:budgeting_app/clean_architecture/domain/entities/expense.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_bloc.dart';
+import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_event.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_state.dart';
 import 'package:budgeting_app/clean_architecture/presentation/screens/expense_form_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,9 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
         ),
       ),
     ).then((result) {
-      // TODO: refresh page
+      if (result) {
+        context.read<ExpenseBloc>().add(FetchExpenses(1));
+      }
     });
   }
 
@@ -56,11 +57,11 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
               child: BlocBuilder<ExpenseBloc, ExpenseState>(
                 builder: (context, state) {
                   if (state is ExpenseLoading) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (state is ExpenseLoaded) {
                     final expenses = state.expenses;
                     return expenses.isEmpty
-                        ? Center(child: Text('No expenses available'))
+                        ? const Center(child: Text('No expenses available'))
                         : ListView.builder(
                             itemCount: expenses.length,
                             itemBuilder: (BuildContext context, int index) {
