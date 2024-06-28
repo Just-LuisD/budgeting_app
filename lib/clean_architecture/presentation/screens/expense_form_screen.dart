@@ -1,9 +1,12 @@
 import 'package:budgeting_app/clean_architecture/domain/entities/expense.dart';
+import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_bloc.dart';
+import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_event.dart';
 import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/category_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/notes_field.dart';
 import 'package:budgeting_app/widgets/transaction_form/title_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseFormScreen extends StatefulWidget {
@@ -35,6 +38,48 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     }
   }
 
+  void _pickDate() async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: _expenseDate,
+      firstDate: DateTime(_expenseDate.year, _expenseDate.month, 1),
+      lastDate: DateTime(_expenseDate.year, _expenseDate.month + 1, 1).subtract(
+        Duration(days: 1),
+      ),
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        _expenseDate = selectedDate;
+      });
+    }
+  }
+
+  void _submitForm(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    final title = _titleController.text;
+    final category = _categoryController.text;
+    final amount = double.tryParse(_amountController.text);
+    final date = DateTime.now().toString();
+    final notes = _notesController.text;
+
+    if (widget.expense == null) {
+      final newExpense = Expense(
+        title: title,
+        categoryId: 1,
+        budgetId: 1,
+        amount: amount!,
+        date: date,
+        notes: notes,
+      );
+      context.read<ExpenseBloc>().add(AddExpense(newExpense));
+    } else {
+      // update
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +91,9 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             ? null
             : [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: delete transaction
+                  },
                   icon: Icon(Icons.delete),
                 ),
               ],
@@ -69,14 +116,14 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   children: [
                     Text('Date: ${DateFormat.yMMMd().format(_expenseDate)}'),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: _pickDate,
                       icon: Icon(Icons.calendar_month),
                     ),
                   ],
                 ),
                 NotesField(inputController: _notesController),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _submitForm(context),
                   child: Text(widget.expense == null ? "Add" : "Update"),
                 ),
               ],

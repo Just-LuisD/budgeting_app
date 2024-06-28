@@ -1,7 +1,12 @@
+import 'dart:math';
+
+import 'package:budgeting_app/clean_architecture/data/repositories/expense_repository_impl.dart';
+import 'package:budgeting_app/clean_architecture/domain/entities/expense.dart';
+import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_bloc.dart';
+import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_state.dart';
 import 'package:budgeting_app/clean_architecture/presentation/screens/expense_form_screen.dart';
-import 'package:budgeting_app/models/transaction.dart';
-import 'package:budgeting_app/screens/edit_transaction_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseListScreen extends StatefulWidget {
@@ -14,21 +19,22 @@ class ExpenseListScreen extends StatefulWidget {
 }
 
 class _ExpenseListScreenState extends State<ExpenseListScreen> {
-  late List<FinancialTransaction> transactions = [];
   bool isLoading = false;
 
-  void _addNewTransaction() {
+  void _addNewTransaction(Expense? expense) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ExpenseFormScreen()),
-    );
-  }
-
-  void _editTransaction(FinancialTransaction tappedTransaction) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EditTransactionScreen(
-              transaction: tappedTransaction,
-            )));
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => ExpenseBloc(ExpenseRepositoryImpl()),
+          child: ExpenseFormScreen(
+            expense: expense,
+          ),
+        ),
+      ),
+    ).then((result) {
+      // TODO: refresh page
+    });
   }
 
   @override
@@ -47,57 +53,77 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: transactions.length,
-                itemBuilder: (BuildContext context, int index) {
-                  bool addDate = false;
-                  lastDate ??= transactions[index].date;
-                  if (!DateUtils.isSameDay(
-                      lastDate, transactions[index].date)) {
-                    addDate = true;
-                    lastDate = transactions[index].date;
-                    total = 0;
+              child: BlocBuilder<ExpenseBloc, ExpenseState>(
+                builder: (context, state) {
+                  if (state is ExpenseLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (state is ExpenseLoaded) {
+                    final expenses = state.expenses;
+                    return expenses.isEmpty
+                        ? Center(child: Text('No expenses available'))
+                        : ListView.builder(
+                            itemCount: expenses.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              bool addDate = false;
+                              lastDate ??=
+                                  DateTime.tryParse(expenses[index].date);
+                              if (!DateUtils.isSameDay(lastDate,
+                                  DateTime.tryParse(expenses[index].date))) {
+                                addDate = true;
+                                lastDate =
+                                    DateTime.tryParse(expenses[index].date);
+                                total = 0;
+                              }
+                              total += expenses[index].amount;
+                              return Column(
+                                children: [
+                                  if (addDate)
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 3,
+                                            horizontal: 6,
+                                          ),
+                                          child: Text(DateFormat.yMMMd()
+                                              .format(lastDate!)),
+                                        ),
+                                        const Spacer(),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 3,
+                                            horizontal: 6,
+                                          ),
+                                          child: Text(
+                                            total.toString(),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _addNewTransaction(expenses[index]);
+                                    },
+                                    child: Card(
+                                      child: ListTile(
+                                        leading: Text(expenses[index]
+                                            .categoryId
+                                            .toString()),
+                                        title: Text(expenses[index].title),
+                                        trailing:
+                                            Text("\$${expenses[index].amount}"),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                  } else if (state is ExpenseError) {
+                    return Center(child: Text(state.message));
                   }
-                  total += transactions[index].amount;
-                  return Column(
-                    children: [
-                      if (addDate)
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 3,
-                                horizontal: 6,
-                              ),
-                              child: Text(DateFormat.yMMMd().format(lastDate!)),
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 3,
-                                horizontal: 6,
-                              ),
-                              child: Text(
-                                total.toString(),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ],
-                        ),
-                      GestureDetector(
-                        onTap: () {
-                          _editTransaction(transactions[index]);
-                        },
-                        child: Card(
-                          child: ListTile(
-                            leading: Text(transactions[index].category),
-                            title: Text(transactions[index].title),
-                            trailing: Text("\$${transactions[index].amount}"),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
+                  return Container();
                 },
               ),
             ),
@@ -105,7 +131,9 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FloatingActionButton(
-                  onPressed: _addNewTransaction,
+                  onPressed: () {
+                    _addNewTransaction(null);
+                  },
                   shape: const CircleBorder(),
                   child: const Icon(Icons.add),
                 ),
