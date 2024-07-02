@@ -14,16 +14,16 @@ class BudgetListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Budgets'),
+        title: const Text('Budgets'),
       ),
       body: BlocBuilder<BudgetBloc, BudgetState>(
         builder: (context, state) {
           if (state is BudgetLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is BudgetLoaded) {
             final budgets = state.budgets;
             return budgets.isEmpty
-                ? Center(child: Text('No budgets available'))
+                ? const Center(child: Text('No budgets available'))
                 : ListView.builder(
                     itemCount: budgets.length,
                     itemBuilder: (context, index) {
@@ -42,19 +42,20 @@ class BudgetListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => BlocProvider(
                       create: (context) => BudgetBloc(BudgetRepositoryImpl()),
-                      child: BudgetFormScreen(),
+                      child: const BudgetFormScreen(),
                     )),
-          );
-          if (result == true) {
-            context.read<BudgetBloc>().add(FetchBudgets());
-          }
+          ).then((value) {
+            if (value == true) {
+              context.read<BudgetBloc>().add(FetchBudgets());
+            }
+          });
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
