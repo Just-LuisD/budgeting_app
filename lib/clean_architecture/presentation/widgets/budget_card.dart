@@ -22,7 +22,7 @@ class BudgetCard extends StatelessWidget {
           },
           icon: const Icon(Icons.delete)),
       onTap: () async {
-        final result = await Navigator.push(
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => BlocProvider(
@@ -32,10 +32,13 @@ class BudgetCard extends StatelessWidget {
               ),
             ),
           ),
+        ).then(
+          (value) {
+            if (value == true) {
+              context.read<BudgetBloc>().add(FetchBudgets());
+            }
+          },
         );
-        if (result == true) {
-          context.read<BudgetBloc>().add(FetchBudgets());
-        }
       },
     );
   }
