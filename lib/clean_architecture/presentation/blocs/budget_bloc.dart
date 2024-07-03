@@ -1,4 +1,5 @@
 import 'package:budgeting_app/clean_architecture/data/repositories/budget_repository_impl.dart';
+import 'package:budgeting_app/clean_architecture/domain/entities/budget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'budget_event.dart';
 import 'budget_state.dart';
@@ -20,7 +21,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     emit(BudgetLoading());
     try {
       final budgets = await budgetRepository.getAllBudgets();
-      emit(BudgetLoaded(budgets));
+      emit(BudgetLoaded(List<Budget>.from(budgets)));
     } catch (e) {
       emit(BudgetError(e.toString()));
     }

@@ -41,14 +41,13 @@ class BudgetRepositoryImpl implements BudgetRepository {
 
   @override
   Future<int> updateBudget(Budget budget) async {
-    final numChanged = await dbHelper.updateBudget(budget.toMap());
-    dbHelper.deleteCategoryByBudgetId(budget.id!);
+    await dbHelper.deleteCategoryByBudgetId(budget.id!);
     for (int i = 0; i < budget.categories!.length; i++) {
       await dbHelper.insertCategory(
         budget.categories![i].copy(budgetId: budget.id).toMap(),
       );
     }
-    return numChanged;
+    return await dbHelper.updateBudget(budget.toMap());
   }
 
   @override

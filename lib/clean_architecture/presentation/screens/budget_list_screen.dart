@@ -29,7 +29,7 @@ class BudgetListScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final budget = budgets[index];
                       return BudgetCard(
-                        key: Key(budget.id!.toString()),
+                        key: UniqueKey(),
                         budget: budget,
                       );
                     },
