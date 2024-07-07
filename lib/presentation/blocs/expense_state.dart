@@ -1,4 +1,4 @@
-import 'package:budgeting_app/clean_architecture/domain/entities/expense.dart';
+import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ExpenseState extends Equatable {

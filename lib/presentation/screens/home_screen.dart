@@ -1,11 +1,11 @@
-import 'package:budgeting_app/clean_architecture/data/repositories/budget_repository_impl.dart';
-import 'package:budgeting_app/clean_architecture/data/repositories/expense_repository_impl.dart';
-import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.dart';
-import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
-import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_bloc.dart';
-import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_event.dart';
-import 'package:budgeting_app/clean_architecture/presentation/screens/budget_list_screen.dart';
-import 'package:budgeting_app/clean_architecture/presentation/screens/expense_list_screen.dart';
+import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
+import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
+import 'package:budgeting_app/presentation/blocs/budget_bloc.dart';
+import 'package:budgeting_app/presentation/blocs/budget_event.dart';
+import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
+import 'package:budgeting_app/presentation/blocs/expense_event.dart';
+import 'package:budgeting_app/presentation/screens/budget_list_screen.dart';
+import 'package:budgeting_app/presentation/screens/expense_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

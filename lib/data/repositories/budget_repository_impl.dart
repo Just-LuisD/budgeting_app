@@ -1,7 +1,7 @@
-import 'package:budgeting_app/clean_architecture/domain/entities/budget.dart';
-import 'package:budgeting_app/clean_architecture/domain/entities/category.dart';
-import 'package:budgeting_app/clean_architecture/domain/repositories/budget_repository.dart';
-import 'package:budgeting_app/clean_architecture/data/local_database.dart';
+import 'package:budgeting_app/domain/entities/budget.dart';
+import 'package:budgeting_app/domain/entities/category.dart';
+import 'package:budgeting_app/domain/repositories/budget_repository.dart';
+import 'package:budgeting_app/data/local_database.dart';
 
 class BudgetRepositoryImpl implements BudgetRepository {
   final DatabaseHelper dbHelper = DatabaseHelper();

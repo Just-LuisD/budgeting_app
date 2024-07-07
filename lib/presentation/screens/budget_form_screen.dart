@@ -1,8 +1,8 @@
-import 'package:budgeting_app/clean_architecture/domain/entities/budget.dart';
-import 'package:budgeting_app/clean_architecture/domain/entities/category.dart';
-import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_bloc.dart';
-import 'package:budgeting_app/clean_architecture/presentation/blocs/budget_event.dart';
-import 'package:budgeting_app/clean_architecture/presentation/widgets/category_input.dart';
+import 'package:budgeting_app/domain/entities/budget.dart';
+import 'package:budgeting_app/domain/entities/category.dart';
+import 'package:budgeting_app/presentation/blocs/budget_bloc.dart';
+import 'package:budgeting_app/presentation/blocs/budget_event.dart';
+import 'package:budgeting_app/presentation/widgets/category_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

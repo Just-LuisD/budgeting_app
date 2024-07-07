@@ -1,4 +1,4 @@
-import 'package:budgeting_app/clean_architecture/domain/entities/category.dart';
+import 'package:budgeting_app/domain/entities/category.dart';
 
 class Budget {
   final int? id;

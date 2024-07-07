@@ -1,4 +1,4 @@
-import 'package:budgeting_app/clean_architecture/data/repositories/expense_repository_impl.dart';
+import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'expense_event.dart';
 import 'expense_state.dart';

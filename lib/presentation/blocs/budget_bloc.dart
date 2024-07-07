@@ -1,5 +1,5 @@
-import 'package:budgeting_app/clean_architecture/data/repositories/budget_repository_impl.dart';
-import 'package:budgeting_app/clean_architecture/domain/entities/budget.dart';
+import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
+import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'budget_event.dart';
 import 'budget_state.dart';

@@ -1,6 +1,6 @@
-import 'package:budgeting_app/clean_architecture/domain/entities/category.dart';
-import 'package:budgeting_app/clean_architecture/domain/repositories/category_repository.dart';
-import 'package:budgeting_app/clean_architecture/data/local_database.dart';
+import 'package:budgeting_app/domain/entities/category.dart';
+import 'package:budgeting_app/domain/repositories/category_repository.dart';
+import 'package:budgeting_app/data/local_database.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
   final DatabaseHelper dbHelper = DatabaseHelper();
