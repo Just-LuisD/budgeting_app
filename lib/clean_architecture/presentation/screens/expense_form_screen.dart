@@ -1,10 +1,10 @@
 import 'package:budgeting_app/clean_architecture/domain/entities/expense.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_bloc.dart';
 import 'package:budgeting_app/clean_architecture/presentation/blocs/expense_event.dart';
-import 'package:budgeting_app/widgets/transaction_form/amount_field.dart';
-import 'package:budgeting_app/widgets/transaction_form/category_field.dart';
-import 'package:budgeting_app/widgets/transaction_form/notes_field.dart';
-import 'package:budgeting_app/widgets/transaction_form/title_field.dart';
+import 'package:budgeting_app/clean_architecture/presentation/widgets/transaction_form/amount_field.dart';
+import 'package:budgeting_app/clean_architecture/presentation/widgets/transaction_form/category_field.dart';
+import 'package:budgeting_app/clean_architecture/presentation/widgets/transaction_form/notes_field.dart';
+import 'package:budgeting_app/clean_architecture/presentation/widgets/transaction_form/title_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

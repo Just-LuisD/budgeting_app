@@ -1,4 +1,3 @@
-import 'package:budgeting_app/screens/create_budget_screen.dart';
 import 'package:budgeting_app/clean_architecture/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,10 +9,6 @@ final _router = GoRouter(
       path: '/',
       builder: (context, state) => const HomeScreen(),
     ),
-    GoRoute(
-      path: '/create-budget/:template',
-      builder: (context, state) => const CreateBudgetScreen(),
-    )
   ],
 );
 

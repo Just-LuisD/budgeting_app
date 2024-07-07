@@ -32,7 +32,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
         ),
       ),
     ).then((result) {
-      if (result) {
+      if (result == true) {
         context.read<ExpenseBloc>().add(FetchExpenses(1));
       }
     });
