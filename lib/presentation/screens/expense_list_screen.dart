@@ -42,113 +42,105 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
   Widget build(BuildContext context) {
     DateTime? lastDate;
     double total = 0;
-    return PageView.builder(
-      itemCount: 3,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: [
-            Text(
-              DateFormat.MMMM().format(DateTime.now()),
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            Expanded(
-              child: BlocBuilder<ExpenseBloc, ExpenseState>(
-                builder: (context, state) {
-                  if (state is ExpenseLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is ExpenseLoaded) {
-                    final expenses = state.expenses;
-                    return expenses.isEmpty
-                        ? const Center(child: Text('No expenses available'))
-                        : ListView.builder(
-                            itemCount: expenses.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              bool addDate = false;
-                              lastDate ??=
-                                  DateTime.tryParse(expenses[index].date);
-                              if (!DateUtils.isSameDay(lastDate,
-                                  DateTime.tryParse(expenses[index].date))) {
-                                addDate = true;
-                                lastDate =
-                                    DateTime.tryParse(expenses[index].date);
-                                total = 0;
-                              }
-                              total += expenses[index].amount;
-                              return Column(
-                                children: [
-                                  if (addDate)
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 3,
-                                            horizontal: 6,
-                                          ),
-                                          child: Text(DateFormat.yMMMd()
-                                              .format(lastDate!)),
-                                        ),
-                                        const Spacer(),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 3,
-                                            horizontal: 6,
-                                          ),
-                                          child: Text(
-                                            total.toString(),
-                                            textAlign: TextAlign.right,
-                                          ),
-                                        ),
-                                      ],
+    return Column(
+      children: [
+        Text(
+          DateFormat.MMMM().format(DateTime.now()),
+          style: const TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        Expanded(
+          child: BlocBuilder<ExpenseBloc, ExpenseState>(
+            builder: (context, state) {
+              if (state is ExpenseLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is ExpenseLoaded) {
+                final expenses = state.expenses;
+                return expenses.isEmpty
+                    ? const Center(child: Text('No expenses available'))
+                    : ListView.builder(
+                        itemCount: expenses.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          bool addDate = false;
+                          lastDate ??= DateTime.tryParse(expenses[index].date);
+                          if (!DateUtils.isSameDay(lastDate,
+                              DateTime.tryParse(expenses[index].date))) {
+                            addDate = true;
+                            lastDate = DateTime.tryParse(expenses[index].date);
+                            total = 0;
+                          }
+                          total += expenses[index].amount;
+                          return Column(
+                            children: [
+                              if (addDate)
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 3,
+                                        horizontal: 6,
+                                      ),
+                                      child: Text(
+                                          DateFormat.yMMMd().format(lastDate!)),
                                     ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _addNewTransaction(expenses[index]);
-                                    },
-                                    child: Card(
-                                      child: ListTile(
-                                        leading: Text(expenses[index]
-                                            .categoryId
-                                            .toString()),
-                                        title: Text(expenses[index].title),
-                                        trailing:
-                                            Text("\$${expenses[index].amount}"),
+                                    const Spacer(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 3,
+                                        horizontal: 6,
+                                      ),
+                                      child: Text(
+                                        total.toString(),
+                                        textAlign: TextAlign.right,
                                       ),
                                     ),
+                                  ],
+                                ),
+                              GestureDetector(
+                                onTap: () {
+                                  _addNewTransaction(expenses[index]);
+                                },
+                                child: Card(
+                                  child: ListTile(
+                                    leading: Text(
+                                        expenses[index].categoryId.toString()),
+                                    title: Text(expenses[index].title),
+                                    trailing:
+                                        Text("\$${expenses[index].amount}"),
                                   ),
-                                ],
-                              );
-                            },
+                                ),
+                              ),
+                            ],
                           );
-                  } else if (state is ExpenseError) {
-                    return Center(child: Text(state.message));
-                  }
-                  return Container();
-                },
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    _addNewTransaction(null);
-                  },
-                  shape: const CircleBorder(),
-                  child: const Icon(Icons.add),
-                ),
-                const SizedBox(
-                  width: 10,
-                )
-              ],
+                        },
+                      );
+              } else if (state is ExpenseError) {
+                return Center(child: Text(state.message));
+              }
+              return Container();
+            },
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                _addNewTransaction(null);
+              },
+              shape: const CircleBorder(),
+              child: const Icon(Icons.add),
             ),
             const SizedBox(
-              height: 10,
+              width: 10,
             )
           ],
-        );
-      },
+        ),
+        const SizedBox(
+          height: 10,
+        )
+      ],
     );
   }
 }

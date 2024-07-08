@@ -32,10 +32,12 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
   final _nameController = TextEditingController();
   final _incomeController = TextEditingController();
   List<CategoryInputStructure> _categoryInputs = [];
+  double _remaindingIncome = 0;
 
   @override
   void initState() {
     super.initState();
+    _incomeController.addListener(_valueChange);
     if (widget.budget != null) {
       _nameController.text = widget.budget!.name;
       _incomeController.text = widget.budget!.income.toString();
@@ -43,6 +45,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
         _categoryInputs = widget.budget!.categories!.map((e) {
           final nameController = TextEditingController();
           final limitController = TextEditingController();
+          limitController.addListener(_valueChange);
           nameController.text = e.name;
           limitController.text = e.spendingLimit.toString();
           final inputKey = UniqueKey();
@@ -61,6 +64,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
           );
         }).toList();
       }
+      _valueChange();
     }
   }
 
@@ -102,6 +106,19 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
         _categoryInputs.indexWhere((element) => element.inputField.key == key);
     setState(() {
       _categoryInputs.removeAt(idx);
+      _valueChange();
+    });
+  }
+
+  void _valueChange() {
+    final income = double.tryParse(_incomeController.text) ?? 0;
+    double usedIncome = 0;
+    for (CategoryInputStructure input in _categoryInputs) {
+      usedIncome += double.tryParse(input.limitController.text) ?? 0;
+    }
+
+    setState(() {
+      _remaindingIncome = income - usedIncome;
     });
   }
 
@@ -130,7 +147,8 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                 ),
                 TextFormField(
                   controller: _incomeController,
-                  decoration: const InputDecoration(labelText: 'Income'),
+                  decoration:
+                      const InputDecoration(labelText: 'Expected Income'),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
@@ -150,11 +168,14 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                       children: [
                         Row(
                           children: [
-                            Expanded(child: Text("Categories")),
+                            Expanded(
+                              child: Text("Categories: \$$_remaindingIncome"),
+                            ),
                             IconButton(
                               onPressed: () {
                                 final nameController = TextEditingController();
                                 final limitController = TextEditingController();
+                                limitController.addListener(_valueChange);
                                 final inputKey = UniqueKey();
                                 final inputField = CategoryInput(
                                   key: inputKey,
@@ -175,7 +196,7 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                                   ];
                                 });
                               },
-                              icon: Icon(Icons.add),
+                              icon: const Icon(Icons.add),
                             ),
                           ],
                         ),
