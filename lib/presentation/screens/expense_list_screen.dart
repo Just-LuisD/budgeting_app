@@ -26,7 +26,10 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
       MaterialPageRoute(
         builder: (context) => BlocProvider(
           create: (context) => ExpenseBloc(ExpenseRepositoryImpl()),
+          // TODO: budgetId and categories are a placeholder
           child: ExpenseFormScreen(
+            budgetId: 0,
+            categories: [],
             expense: expense,
           ),
         ),

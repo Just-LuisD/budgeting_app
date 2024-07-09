@@ -1,3 +1,4 @@
+import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
 import 'package:budgeting_app/presentation/blocs/expense_event.dart';
@@ -10,8 +11,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseFormScreen extends StatefulWidget {
+  final int budgetId;
+  final List<Category> categories;
   final Expense? expense;
-  const ExpenseFormScreen({super.key, this.expense});
+
+  const ExpenseFormScreen({
+    super.key,
+    this.expense,
+    required this.budgetId,
+    required this.categories,
+  });
 
   @override
   State<ExpenseFormScreen> createState() => _ExpenseFormScreenState();
@@ -69,7 +78,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       final newExpense = Expense(
         title: title,
         categoryId: 1,
-        budgetId: 1,
+        budgetId: widget.budgetId,
         amount: amount!,
         date: date,
         notes: notes,
@@ -112,20 +121,40 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             child: Column(
               children: [
                 TitleField(inputController: _titleController),
-                CategoryField(inputController: _categoryController),
                 AmountField(
                   inputController: _amountController,
                   label: "Amount",
                   enabled: true,
                 ),
-                Row(
-                  children: [
-                    Text('Date: ${DateFormat.yMMMd().format(_expenseDate)}'),
-                    IconButton(
-                      onPressed: _pickDate,
-                      icon: Icon(Icons.calendar_month),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      DropdownMenu(
+                        label: const Text("Category"),
+                        dropdownMenuEntries: widget.categories.map(
+                          (e) {
+                            return DropdownMenuEntry(
+                                value: e.id, label: e.name);
+                          },
+                        ).toList(),
+                        inputDecorationTheme: const InputDecorationTheme(
+                            isDense: true,
+                            border: OutlineInputBorder(),
+                            constraints: BoxConstraints(maxWidth: 160)),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Date: ${DateFormat.yMMMd().format(_expenseDate)}',
+                        ),
+                      ),
+                      IconButton(
+                        alignment: Alignment.centerRight,
+                        onPressed: _pickDate,
+                        icon: Icon(Icons.calendar_month),
+                      ),
+                    ],
+                  ),
                 ),
                 NotesField(inputController: _notesController),
                 ElevatedButton(

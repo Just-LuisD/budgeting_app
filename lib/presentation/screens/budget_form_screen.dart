@@ -1,7 +1,10 @@
+import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/presentation/blocs/budget_bloc.dart';
 import 'package:budgeting_app/presentation/blocs/budget_event.dart';
+import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
+import 'package:budgeting_app/presentation/screens/expense_form_screen.dart';
 import 'package:budgeting_app/presentation/widgets/category_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +36,8 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
   final _incomeController = TextEditingController();
   List<CategoryInputStructure> _categoryInputs = [];
   double _remaindingIncome = 0;
+  bool _showCategories = true;
+  bool _showExpenses = true;
 
   @override
   void initState() {
@@ -168,11 +173,24 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                       children: [
                         Row(
                           children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _showCategories = !_showCategories;
+                                });
+                              },
+                              icon: Icon(_showCategories
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_right_outlined),
+                            ),
                             Expanded(
                               child: Text("Categories: \$$_remaindingIncome"),
                             ),
                             IconButton(
                               onPressed: () {
+                                if (!_showCategories) {
+                                  return;
+                                }
                                 final nameController = TextEditingController();
                                 final limitController = TextEditingController();
                                 limitController.addListener(_valueChange);
@@ -200,7 +218,47 @@ class _BudgetFormScreenState extends State<BudgetFormScreen> {
                             ),
                           ],
                         ),
-                        ..._categoryInputs.map((e) => e.inputField)
+                        if (_showCategories)
+                          ..._categoryInputs.map((e) => e.inputField),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _showExpenses = !_showExpenses;
+                                });
+                              },
+                              icon: Icon(_showExpenses
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_right_outlined),
+                            ),
+                            Expanded(
+                              child: Text("Expenses: \$$_remaindingIncome"),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BlocProvider(
+                                      create: (context) =>
+                                          ExpenseBloc(ExpenseRepositoryImpl()),
+                                      child: ExpenseFormScreen(
+                                        budgetId: widget.budget!.id!,
+                                        categories: widget.budget!.categories!,
+                                      ),
+                                    ),
+                                  ),
+                                ).then((result) {
+                                  if (result == true) {
+                                    // TODO: fetch expenses
+                                  }
+                                });
+                              },
+                              icon: const Icon(Icons.add),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
