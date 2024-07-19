@@ -59,6 +59,17 @@ class DatabaseHelper {
         FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE Income (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        budget_id INTEGER NOT NULL,
+        amount REAL NOT NULL,
+        date TEXT NOT NULL,
+        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
+      )
+    ''');
   }
 
   // Insert a new budget
