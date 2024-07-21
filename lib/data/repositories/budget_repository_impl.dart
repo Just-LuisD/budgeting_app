@@ -32,10 +32,6 @@ class BudgetRepositoryImpl implements BudgetRepository {
   @override
   Future<int> insertBudget(Budget budget) async {
     final budgetId = await dbHelper.insertBudget(budget.toMap());
-    for (int i = 0; i < budget.categories!.length; i++) {
-      await dbHelper.insertCategory(
-          budget.categories![i].copy(budgetId: budgetId).toMap());
-    }
     return budgetId;
   }
 

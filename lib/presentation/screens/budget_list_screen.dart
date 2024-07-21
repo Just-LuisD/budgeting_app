@@ -4,6 +4,7 @@ import 'package:budgeting_app/presentation/blocs/budget_event.dart';
 import 'package:budgeting_app/presentation/blocs/budget_state.dart';
 import 'package:budgeting_app/presentation/screens/budget_form_screen.dart';
 import 'package:budgeting_app/presentation/widgets/budget_card.dart';
+import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,17 +43,16 @@ class BudgetListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BlocProvider(
-                      create: (context) => BudgetBloc(BudgetRepositoryImpl()),
-                      child: const BudgetFormScreen(),
-                    )),
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return BlocProvider(
+                create: (context) => BudgetBloc(BudgetRepositoryImpl()),
+                child: BudgetModal(),
+              );
+            },
           ).then((value) {
-            if (value == true) {
-              context.read<BudgetBloc>().add(FetchBudgets());
-            }
+            context.read<BudgetBloc>().add(FetchBudgets());
           });
         },
         child: const Icon(Icons.add),
