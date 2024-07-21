@@ -15,6 +15,7 @@ class BudgetListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Budgets'),
+        centerTitle: true,
       ),
       body: BlocBuilder<BudgetBloc, BudgetState>(
         builder: (context, state) {
