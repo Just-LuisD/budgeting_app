@@ -48,7 +48,7 @@ class BudgetListScreen extends StatelessWidget {
             builder: (context) {
               return BlocProvider(
                 create: (context) => BudgetBloc(BudgetRepositoryImpl()),
-                child: BudgetModal(),
+                child: const BudgetModal(),
               );
             },
           ).then((value) {
