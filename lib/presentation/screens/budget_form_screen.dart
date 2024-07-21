@@ -1,7 +1,10 @@
+import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
 import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/budget.dart';
+import 'package:budgeting_app/presentation/blocs/budget_bloc.dart';
 import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
 import 'package:budgeting_app/presentation/screens/expense_form_screen.dart';
+import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -43,6 +46,25 @@ class _BudgetFormScreemState extends State<BudgetFormScreen> {
         title: Text(
           widget.budget.name,
         ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await showDialog(
+                context: context,
+                builder: (context) {
+                  return BlocProvider(
+                    create: (context) => BudgetBloc(BudgetRepositoryImpl()),
+                    child: BudgetModal(
+                      budget: widget.budget,
+                    ),
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.edit),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

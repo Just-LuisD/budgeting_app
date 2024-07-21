@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BudgetModal extends StatefulWidget {
-  const BudgetModal({super.key});
+  final Budget? budget;
+
+  const BudgetModal({
+    super.key,
+    this.budget,
+  });
 
   @override
   State<BudgetModal> createState() => _BudgetModalState();
@@ -16,17 +21,37 @@ class _BudgetModalState extends State<BudgetModal> {
   final _nameController = TextEditingController();
   final _incomeController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.budget != null) {
+      _nameController.text = widget.budget!.name;
+      _incomeController.text = widget.budget!.income.toString();
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _incomeController.dispose();
+    super.dispose();
+  }
+
   void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
       final double income = double.parse(_incomeController.text);
 
-      final newBudget = Budget(
-        name: name,
-        income: income,
-      );
-      context.read<BudgetBloc>().add(AddBudget(newBudget));
-
+      if (widget.budget == null) {
+        final newBudget = Budget(
+          name: name,
+          income: income,
+        );
+        context.read<BudgetBloc>().add(AddBudget(newBudget));
+      } else {
+        final updatedBudget = widget.budget!.copy(name: name, income: income);
+        context.read<BudgetBloc>().add(UpdateBudget(updatedBudget));
+      }
       Navigator.pop(context, true);
     }
   }
@@ -34,10 +59,10 @@ class _BudgetModalState extends State<BudgetModal> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Add Budget"),
+      title: Text(widget.budget == null ? "Add Budget" : "Edit Budget"),
       content: Form(
         key: _formKey,
-        child: Container(
+        child: SizedBox(
           height: 200,
           child: Column(
             children: [
@@ -75,16 +100,15 @@ class _BudgetModalState extends State<BudgetModal> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
+          child: const Text("Cancel"),
         ),
         TextButton(
           onPressed: () {
             _submitForm(context);
           },
-          child: Text("Submit"),
+          child: const Text("Submit"),
         ),
       ],
     );
-    ;
   }
 }
