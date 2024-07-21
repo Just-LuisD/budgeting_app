@@ -90,6 +90,12 @@ class DatabaseHelper {
     return await db.insert('Expenses', expense);
   }
 
+  // Insert a new income
+  Future<int> insertIncome(Map<String, dynamic> income) async {
+    Database db = await database;
+    return await db.insert("Income", income);
+  }
+
   // Query all budgets
   Future<List<Map<String, dynamic>>> getBudgets() async {
     Database db = await database;
@@ -108,6 +114,16 @@ class DatabaseHelper {
     Database db = await database;
     return await db
         .query('Expenses', where: 'category_id = ?', whereArgs: [categoryId]);
+  }
+
+  // Query all income for a specific budget
+  Future<List<Map<String, dynamic>>> getIncome(int budgetId) async {
+    Database db = await database;
+    return await db.query(
+      "Income",
+      where: 'budget_id = ?',
+      whereArgs: [budgetId],
+    );
   }
 
   Future<List<Map<String, dynamic>>> getExpensesByBudgetId(int budgetId) async {
