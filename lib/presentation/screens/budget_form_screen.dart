@@ -8,14 +8,13 @@ import 'package:intl/intl.dart';
 
 class BudgetFormScreen extends StatefulWidget {
   final Budget budget;
-
   const BudgetFormScreen({super.key, required this.budget});
 
   @override
-  _BudgetFormScreenState createState() => _BudgetFormScreenState();
+  State<BudgetFormScreen> createState() => _BudgetFormScreemState();
 }
 
-class _BudgetFormScreenState extends State<BudgetFormScreen> {
+class _BudgetFormScreemState extends State<BudgetFormScreen> {
   bool _showCategories = true;
   bool _showExpenses = true;
   var _expenseDate = DateTime.now();
