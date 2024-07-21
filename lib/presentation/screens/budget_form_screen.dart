@@ -1,289 +1,270 @@
 import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/budget.dart';
-import 'package:budgeting_app/domain/entities/category.dart';
-import 'package:budgeting_app/presentation/blocs/budget_bloc.dart';
-import 'package:budgeting_app/presentation/blocs/budget_event.dart';
 import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
 import 'package:budgeting_app/presentation/screens/expense_form_screen.dart';
-import 'package:budgeting_app/presentation/widgets/category_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-class CategoryInputStructure {
-  CategoryInput inputField;
-  TextEditingController nameController;
-  TextEditingController limitController;
-
-  CategoryInputStructure(
-    this.inputField,
-    this.nameController,
-    this.limitController,
-  );
-}
+import 'package:intl/intl.dart';
 
 class BudgetFormScreen extends StatefulWidget {
-  final Budget? budget;
+  final Budget budget;
 
-  const BudgetFormScreen({super.key, this.budget});
+  const BudgetFormScreen({super.key, required this.budget});
 
   @override
   _BudgetFormScreenState createState() => _BudgetFormScreenState();
 }
 
 class _BudgetFormScreenState extends State<BudgetFormScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _incomeController = TextEditingController();
-  List<CategoryInputStructure> _categoryInputs = [];
-  double _remaindingIncome = 0;
   bool _showCategories = true;
   bool _showExpenses = true;
+  var _expenseDate = DateTime.now();
 
-  @override
-  void initState() {
-    super.initState();
-    _incomeController.addListener(_valueChange);
-    if (widget.budget != null) {
-      _nameController.text = widget.budget!.name;
-      _incomeController.text = widget.budget!.income.toString();
-      if (widget.budget!.categories != null) {
-        _categoryInputs = widget.budget!.categories!.map((e) {
-          final nameController = TextEditingController();
-          final limitController = TextEditingController();
-          limitController.addListener(_valueChange);
-          nameController.text = e.name;
-          limitController.text = e.spendingLimit.toString();
-          final inputKey = UniqueKey();
-          final inputField = CategoryInput(
-            key: inputKey,
-            onDelete: () {
-              _deleteCategory(inputKey);
-            },
-            nameController: nameController,
-            limitController: limitController,
-          );
-          return CategoryInputStructure(
-            inputField,
-            nameController,
-            limitController,
-          );
-        }).toList();
-      }
-      _valueChange();
+  void _pickDate() async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: _expenseDate,
+      firstDate: DateTime(_expenseDate.year, _expenseDate.month, 1),
+      lastDate: DateTime(_expenseDate.year, _expenseDate.month + 1, 1).subtract(
+        Duration(days: 1),
+      ),
+    );
+
+    if (selectedDate != null) {
+      setState(() {
+        _expenseDate = selectedDate;
+      });
     }
-  }
-
-  void _submitForm(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text;
-      final double income = double.parse(_incomeController.text);
-      final List<Category> categories = [];
-
-      for (CategoryInputStructure categoryInput in _categoryInputs) {
-        final categoryName = categoryInput.nameController.text;
-        final categoryLimit =
-            double.tryParse(categoryInput.limitController.text);
-        categories
-            .add(Category(name: categoryName, spendingLimit: categoryLimit!));
-      }
-
-      if (widget.budget == null) {
-        final newBudget = Budget(
-          name: name,
-          income: income,
-          categories: categories,
-        );
-        context.read<BudgetBloc>().add(AddBudget(newBudget));
-      } else {
-        final updatedBudget = widget.budget!.copy(
-          name: name,
-          income: income,
-          categories: categories,
-        );
-        context.read<BudgetBloc>().add(UpdateBudget(updatedBudget));
-      }
-      Navigator.pop(context, true);
-    }
-  }
-
-  void _deleteCategory(UniqueKey key) {
-    int idx =
-        _categoryInputs.indexWhere((element) => element.inputField.key == key);
-    setState(() {
-      _categoryInputs.removeAt(idx);
-      _valueChange();
-    });
-  }
-
-  void _valueChange() {
-    final income = double.tryParse(_incomeController.text) ?? 0;
-    double usedIncome = 0;
-    for (CategoryInputStructure input in _categoryInputs) {
-      usedIncome += double.tryParse(input.limitController.text) ?? 0;
-    }
-
-    setState(() {
-      _remaindingIncome = income - usedIncome;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.budget == null ? 'Add Budget' : 'Edit Budget'),
+        title: Text(
+          widget.budget.name,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Budget Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a budget name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _incomeController,
-                  decoration:
-                      const InputDecoration(labelText: 'Expected Income'),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter an income amount';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Please enter a valid number';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _showCategories = !_showCategories;
-                                });
-                              },
-                              icon: Icon(_showCategories
-                                  ? Icons.arrow_drop_down
-                                  : Icons.arrow_right_outlined),
-                            ),
-                            Expanded(
-                              child: Text("Categories: \$$_remaindingIncome"),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (!_showCategories) {
-                                  return;
-                                }
-                                final nameController = TextEditingController();
-                                final limitController = TextEditingController();
-                                limitController.addListener(_valueChange);
-                                final inputKey = UniqueKey();
-                                final inputField = CategoryInput(
-                                  key: inputKey,
-                                  onDelete: () {
-                                    _deleteCategory(inputKey);
-                                  },
-                                  nameController: nameController,
-                                  limitController: limitController,
-                                );
-                                final newInput = CategoryInputStructure(
-                                    inputField,
-                                    nameController,
-                                    limitController);
-                                setState(() {
-                                  _categoryInputs = [
-                                    newInput,
-                                    ..._categoryInputs
-                                  ];
-                                });
-                              },
-                              icon: const Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                        if (_showCategories)
-                          ..._categoryInputs.map((e) => e.inputField),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _showExpenses = !_showExpenses;
-                                });
-                              },
-                              icon: Icon(_showExpenses
-                                  ? Icons.arrow_drop_down
-                                  : Icons.arrow_right_outlined),
-                            ),
-                            Expanded(
-                              child: Text("Expenses: \$$_remaindingIncome"),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BlocProvider(
-                                      create: (context) =>
-                                          ExpenseBloc(ExpenseRepositoryImpl()),
-                                      child: ExpenseFormScreen(
-                                        budgetId: widget.budget!.id!,
-                                        categories: widget.budget!.categories!,
+          child: Column(
+            children: [
+              Text("Expected Income: \$${widget.budget.income}"),
+              const SizedBox(height: 20),
+              Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _showCategories = !_showCategories;
+                              });
+                            },
+                            icon: Icon(_showCategories
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_right_outlined),
+                          ),
+                          Expanded(
+                            child: Text("Income"),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Scaffold(
+                                    appBar: AppBar(
+                                      title: Text("Add Income"),
+                                    ),
+                                    body: SingleChildScrollView(
+                                      child: Form(
+                                        child: Column(
+                                          children: [
+                                            TextFormField(
+                                              controller: null,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Title',
+                                              ),
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Your transaction must have a title.';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            TextFormField(
+                                              controller: null,
+                                              decoration: InputDecoration(
+                                                labelText: "Amount",
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty ||
+                                                    double.tryParse(value) ==
+                                                        null ||
+                                                    double.tryParse(value)! <=
+                                                        0) {
+                                                  return 'Your transaction amount must be a positive value.';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    'Date: ${DateFormat.yMMMd().format(_expenseDate)}',
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  onPressed: _pickDate,
+                                                  icon: Icon(
+                                                      Icons.calendar_month),
+                                                ),
+                                              ],
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {},
+                                              child: Text("Add"),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
+                                  );
+                                },
+                              );
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _showCategories = !_showCategories;
+                              });
+                            },
+                            icon: Icon(_showCategories
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_right_outlined),
+                          ),
+                          Expanded(
+                            child: Text("Categories"),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Scaffold(
+                                    appBar: AppBar(
+                                      title: Text("Add Category"),
+                                    ),
+                                    body: SingleChildScrollView(
+                                      child: Form(
+                                        child: Column(
+                                          children: [
+                                            TextFormField(
+                                              controller: null,
+                                              decoration: const InputDecoration(
+                                                labelText: 'Name',
+                                              ),
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Your transaction must have a title.';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            TextFormField(
+                                              controller: null,
+                                              decoration: InputDecoration(
+                                                labelText: "Limit",
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty ||
+                                                    double.tryParse(value) ==
+                                                        null ||
+                                                    double.tryParse(value)! <=
+                                                        0) {
+                                                  return 'Your transaction amount must be a positive value.';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {},
+                                              child: Text("Add"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _showExpenses = !_showExpenses;
+                              });
+                            },
+                            icon: Icon(_showExpenses
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_right_outlined),
+                          ),
+                          Expanded(
+                            child: Text("Expenses"),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => BlocProvider(
+                                  create: (context) =>
+                                      ExpenseBloc(ExpenseRepositoryImpl()),
+                                  child: ExpenseFormScreen(
+                                    budgetId: widget.budget!.id!,
+                                    categories: [],
                                   ),
-                                ).then((result) {
-                                  if (result == true) {
-                                    // TODO: fetch expenses
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => _submitForm(context),
-                  child: Text(widget.budget == null ? 'Save' : "Update"),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _incomeController.dispose();
-    for (CategoryInputStructure st in _categoryInputs) {
-      st.nameController.dispose();
-      st.limitController.dispose();
-    }
-    super.dispose();
   }
 }
