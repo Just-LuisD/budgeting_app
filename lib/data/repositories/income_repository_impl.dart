@@ -7,14 +7,14 @@ class IncomeRepositoryImpl implements IncomeRepository {
 
   @override
   Future<List<Income>> getBudgetIncome(int budgetId) async {
-    final maps = await dbHelper.getCategories(budgetId);
+    final maps = await dbHelper.getIncome(budgetId);
     return List.generate(maps.length, (i) {
       return Income.fromMap(maps[i]);
     });
   }
 
   @override
-  Future<int> insertBudget(Income income) async {
+  Future<int> insertIncome(Income income) async {
     return await dbHelper.insertIncome(income.toMap());
   }
 }

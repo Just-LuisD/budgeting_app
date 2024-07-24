@@ -1,14 +1,14 @@
 class Income {
   final int? id;
   final String title;
-  final int budgetId;
+  final int? budgetId;
   final double amount;
   final String date;
 
   Income({
     this.id,
     required this.title,
-    required this.budgetId,
+    this.budgetId,
     required this.amount,
     required this.date,
   });

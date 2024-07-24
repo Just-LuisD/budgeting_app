@@ -1,13 +1,9 @@
-import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
-import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/budget.dart';
-import 'package:budgeting_app/presentation/blocs/budget_bloc.dart';
-import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
+import 'package:budgeting_app/domain/entities/income.dart';
 import 'package:budgeting_app/presentation/screens/expense_form_screen.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
-import 'package:budgeting_app/presentation/widgets/income_section.dart';
+import 'package:budgeting_app/presentation/widgets/income_header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BudgetFormScreen extends StatefulWidget {
   final Budget budget;
@@ -20,6 +16,10 @@ class BudgetFormScreen extends StatefulWidget {
 class _BudgetFormScreemState extends State<BudgetFormScreen> {
   bool _showCategories = true;
   bool _showExpenses = true;
+
+  void submitIncome(Income income) {
+    // TODO: submit income
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,7 @@ class _BudgetFormScreemState extends State<BudgetFormScreen> {
               await showDialog(
                 context: context,
                 builder: (context) {
-                  return BlocProvider(
-                    create: (context) => BudgetBloc(BudgetRepositoryImpl()),
-                    child: BudgetModal(
-                      budget: widget.budget,
-                    ),
-                  );
+                  return BudgetModal(budget: widget.budget);
                 },
               );
             },
@@ -59,7 +54,13 @@ class _BudgetFormScreemState extends State<BudgetFormScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const IncomeSection(),
+                      IncomeHeader(onSubmit: submitIncome),
+                      ListView.builder(
+                        itemCount: [].length,
+                        itemBuilder: (context, index) {
+                          return ListTile();
+                        },
+                      ),
                       Row(
                         children: [
                           IconButton(
@@ -155,13 +156,9 @@ class _BudgetFormScreemState extends State<BudgetFormScreen> {
                             onPressed: () {
                               showModalBottomSheet(
                                 context: context,
-                                builder: (context) => BlocProvider(
-                                  create: (context) =>
-                                      ExpenseBloc(ExpenseRepositoryImpl()),
-                                  child: ExpenseFormScreen(
-                                    budgetId: widget.budget!.id!,
-                                    categories: [],
-                                  ),
+                                builder: (context) => ExpenseFormScreen(
+                                  budgetId: widget.budget.id!,
+                                  categories: [],
                                 ),
                               );
                             },

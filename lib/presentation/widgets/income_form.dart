@@ -1,16 +1,19 @@
+import 'package:budgeting_app/domain/entities/income.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class IncomeForm extends StatefulWidget {
-  const IncomeForm({super.key});
+  final Function onSubmit;
+  const IncomeForm({super.key, required this.onSubmit});
 
   @override
   State<IncomeForm> createState() => _IncomeFormState();
 }
 
 class _IncomeFormState extends State<IncomeForm> {
-  final TextEditingController _titleController = new TextEditingController();
-  final TextEditingController _amountController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
   var _expenseDate = DateTime.now();
 
   void _pickDate() async {
@@ -30,7 +33,19 @@ class _IncomeFormState extends State<IncomeForm> {
     }
   }
 
-  void _onSubmit(BuildContext context) {}
+  void _onSubmit() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    final title = _titleController.text;
+    final amount = double.tryParse(_amountController.text);
+    final date = DateTime.now().toString();
+
+    final newIncome = Income(title: title, amount: amount!, date: date);
+    widget.onSubmit(newIncome);
+
+    Navigator.pop(context, true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +56,11 @@ class _IncomeFormState extends State<IncomeForm> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
-                controller: null,
+                controller: _titleController,
                 decoration: const InputDecoration(
                   labelText: 'Title',
                 ),
@@ -56,7 +72,7 @@ class _IncomeFormState extends State<IncomeForm> {
                 },
               ),
               TextFormField(
-                controller: null,
+                controller: _amountController,
                 decoration: const InputDecoration(
                   labelText: "Amount",
                 ),
@@ -86,9 +102,7 @@ class _IncomeFormState extends State<IncomeForm> {
                 ],
               ),
               ElevatedButton(
-                onPressed: () {
-                  _onSubmit(context);
-                },
+                onPressed: _onSubmit,
                 child: const Text("Add"),
               ),
             ],

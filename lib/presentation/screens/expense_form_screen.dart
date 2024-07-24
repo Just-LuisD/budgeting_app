@@ -1,7 +1,5 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
-import 'package:budgeting_app/presentation/blocs/expense_bloc.dart';
-import 'package:budgeting_app/presentation/blocs/expense_event.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_form/amount_field.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_form/notes_field.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_form/title_field.dart';
@@ -82,11 +80,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
         date: date,
         notes: notes,
       );
-      context.read<ExpenseBloc>().add(AddExpense(newExpense));
+      // TODO: add expense
     } else {
       final updatedExpense = widget.expense!
           .copy(title: title, amount: amount, date: date, notes: notes);
-      context.read<ExpenseBloc>().add(UpdateExpense(updatedExpense));
+      // TODO: update expense
     }
     Navigator.pop(context, true);
   }
@@ -103,9 +101,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
             : [
                 IconButton(
                   onPressed: () {
-                    context
-                        .read<ExpenseBloc>()
-                        .add(DeleteExpense(widget.expense!));
+                    // TODO: delete expense
                     Navigator.pop(context, true);
                   },
                   icon: const Icon(Icons.delete),
