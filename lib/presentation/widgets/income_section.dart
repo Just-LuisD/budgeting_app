@@ -21,7 +21,6 @@ class _IncomeSectionState extends State<IncomeSection> {
 
   @override
   Widget build(BuildContext context) {
-    print("DEBUG trying to build this");
     return Container(
       height: 500,
       child: SingleChildScrollView(
