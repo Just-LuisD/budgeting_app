@@ -43,7 +43,7 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
             children: [
               Text("Expected Income: \$${widget.budget.income}"),
               IncomeSection(),
-              //CategorySection(),
+              CategorySection(),
               //ExpenseSection(),
             ],
           ),
