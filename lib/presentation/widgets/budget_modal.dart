@@ -1,6 +1,5 @@
 import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BudgetModal extends StatefulWidget {
   final Budget? budget;
@@ -61,7 +60,7 @@ class _BudgetModalState extends State<BudgetModal> {
       content: Form(
         key: _formKey,
         child: SizedBox(
-          height: 200,
+          height: 150,
           child: Column(
             children: [
               TextFormField(

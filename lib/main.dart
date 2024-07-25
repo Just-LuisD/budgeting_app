@@ -1,4 +1,5 @@
 import 'package:budgeting_app/presentation/screens/budget_list_screen.dart';
+import 'package:budgeting_app/test_data.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,8 +8,8 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const BudgetListScreen(
-        budgets: [],
+      builder: (context, state) => BudgetListScreen(
+        budgets: testBudgets,
       ),
     ),
   ],

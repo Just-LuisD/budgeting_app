@@ -5,15 +5,15 @@ import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:budgeting_app/presentation/widgets/income_header.dart';
 import 'package:flutter/material.dart';
 
-class BudgetFormScreen extends StatefulWidget {
+class BudgetDetailsScreen extends StatefulWidget {
   final Budget budget;
-  const BudgetFormScreen({super.key, required this.budget});
+  const BudgetDetailsScreen({super.key, required this.budget});
 
   @override
-  State<BudgetFormScreen> createState() => _BudgetFormScreemState();
+  State<BudgetDetailsScreen> createState() => _BudgetFormScreemState();
 }
 
-class _BudgetFormScreemState extends State<BudgetFormScreen> {
+class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
   bool _showCategories = true;
   bool _showExpenses = true;
 
