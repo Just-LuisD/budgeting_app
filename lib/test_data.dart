@@ -1,5 +1,6 @@
 import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/domain/entities/category.dart';
+import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:budgeting_app/domain/entities/income.dart';
 
 List<Budget> testBudgets = [
@@ -18,6 +19,30 @@ List<Budget> testBudgets = [
     name: "First Budget",
     income: 20000,
   )
+];
+
+List<Expense> testExpesnses1 = [
+  Expense(
+    title: "expense 1",
+    categoryId: 1,
+    budgetId: 1,
+    amount: 50,
+    date: DateTime.now().toString(),
+  ),
+  Expense(
+    title: "expense 1",
+    categoryId: 1,
+    budgetId: 1,
+    amount: 50,
+    date: DateTime.now().toString(),
+  ),
+  Expense(
+    title: "expense 1",
+    categoryId: 1,
+    budgetId: 1,
+    amount: 50,
+    date: DateTime.now().toString(),
+  ),
 ];
 
 List<Category> testCategories1 = [

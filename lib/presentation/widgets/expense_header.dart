@@ -2,17 +2,27 @@ import 'package:budgeting_app/presentation/screens/expense_form_screen.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseHeader extends StatelessWidget {
-  const ExpenseHeader({super.key});
+  final bool showingList;
+  final Function onToggle;
+  const ExpenseHeader({
+    super.key,
+    required this.showingList,
+    required this.onToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         IconButton(
-          onPressed: () {},
-          icon: Icon(true ? Icons.arrow_drop_down : Icons.arrow_right_outlined),
+          onPressed: () {
+            onToggle();
+          },
+          icon: Icon(showingList == true
+              ? Icons.arrow_drop_down
+              : Icons.arrow_right_outlined),
         ),
-        Expanded(
+        const Expanded(
           child: Text("Expenses"),
         ),
         IconButton(
