@@ -10,9 +10,10 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
+    return Flexible(
       child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: categories.length,
         itemBuilder: (context, idx) {
           return CategoryItem(category: categories[idx]);
@@ -32,7 +33,7 @@ class CategoryItem extends StatelessWidget {
       title: Text(category.name),
       trailing: IconButton(
         onPressed: () {},
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
       ),
     );
   }

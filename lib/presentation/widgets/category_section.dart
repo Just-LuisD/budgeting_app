@@ -21,16 +21,15 @@ class _CategorySectionState extends State<CategorySection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          CateggoryHeader(
-            showingList: _showList,
-            onToggle: _toggleList,
-          ),
-          if (_showList) CategoryList(categories: testCategories1)
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CateggoryHeader(
+          showingList: _showList,
+          onToggle: _toggleList,
+        ),
+        if (_showList) CategoryList(categories: testCategories1)
+      ],
     );
   }
 }
