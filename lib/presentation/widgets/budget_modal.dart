@@ -59,37 +59,35 @@ class _BudgetModalState extends State<BudgetModal> {
       title: Text(widget.budget == null ? "Add Budget" : "Edit Budget"),
       content: Form(
         key: _formKey,
-        child: SizedBox(
-          height: 150,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Budget Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a budget name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _incomeController,
-                decoration: const InputDecoration(labelText: 'Expected Income'),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an income amount';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Budget Name'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a valid name';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _incomeController,
+              decoration: const InputDecoration(labelText: 'Expected Income'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an income amount';
+                }
+                if (double.tryParse(value) == null) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+            ),
+          ],
         ),
       ),
       actions: [

@@ -18,6 +18,51 @@ List<Budget> testBudgets = [
     id: 1,
     name: "First Budget",
     income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
+  ),
+  Budget(
+    id: 1,
+    name: "First Budget",
+    income: 20000,
   )
 ];
 

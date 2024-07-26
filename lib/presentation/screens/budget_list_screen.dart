@@ -15,7 +15,7 @@ class BudgetListScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: budgets.isEmpty
-          ? const Center(child: Text('No budgets available'))
+          ? const Center(child: Text('No Budgets Available'))
           : ListView.builder(
               itemCount: budgets.length,
               itemBuilder: (context, index) {
