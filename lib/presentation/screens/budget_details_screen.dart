@@ -40,6 +40,7 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text("Expected Income: \$${widget.budget.income}"),
               IncomeSection(),

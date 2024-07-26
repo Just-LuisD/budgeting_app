@@ -21,22 +21,21 @@ class _IncomeSectionState extends State<IncomeSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          IncomeHeader(
-            showingList: _showList,
-            onToggle: _toggleList,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IncomeHeader(
+          showingList: _showList,
+          onToggle: _toggleList,
+        ),
+        LinearProgressIndicator(
+          value: 0.5,
+        ),
+        if (_showList)
+          IncomeList(
+            incomeList: testIncome1,
           ),
-          LinearProgressIndicator(
-            value: 0.5,
-          ),
-          if (_showList)
-            IncomeList(
-              incomeList: testIncome1,
-            ),
-        ],
-      ),
+      ],
     );
   }
 }
