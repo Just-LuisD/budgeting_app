@@ -10,9 +10,10 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
+    return Flexible(
       child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: expenses.length,
         itemBuilder: (context, idx) {
           return ExpenseItem(expense: expenses[idx]);
@@ -33,7 +34,7 @@ class ExpenseItem extends StatelessWidget {
       subtitle: Text(expense.amount.toString()),
       trailing: IconButton(
         onPressed: () {},
-        icon: Icon(Icons.delete),
+        icon: const Icon(Icons.delete),
       ),
     );
   }

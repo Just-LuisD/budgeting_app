@@ -21,19 +21,18 @@ class _ExpenseSectionState extends State<ExpenseSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          ExpenseHeader(
-            showingList: _showList,
-            onToggle: _toggleList,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ExpenseHeader(
+          showingList: _showList,
+          onToggle: _toggleList,
+        ),
+        if (_showList)
+          ExpenseList(
+            expenses: testExpesnses1,
           ),
-          if (_showList)
-            ExpenseList(
-              expenses: testExpesnses1,
-            ),
-        ],
-      ),
+      ],
     );
   }
 }
