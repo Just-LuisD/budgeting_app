@@ -10,16 +10,18 @@ class ExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: expenses.length,
-        itemBuilder: (context, idx) {
-          return ExpenseItem(expense: expenses[idx]);
-        },
-      ),
-    );
+    return expenses.isEmpty
+        ? const Text("No Expenses Found")
+        : Flexible(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: expenses.length,
+              itemBuilder: (context, idx) {
+                return ExpenseItem(expense: expenses[idx]);
+              },
+            ),
+          );
   }
 }
 

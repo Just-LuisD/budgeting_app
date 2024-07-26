@@ -10,16 +10,18 @@ class IncomeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: incomeList.length,
-        itemBuilder: (context, idx) {
-          return IncomeItem(income: incomeList[idx]);
-        },
-      ),
-    );
+    return incomeList.isEmpty
+        ? const Text("No Income Found")
+        : Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: incomeList.length,
+              itemBuilder: (context, idx) {
+                return IncomeItem(income: incomeList[idx]);
+              },
+            ),
+          );
   }
 }
 

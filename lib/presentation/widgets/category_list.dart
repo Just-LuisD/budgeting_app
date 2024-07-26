@@ -10,16 +10,18 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: categories.length,
-        itemBuilder: (context, idx) {
-          return CategoryItem(category: categories[idx]);
-        },
-      ),
-    );
+    return categories.isEmpty
+        ? const Text("No Categories Found")
+        : Flexible(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: categories.length,
+              itemBuilder: (context, idx) {
+                return CategoryItem(category: categories[idx]);
+              },
+            ),
+          );
   }
 }
 
