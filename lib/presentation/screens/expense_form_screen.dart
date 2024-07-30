@@ -4,7 +4,6 @@ import 'package:budgeting_app/presentation/widgets/transaction_form/amount_field
 import 'package:budgeting_app/presentation/widgets/transaction_form/notes_field.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_form/title_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseFormScreen extends StatefulWidget {
@@ -91,73 +90,69 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.expense == null ? 'Add Transaction' : 'Edit Transaction',
-        ),
-        actions: widget.expense == null
-            ? null
-            : [
-                IconButton(
-                  onPressed: () {
-                    // TODO: delete expense
-                    Navigator.pop(context, true);
-                  },
-                  icon: const Icon(Icons.delete),
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Text(
+                widget.expense == null ? 'Add Transaction' : 'Edit Transaction',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TitleField(inputController: _titleController),
-                AmountField(
-                  inputController: _amountController,
-                  label: "Amount",
-                  enabled: true,
+              ),
+              TitleField(inputController: _titleController),
+              AmountField(
+                inputController: _amountController,
+                label: "Amount",
+                enabled: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Date: ${DateFormat.yMMMd().format(_expenseDate)}',
+                      ),
+                    ),
+                    IconButton(
+                      alignment: Alignment.centerRight,
+                      onPressed: _pickDate,
+                      icon: Icon(Icons.calendar_month),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    children: [
-                      DropdownMenu(
-                        label: const Text("Category"),
-                        dropdownMenuEntries: widget.categories.map(
-                          (e) {
-                            return DropdownMenuEntry(
-                                value: e.id, label: e.name);
-                          },
-                        ).toList(),
-                        inputDecorationTheme: const InputDecorationTheme(
-                            isDense: true,
-                            border: OutlineInputBorder(),
-                            constraints: BoxConstraints(maxWidth: 160)),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Date: ${DateFormat.yMMMd().format(_expenseDate)}',
-                        ),
-                      ),
-                      IconButton(
-                        alignment: Alignment.centerRight,
-                        onPressed: _pickDate,
-                        icon: Icon(Icons.calendar_month),
-                      ),
-                    ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                alignment: Alignment.centerLeft,
+                child: DropdownMenu(
+                  width: 320,
+                  label: const Text("Category"),
+                  dropdownMenuEntries: widget.categories.map(
+                    (e) {
+                      return DropdownMenuEntry(value: e.name, label: e.name);
+                    },
+                  ).toList(),
+                  inputDecorationTheme: const InputDecorationTheme(
+                    isDense: true,
+                    border: OutlineInputBorder(),
                   ),
                 ),
-                NotesField(inputController: _notesController),
-                ElevatedButton(
-                  onPressed: () => _submitForm(context),
-                  child: Text(widget.expense == null ? "Add" : "Update"),
-                ),
-              ],
-            ),
+              ),
+              NotesField(inputController: _notesController),
+              const SizedBox(
+                height: 12,
+              ),
+              ElevatedButton(
+                onPressed: () => _submitForm(context),
+                child: Text(widget.expense == null ? "Add" : "Update"),
+              ),
+            ],
           ),
         ),
       ),

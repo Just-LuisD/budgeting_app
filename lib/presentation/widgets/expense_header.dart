@@ -1,4 +1,5 @@
 import 'package:budgeting_app/presentation/screens/expense_form_screen.dart';
+import 'package:budgeting_app/test_data.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseHeader extends StatelessWidget {
@@ -28,10 +29,16 @@ class ExpenseHeader extends StatelessWidget {
         IconButton(
           onPressed: () {
             showModalBottomSheet(
+              isScrollControlled: true,
               context: context,
-              builder: (context) => ExpenseFormScreen(
-                budgetId: 0,
-                categories: [],
+              builder: (context) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: ExpenseFormScreen(
+                  budgetId: 0,
+                  categories: testCategories1,
+                ),
               ),
             );
           },
