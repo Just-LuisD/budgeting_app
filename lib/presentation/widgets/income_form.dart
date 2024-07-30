@@ -47,45 +47,51 @@ class _IncomeFormState extends State<IncomeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add Income"),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Your income must have a title.';
-                  }
-                  return null;
-                },
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              "Add Income",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(
-                  labelText: "Amount",
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      double.tryParse(value) == null ||
-                      double.tryParse(value)! <= 0) {
-                    return 'Your income amount must be a positive value.';
-                  }
-                  return null;
-                },
+            ),
+            TextFormField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Title',
               ),
-              Row(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Your income must have a title.';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _amountController,
+              decoration: const InputDecoration(
+                labelText: "Amount",
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null ||
+                    value.isEmpty ||
+                    double.tryParse(value) == null ||
+                    double.tryParse(value)! <= 0) {
+                  return 'Your income amount must be a positive value.';
+                }
+                return null;
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
                 children: [
                   Expanded(
                     child: Text(
@@ -99,15 +105,14 @@ class _IncomeFormState extends State<IncomeForm> {
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: _onSubmit,
-                child: const Text("Add"),
-              ),
-            ],
-          ),
+            ),
+            ElevatedButton(
+              onPressed: _onSubmit,
+              child: const Text("Add"),
+            ),
+          ],
         ),
       ),
     );
-    ;
   }
 }
