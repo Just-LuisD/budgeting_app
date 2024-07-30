@@ -29,9 +29,15 @@ class CateggoryHeader extends StatelessWidget {
         IconButton(
           onPressed: () {
             showModalBottomSheet(
+              isScrollControlled: true,
               context: context,
               builder: (context) {
-                return CategoryForm();
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: CategoryForm(),
+                );
               },
             );
           },
