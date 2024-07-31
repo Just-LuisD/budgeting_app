@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class BudgetModal extends StatefulWidget {
   final Budget? budget;
+  final void Function(Budget) onSubmit;
 
   const BudgetModal({
     super.key,
     this.budget,
+    required this.onSubmit,
   });
 
   @override
@@ -38,17 +40,16 @@ class _BudgetModalState extends State<BudgetModal> {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
       final double income = double.parse(_incomeController.text);
-
+      Budget newBudget;
       if (widget.budget == null) {
-        final newBudget = Budget(
+        newBudget = Budget(
           name: name,
           income: income,
         );
-        // TODO: add budget
       } else {
-        final updatedBudget = widget.budget!.copy(name: name, income: income);
-        // TODO: update budget
+        newBudget = widget.budget!.copy(name: name, income: income);
       }
+      widget.onSubmit(newBudget);
       Navigator.pop(context, true);
     }
   }

@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 
 class BudgetCard extends StatelessWidget {
   final Budget budget;
+  final void Function() onDelete;
 
-  const BudgetCard({super.key, required this.budget});
+  const BudgetCard({
+    super.key,
+    required this.budget,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +18,9 @@ class BudgetCard extends StatelessWidget {
       title: Text(budget.name),
       subtitle: Text('Expected Income: \$${budget.income.toStringAsFixed(2)}'),
       trailing: IconButton(
-          onPressed: () {
-            // TODO: delete budget
-          },
-          icon: const Icon(Icons.delete)),
+        onPressed: onDelete,
+        icon: const Icon(Icons.delete),
+      ),
       onTap: () {
         Navigator.push(
           context,

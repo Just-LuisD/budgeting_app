@@ -1,3 +1,4 @@
+import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:budgeting_app/presentation/widgets/category_section.dart';
@@ -14,6 +15,8 @@ class BudgetDetailsScreen extends StatefulWidget {
 }
 
 class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
+  BudgetRepositoryImpl budgetRepository = BudgetRepositoryImpl();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +31,10 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
               await showDialog(
                 context: context,
                 builder: (context) {
-                  return BudgetModal(budget: widget.budget);
+                  return BudgetModal(
+                    budget: widget.budget,
+                    onSubmit: budgetRepository.updateBudget,
+                  );
                 },
               );
             },
