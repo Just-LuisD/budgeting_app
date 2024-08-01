@@ -1,14 +1,17 @@
+import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/presentation/widgets/category_form.dart';
 import 'package:flutter/material.dart';
 
 class CateggoryHeader extends StatelessWidget {
   final bool showingList;
   final Function onToggle;
+  final void Function(Category) onAdd;
 
   const CateggoryHeader({
     super.key,
     required this.showingList,
     required this.onToggle,
+    required this.onAdd,
   });
 
   @override
@@ -36,7 +39,9 @@ class CateggoryHeader extends StatelessWidget {
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
                   ),
-                  child: CategoryForm(),
+                  child: CategoryForm(
+                    onSubmit: onAdd,
+                  ),
                 );
               },
             );
