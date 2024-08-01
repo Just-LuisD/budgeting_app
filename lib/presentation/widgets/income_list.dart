@@ -1,13 +1,16 @@
 import 'package:budgeting_app/domain/entities/income.dart';
+import 'package:budgeting_app/presentation/widgets/income_form.dart';
 import 'package:flutter/material.dart';
 
 class IncomeList extends StatelessWidget {
   final List<Income> incomeList;
   final void Function(int) deleteItem;
+  final void Function(Income) updateItem;
   const IncomeList({
     super.key,
     required this.incomeList,
     required this.deleteItem,
+    required this.updateItem,
   });
 
   @override
@@ -23,6 +26,7 @@ class IncomeList extends StatelessWidget {
                 return IncomeItem(
                   income: incomeList[idx],
                   onDelete: deleteItem,
+                  onUpdate: updateItem,
                 );
               },
             ),
@@ -33,10 +37,12 @@ class IncomeList extends StatelessWidget {
 class IncomeItem extends StatelessWidget {
   final Income income;
   final void Function(int) onDelete;
+  final void Function(Income) onUpdate;
   const IncomeItem({
     super.key,
     required this.income,
     required this.onDelete,
+    required this.onUpdate,
   });
 
   @override
@@ -50,6 +56,25 @@ class IncomeItem extends StatelessWidget {
         },
         icon: const Icon(Icons.delete),
       ),
+      onTap: () {
+        showModalBottomSheet(
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          context: context,
+          builder: (context) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: IncomeForm(
+                onSubmit: onUpdate,
+                income: income,
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

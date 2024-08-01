@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class IncomeForm extends StatefulWidget {
+  final Income? income;
   final void Function(Income) onSubmit;
 
   const IncomeForm({
     super.key,
     required this.onSubmit,
+    this.income,
   });
 
   @override
@@ -18,21 +20,31 @@ class _IncomeFormState extends State<IncomeForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-  var _expenseDate = DateTime.now();
+  var _incomeDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.income != null) {
+      _titleController.text = widget.income!.title;
+      _amountController.text = widget.income!.amount.toString();
+      _incomeDate = DateTime.parse(widget.income!.date);
+    }
+  }
 
   void _pickDate() async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
-      initialDate: _expenseDate,
-      firstDate: DateTime(_expenseDate.year, _expenseDate.month, 1),
-      lastDate: DateTime(_expenseDate.year, _expenseDate.month + 1, 1).subtract(
+      initialDate: _incomeDate,
+      firstDate: DateTime(_incomeDate.year, _incomeDate.month, 1),
+      lastDate: DateTime(_incomeDate.year, _incomeDate.month + 1, 1).subtract(
         const Duration(days: 1),
       ),
     );
 
     if (selectedDate != null) {
       setState(() {
-        _expenseDate = selectedDate;
+        _incomeDate = selectedDate;
       });
     }
   }
@@ -43,9 +55,18 @@ class _IncomeFormState extends State<IncomeForm> {
     }
     final title = _titleController.text;
     final amount = double.tryParse(_amountController.text);
-    final date = DateTime.now().toString();
 
-    final newIncome = Income(title: title, amount: amount!, date: date);
+    Income newIncome;
+    if (widget.income == null) {
+      newIncome =
+          Income(title: title, amount: amount!, date: _incomeDate.toString());
+    } else {
+      newIncome = widget.income!.copy(
+        title: title,
+        amount: amount,
+        date: _incomeDate.toString(),
+      );
+    }
     widget.onSubmit(newIncome);
     Navigator.pop(context, true);
   }
@@ -100,7 +121,7 @@ class _IncomeFormState extends State<IncomeForm> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Date: ${DateFormat.yMMMd().format(_expenseDate)}',
+                      'Date: ${DateFormat.yMMMd().format(_incomeDate)}',
                     ),
                   ),
                   IconButton(

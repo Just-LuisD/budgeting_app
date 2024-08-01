@@ -35,6 +35,11 @@ class _IncomeSectionState extends State<IncomeSection> {
     setState(() {});
   }
 
+  void _updateIncome(Income newIncome) {
+    incomeRepository.updateIncome(newIncome);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,6 +61,7 @@ class _IncomeSectionState extends State<IncomeSection> {
                 return IncomeList(
                   incomeList: snapshot.data!,
                   deleteItem: _deleteIncome,
+                  updateItem: _updateIncome,
                 );
               }
               return Container();
