@@ -1,8 +1,5 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
-import 'package:budgeting_app/presentation/widgets/transaction_form/amount_field.dart';
-import 'package:budgeting_app/presentation/widgets/transaction_form/notes_field.dart';
-import 'package:budgeting_app/presentation/widgets/transaction_form/title_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -104,11 +101,34 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              TitleField(inputController: _titleController),
-              AmountField(
-                inputController: _amountController,
-                label: "Amount",
-                enabled: true,
+              TextFormField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Your transaction must have a title.';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  labelText: "Amount",
+                  prefixText: '\$',
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      double.tryParse(value) == null ||
+                      double.tryParse(value)! <= 0) {
+                    return 'Your transaction amount must be a positive value.';
+                  }
+                  return null;
+                },
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -144,7 +164,13 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                   ),
                 ),
               ),
-              NotesField(inputController: _notesController),
+              TextFormField(
+                maxLines: 8,
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  label: Text("Notes"),
+                ),
+              ),
               const SizedBox(
                 height: 12,
               ),

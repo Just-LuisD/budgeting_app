@@ -55,7 +55,9 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
               CategorySection(
                 budgetId: widget.budget.id!,
               ),
-              ExpenseSection(),
+              ExpenseSection(
+                budgetId: widget.budget.id!,
+              ),
             ],
           ),
         ),
