@@ -165,19 +165,16 @@ class DatabaseHelper {
         .delete('Categories', where: 'id = ?', whereArgs: [categoryId]);
   }
 
-  Future<int> deleteCategoryByBudgetId(int budgetId) async {
-    Database db = await database;
-    return await db.delete(
-      'Categories',
-      where: 'budget_id = ?',
-      whereArgs: [budgetId],
-    );
-  }
-
   // Delete an expense
   Future<int> deleteExpense(int expenseId) async {
     Database db = await database;
     return await db.delete('Expenses', where: 'id = ?', whereArgs: [expenseId]);
+  }
+
+// Delete an expense
+  Future<int> deleteIncome(int incomeId) async {
+    Database db = await database;
+    return await db.delete('Income', where: 'id = ?', whereArgs: [incomeId]);
   }
 
   // Update a budget
@@ -201,6 +198,13 @@ class DatabaseHelper {
     int id = expense['id'];
     return await db
         .update('Expenses', expense, where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Update an expense
+  Future<int> updateIncome(Map<String, dynamic> income) async {
+    Database db = await database;
+    int id = income['id'];
+    return await db.update('Income', income, where: 'id = ?', whereArgs: [id]);
   }
 
   // Close the database

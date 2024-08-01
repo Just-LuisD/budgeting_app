@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class IncomeForm extends StatefulWidget {
-  const IncomeForm({super.key});
+  final void Function(Income) onSubmit;
+
+  const IncomeForm({
+    super.key,
+    required this.onSubmit,
+  });
 
   @override
   State<IncomeForm> createState() => _IncomeFormState();
@@ -41,7 +46,7 @@ class _IncomeFormState extends State<IncomeForm> {
     final date = DateTime.now().toString();
 
     final newIncome = Income(title: title, amount: amount!, date: date);
-
+    widget.onSubmit(newIncome);
     Navigator.pop(context, true);
   }
 

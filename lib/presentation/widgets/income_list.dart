@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class IncomeList extends StatelessWidget {
   final List<Income> incomeList;
+  final void Function(int) deleteItem;
   const IncomeList({
     super.key,
     required this.incomeList,
+    required this.deleteItem,
   });
 
   @override
@@ -18,7 +20,10 @@ class IncomeList extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: incomeList.length,
               itemBuilder: (context, idx) {
-                return IncomeItem(income: incomeList[idx]);
+                return IncomeItem(
+                  income: incomeList[idx],
+                  onDelete: deleteItem,
+                );
               },
             ),
           );
@@ -27,7 +32,12 @@ class IncomeList extends StatelessWidget {
 
 class IncomeItem extends StatelessWidget {
   final Income income;
-  const IncomeItem({super.key, required this.income});
+  final void Function(int) onDelete;
+  const IncomeItem({
+    super.key,
+    required this.income,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +45,9 @@ class IncomeItem extends StatelessWidget {
       title: Text(income.title),
       subtitle: Text(income.amount.toString()),
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          onDelete(income.id!);
+        },
         icon: const Icon(Icons.delete),
       ),
     );

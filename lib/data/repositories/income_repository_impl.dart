@@ -17,4 +17,14 @@ class IncomeRepositoryImpl implements IncomeRepository {
   Future<int> insertIncome(Income income) async {
     return await dbHelper.insertIncome(income.toMap());
   }
+
+  @override
+  Future<int> deleteIncome(int incomeId) async {
+    return await dbHelper.deleteIncome(incomeId);
+  }
+
+  @override
+  Future<int> updateIncome(Income income) async {
+    return await dbHelper.updateIncome(income.toMap());
+  }
 }

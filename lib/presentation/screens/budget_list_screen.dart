@@ -1,5 +1,4 @@
 import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
-import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/presentation/widgets/budget_card.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ class BudgetListScreen extends StatefulWidget {
 
 class _BudgetListScreenState extends State<BudgetListScreen> {
   BudgetRepositoryImpl budgetRepository = BudgetRepositoryImpl();
-  List<Budget> budgets = [];
 
   @override
   Widget build(BuildContext context) {
