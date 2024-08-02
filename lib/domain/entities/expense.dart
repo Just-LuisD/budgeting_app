@@ -2,7 +2,7 @@ class Expense {
   final int? id;
   final String title;
   final int categoryId;
-  final int budgetId;
+  final int? budgetId;
   final double amount;
   final String date;
   final String? notes;
@@ -11,7 +11,7 @@ class Expense {
     this.id,
     required this.title,
     required this.categoryId,
-    required this.budgetId,
+    this.budgetId,
     required this.amount,
     required this.date,
     this.notes,

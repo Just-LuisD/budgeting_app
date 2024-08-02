@@ -1,11 +1,20 @@
+import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
+import 'package:budgeting_app/presentation/widgets/expense_form_screen.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseList extends StatelessWidget {
   final List<Expense> expenses;
+  final void Function(int) deleteItem;
+  final void Function(Expense) updateItem;
+  final Future<List<Category>> Function() getCategories;
+
   const ExpenseList({
     super.key,
     required this.expenses,
+    required this.deleteItem,
+    required this.updateItem,
+    required this.getCategories,
   });
 
   @override
@@ -18,7 +27,12 @@ class ExpenseList extends StatelessWidget {
               shrinkWrap: true,
               itemCount: expenses.length,
               itemBuilder: (context, idx) {
-                return ExpenseItem(expense: expenses[idx]);
+                return ExpenseItem(
+                  expense: expenses[idx],
+                  onDelete: deleteItem,
+                  onUpdate: updateItem,
+                  getCategories: getCategories,
+                );
               },
             ),
           );
@@ -27,7 +41,17 @@ class ExpenseList extends StatelessWidget {
 
 class ExpenseItem extends StatelessWidget {
   final Expense expense;
-  const ExpenseItem({super.key, required this.expense});
+  final void Function(int) onDelete;
+  final void Function(Expense) onUpdate;
+  final Future<List<Category>> Function() getCategories;
+
+  const ExpenseItem({
+    super.key,
+    required this.expense,
+    required this.onDelete,
+    required this.onUpdate,
+    required this.getCategories,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +59,31 @@ class ExpenseItem extends StatelessWidget {
       title: Text(expense.title),
       subtitle: Text(expense.amount.toString()),
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          onDelete(expense.id!);
+        },
         icon: const Icon(Icons.delete),
       ),
+      onTap: () {
+        getCategories().then(
+          (categories) {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: ExpenseFormScreen(
+                  expense: expense,
+                  onSubmit: onUpdate,
+                  categories: categories,
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

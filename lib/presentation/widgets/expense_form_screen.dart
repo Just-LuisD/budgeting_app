@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseFormScreen extends StatefulWidget {
-  final int budgetId;
   final List<Category> categories;
   final Expense? expense;
+  final void Function(Expense) onSubmit;
 
   const ExpenseFormScreen({
     super.key,
     this.expense,
-    required this.budgetId,
     required this.categories,
+    required this.onSubmit,
   });
 
   @override
@@ -22,7 +22,7 @@ class ExpenseFormScreen extends StatefulWidget {
 class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final _categoryController = TextEditingController();
+  int? _selectedCategory;
   final _amountController = TextEditingController();
   var _expenseDate = DateTime.now();
   final _notesController = TextEditingController();
@@ -32,8 +32,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     super.initState();
     if (widget.expense != null) {
       _titleController.text = widget.expense!.title;
-      // TODO: maybe change expense to hold a reference to the category name?
-      _categoryController.text = widget.expense!.categoryId.toString();
+      _selectedCategory = widget.expense!.categoryId;
       _amountController.text = widget.expense!.amount.toString();
       _expenseDate = DateTime.parse(widget.expense!.date);
       _notesController.text = widget.expense!.notes ?? "";
@@ -46,7 +45,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       initialDate: _expenseDate,
       firstDate: DateTime(_expenseDate.year, _expenseDate.month, 1),
       lastDate: DateTime(_expenseDate.year, _expenseDate.month + 1, 1).subtract(
-        Duration(days: 1),
+        const Duration(days: 1),
       ),
     );
 
@@ -58,31 +57,35 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
   }
 
   void _submitForm(BuildContext context) async {
-    if (!_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate() || _selectedCategory == null) {
       return;
     }
+
     final title = _titleController.text;
-    final category = _categoryController.text;
     final amount = double.tryParse(_amountController.text);
-    final date = DateTime.now().toString();
     final notes = _notesController.text;
 
+    Expense newExpense;
     if (widget.expense == null) {
-      final newExpense = Expense(
+      newExpense = Expense(
         title: title,
-        categoryId: 1,
-        budgetId: widget.budgetId,
+        categoryId: _selectedCategory!,
         amount: amount!,
-        date: date,
+        date: _expenseDate.toString(),
         notes: notes,
       );
-      // TODO: add expense
     } else {
-      final updatedExpense = widget.expense!
-          .copy(title: title, amount: amount, date: date, notes: notes);
-      // TODO: update expense
+      newExpense = widget.expense!.copy(
+        title: title,
+        categoryId: _selectedCategory!,
+        amount: amount,
+        date: _expenseDate.toString(),
+        notes: notes,
+      );
     }
-    Navigator.pop(context, true);
+
+    widget.onSubmit(newExpense);
+    Navigator.pop(context);
   }
 
   @override
@@ -142,7 +145,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     IconButton(
                       alignment: Alignment.centerRight,
                       onPressed: _pickDate,
-                      icon: Icon(Icons.calendar_month),
+                      icon: const Icon(Icons.calendar_month),
                     ),
                   ],
                 ),
@@ -151,11 +154,20 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 alignment: Alignment.centerLeft,
                 child: DropdownMenu(
+                  initialSelection: _selectedCategory,
+                  onSelected: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  },
                   width: 320,
                   label: const Text("Category"),
                   dropdownMenuEntries: widget.categories.map(
                     (e) {
-                      return DropdownMenuEntry(value: e.name, label: e.name);
+                      return DropdownMenuEntry(value: e.id, label: e.name);
                     },
                   ).toList(),
                   inputDecorationTheme: const InputDecorationTheme(
