@@ -2,7 +2,7 @@ class Category {
   final int? id;
   final int? budgetId;
   final String name;
-  final double spendingLimit;
+  final int spendingLimit;
 
   Category({
     this.id,
@@ -33,7 +33,7 @@ class Category {
     int? id,
     int? budgetId,
     String? name,
-    double? spendingLimit,
+    int? spendingLimit,
   }) {
     return Category(
       id: id ?? this.id,

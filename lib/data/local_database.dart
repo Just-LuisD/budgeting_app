@@ -32,7 +32,7 @@ class DatabaseHelper {
       CREATE TABLE Budgets (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE NOT NULL,
-        income REAL NOT NULL
+        income INTEGER NOT NULL
       )
     ''');
 
@@ -41,7 +41,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         budget_id INTEGER NOT NULL,
         name TEXT NOT NULL,
-        spending_limit REAL,
+        spending_limit INTEGER NOT NULL,
         FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
       )
     ''');
@@ -52,7 +52,7 @@ class DatabaseHelper {
         title TEXT NOT NULL,
         category_id INTEGER NOT NULL,
         budget_id INTEGER NOT NULL,
-        amount REAL NOT NULL,
+        amount INTEGER NOT NULL,
         date TEXT NOT NULL,
         notes TEXT,
         FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
@@ -65,7 +65,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
         budget_id INTEGER NOT NULL,
-        amount REAL NOT NULL,
+        amount INTEGER NOT NULL,
         date TEXT NOT NULL,
         FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
       )

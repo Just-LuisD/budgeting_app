@@ -1,7 +1,7 @@
 class Budget {
   final int? id;
   final String name;
-  final double income;
+  final int income;
 
   Budget({
     this.id,
@@ -28,7 +28,7 @@ class Budget {
   Budget copy({
     int? id,
     String? name,
-    double? income,
+    int? income,
   }) {
     return Budget(
       id: id ?? this.id,

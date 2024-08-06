@@ -62,7 +62,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
     }
 
     final title = _titleController.text;
-    final amount = double.tryParse(_amountController.text);
+    final amount = int.tryParse(_amountController.text.replaceAll(".", ""));
     final notes = _notesController.text;
 
     Expense newExpense;

@@ -39,7 +39,7 @@ class _BudgetModalState extends State<BudgetModal> {
   void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
-      final double income = double.parse(_incomeController.text);
+      final income = int.parse(_incomeController.text.replaceAll(".", ""));
       Budget newBudget;
       if (widget.budget == null) {
         newBudget = Budget(

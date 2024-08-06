@@ -54,7 +54,7 @@ class _IncomeFormState extends State<IncomeForm> {
       return;
     }
     final title = _titleController.text;
-    final amount = double.tryParse(_amountController.text);
+    final amount = int.tryParse(_amountController.text.replaceAll(".", ""));
 
     Income newIncome;
     if (widget.income == null) {

@@ -2,7 +2,7 @@ class Income {
   final int? id;
   final String title;
   final int? budgetId;
-  final double amount;
+  final int amount;
   final String date;
 
   Income({
@@ -37,7 +37,7 @@ class Income {
     int? id,
     String? title,
     int? budgetId,
-    double? amount,
+    int? amount,
     String? date,
   }) {
     return Income(

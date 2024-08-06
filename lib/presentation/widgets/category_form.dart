@@ -35,7 +35,7 @@ class _CategoryFormState extends State<CategoryForm> {
     }
 
     final name = _nameController.text;
-    final limit = double.tryParse(_limitController.text);
+    final limit = int.tryParse(_limitController.text.replaceAll(".", ""));
 
     Category newCategory;
 

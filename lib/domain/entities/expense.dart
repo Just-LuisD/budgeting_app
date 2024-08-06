@@ -3,7 +3,7 @@ class Expense {
   final String title;
   final int categoryId;
   final int? budgetId;
-  final double amount;
+  final int amount;
   final String date;
   final String? notes;
 
@@ -46,7 +46,7 @@ class Expense {
     String? title,
     int? categoryId,
     int? budgetId,
-    double? amount,
+    int? amount,
     String? date,
     String? notes,
   }) {
