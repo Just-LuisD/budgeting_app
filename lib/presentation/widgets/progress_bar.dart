@@ -23,7 +23,10 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double barWidth = MediaQuery.sizeOf(context).width - 50;
-    final percantage = (value - minVal) / (maxVal - minVal);
+    double percantage = (value - minVal) / (maxVal - minVal);
+    if (percantage > 0 && percantage < 0.03) {
+      percantage = 0.03;
+    }
     return SizedBox(
       width: barWidth,
       child: Column(
