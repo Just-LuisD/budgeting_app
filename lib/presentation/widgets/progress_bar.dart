@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final curencyFormatter = NumberFormat.simpleCurrency();
 
 class ProgressBar extends StatelessWidget {
   final String label;
@@ -31,7 +34,7 @@ class ProgressBar extends StatelessWidget {
       width: barWidth,
       child: Column(
         children: [
-          Text("$label: \$${value}"),
+          Text("$label: ${curencyFormatter.format(value / 100)}"),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -63,13 +66,13 @@ class ProgressBar extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    minVal.toString(),
+                    curencyFormatter.format(minVal / 100),
                     textAlign: TextAlign.left,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    maxVal.toString(),
+                    curencyFormatter.format(maxVal / 100),
                     textAlign: TextAlign.right,
                   ),
                 ),
