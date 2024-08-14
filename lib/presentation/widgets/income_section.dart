@@ -1,5 +1,6 @@
 import 'package:budgeting_app/data/repositories/income_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/income.dart';
+import 'package:budgeting_app/presentation/widgets/progress_bar.dart';
 import 'package:budgeting_app/presentation/widgets/income_header.dart';
 import 'package:budgeting_app/presentation/widgets/income_list.dart';
 import 'package:flutter/material.dart';
@@ -45,13 +46,19 @@ class _IncomeSectionState extends State<IncomeSection> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        ProgressBar(
+          label: "Expected Income",
+          minVal: 0,
+          maxVal: 100,
+          value: 35,
+          height: 20,
+          color: Colors.green,
+          backgroundColor: Colors.grey,
+        ),
         IncomeHeader(
           showingList: _showList,
           onToggle: _toggleList,
           onAdd: _addIncome,
-        ),
-        LinearProgressIndicator(
-          value: 0.5,
         ),
         if (_showList)
           FutureBuilder(

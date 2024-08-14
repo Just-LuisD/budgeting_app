@@ -1,5 +1,6 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/presentation/widgets/category_form.dart';
+import 'package:budgeting_app/presentation/widgets/progress_bar.dart';
 import 'package:flutter/material.dart';
 
 class CategoryList extends StatelessWidget {
@@ -49,13 +50,14 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(category.name),
-      trailing: IconButton(
-        onPressed: () {
-          onDelete(category.id!);
-        },
-        icon: const Icon(Icons.delete),
+    return GestureDetector(
+      child: ProgressBar(
+        label: category.name,
+        minVal: 0,
+        maxVal: category.spendingLimit,
+        value: 0,
+        height: 16,
+        color: Colors.red,
       ),
       onTap: () {
         showModalBottomSheet(

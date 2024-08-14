@@ -48,7 +48,6 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Expected Income: \$${widget.budget.income}"),
               IncomeSection(
                 budgetId: widget.budget.id!,
               ),
