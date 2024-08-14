@@ -1,4 +1,5 @@
 import 'package:budgeting_app/data/repositories/income_repository_impl.dart';
+import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/domain/entities/income.dart';
 import 'package:budgeting_app/presentation/widgets/progress_bar.dart';
 import 'package:budgeting_app/presentation/widgets/income_header.dart';
@@ -6,10 +7,10 @@ import 'package:budgeting_app/presentation/widgets/income_list.dart';
 import 'package:flutter/material.dart';
 
 class IncomeSection extends StatefulWidget {
-  final int budgetId;
+  final Budget budget;
   const IncomeSection({
     super.key,
-    required this.budgetId,
+    required this.budget,
   });
 
   @override
@@ -27,7 +28,7 @@ class _IncomeSectionState extends State<IncomeSection> {
   }
 
   void _addIncome(Income income) {
-    incomeRepository.insertIncome(income.copy(budgetId: widget.budgetId));
+    incomeRepository.insertIncome(income.copy(budgetId: widget.budget.id));
     setState(() {});
   }
 
@@ -46,14 +47,22 @@ class _IncomeSectionState extends State<IncomeSection> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ProgressBar(
-          label: "Expected Income",
-          minVal: 0,
-          maxVal: 100,
-          value: 35,
-          height: 20,
-          color: Colors.green,
-          backgroundColor: Colors.grey,
+        FutureBuilder(
+          future: incomeRepository.getTotalIncome(widget.budget.id!),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ProgressBar(
+                label: "Income",
+                minVal: 0,
+                maxVal: widget.budget.income,
+                value: snapshot.data!,
+                height: 20,
+                color: Colors.green,
+                backgroundColor: Colors.grey,
+              );
+            }
+            return Container();
+          },
         ),
         IncomeHeader(
           showingList: _showList,
@@ -62,7 +71,7 @@ class _IncomeSectionState extends State<IncomeSection> {
         ),
         if (_showList)
           FutureBuilder(
-            future: incomeRepository.getBudgetIncome(widget.budgetId),
+            future: incomeRepository.getBudgetIncome(widget.budget.id!),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return IncomeList(

@@ -5,4 +5,5 @@ abstract class IncomeRepository {
   Future<int> insertIncome(Income income);
   Future<int> deleteIncome(int incomeId);
   Future<int> updateIncome(Income income);
+  Future<int> getTotalIncome(int budgetId);
 }

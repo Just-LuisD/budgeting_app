@@ -27,4 +27,14 @@ class IncomeRepositoryImpl implements IncomeRepository {
   Future<int> updateIncome(Income income) async {
     return await dbHelper.updateIncome(income.toMap());
   }
+
+  @override
+  Future<int> getTotalIncome(int budgetId) async {
+    final maps = await dbHelper.getIncome(budgetId);
+    int total = 0;
+    for (Map<String, dynamic> map in maps) {
+      total += map['amount'] as int;
+    }
+    return total;
+  }
 }

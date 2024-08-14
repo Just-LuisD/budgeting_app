@@ -49,7 +49,7 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IncomeSection(
-                budgetId: widget.budget.id!,
+                budget: widget.budget,
               ),
               CategorySection(
                 budgetId: widget.budget.id!,
