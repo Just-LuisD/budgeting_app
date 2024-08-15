@@ -3,12 +3,12 @@ import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ExpenseFormScreen extends StatefulWidget {
+class ExpenseForm extends StatefulWidget {
   final List<Category> categories;
   final Expense? expense;
   final void Function(Expense) onSubmit;
 
-  const ExpenseFormScreen({
+  const ExpenseForm({
     super.key,
     this.expense,
     required this.categories,
@@ -16,10 +16,10 @@ class ExpenseFormScreen extends StatefulWidget {
   });
 
   @override
-  State<ExpenseFormScreen> createState() => _ExpenseFormScreenState();
+  State<ExpenseForm> createState() => _ExpenseFormState();
 }
 
-class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
+class _ExpenseFormState extends State<ExpenseForm> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   int? _selectedCategory;

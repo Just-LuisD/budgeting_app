@@ -43,7 +43,7 @@ class ExpenseHeader extends StatelessWidget {
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    child: ExpenseFormScreen(
+                    child: ExpenseForm(
                       onSubmit: onAdd,
                       categories: categories,
                     ),
