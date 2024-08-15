@@ -33,4 +33,14 @@ class CategoryRepositoryImpl implements CategoryRepository {
   Future<int> deleteCategory(int id) async {
     return await dbHelper.deleteCategory(id);
   }
+
+  @override
+  Future<int> getTotalSpent(int id) async {
+    final maps = await dbHelper.getExpenses(id);
+    int total = 0;
+    for (Map<String, dynamic> map in maps) {
+      total += map['amount'] as int;
+    }
+    return total;
+  }
 }

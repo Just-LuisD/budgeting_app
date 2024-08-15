@@ -6,4 +6,5 @@ abstract class CategoryRepository {
   Future<int> insertCategory(Category category);
   Future<int> updateCategory(Category category);
   Future<int> deleteCategory(int id);
+  Future<int> getTotalSpent(int id);
 }

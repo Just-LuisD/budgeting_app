@@ -40,6 +40,10 @@ class _CategorySectionState extends State<CategorySection> {
     setState(() {});
   }
 
+  Future<int> _getTotal(int categoryId) {
+    return categoryRepository.getTotalSpent(categoryId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,6 +63,7 @@ class _CategorySectionState extends State<CategorySection> {
                   categories: snapshot.data!,
                   deleteItem: _deleteCategory,
                   updateItem: _updateCategory,
+                  getItemTotal: _getTotal,
                 );
               }
               return Container();

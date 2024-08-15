@@ -7,12 +7,14 @@ class CategoryList extends StatelessWidget {
   final List<Category> categories;
   final void Function(int) deleteItem;
   final void Function(Category) updateItem;
+  final Future<int> Function(int) getItemTotal;
 
   const CategoryList({
     super.key,
     required this.categories,
     required this.deleteItem,
     required this.updateItem,
+    required this.getItemTotal,
   });
 
   @override
@@ -25,10 +27,19 @@ class CategoryList extends StatelessWidget {
               shrinkWrap: true,
               itemCount: categories.length,
               itemBuilder: (context, idx) {
-                return CategoryItem(
-                  category: categories[idx],
-                  onDelete: deleteItem,
-                  onUpdate: updateItem,
+                return FutureBuilder(
+                  future: getItemTotal(categories[idx].id!),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return CategoryItem(
+                        category: categories[idx],
+                        categoryTotal: snapshot.data!,
+                        onDelete: deleteItem,
+                        onUpdate: updateItem,
+                      );
+                    }
+                    return Container();
+                  },
                 );
               },
             ),
@@ -38,12 +49,14 @@ class CategoryList extends StatelessWidget {
 
 class CategoryItem extends StatelessWidget {
   final Category category;
+  final int categoryTotal;
   final void Function(int) onDelete;
   final void Function(Category) onUpdate;
 
   const CategoryItem({
     super.key,
     required this.category,
+    required this.categoryTotal,
     required this.onDelete,
     required this.onUpdate,
   });
@@ -55,7 +68,7 @@ class CategoryItem extends StatelessWidget {
         label: category.name,
         minVal: 0,
         maxVal: category.spendingLimit,
-        value: 0,
+        value: categoryTotal,
         height: 16,
         color: Colors.red,
       ),
