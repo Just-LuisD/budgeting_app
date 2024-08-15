@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class CategoryForm extends StatefulWidget {
   final Category? category;
   final void Function(Category) onSubmit;
+  final void Function(int)? onDelete;
 
   const CategoryForm({
     super.key,
     required this.onSubmit,
+    this.onDelete,
     this.category,
   });
 
@@ -58,12 +60,27 @@ class _CategoryFormState extends State<CategoryForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.category == null ? "Add Category" : "Edit Category",
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.category == null ? "Add Category" : "Edit Category",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                if (widget.category != null && widget.onDelete != null)
+                  IconButton(
+                    onPressed: () {
+                      widget.onDelete!(widget.category!.id!);
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.delete),
+                  ),
+              ],
             ),
             TextFormField(
               controller: _nameController,

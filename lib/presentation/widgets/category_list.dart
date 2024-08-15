@@ -71,6 +71,7 @@ class CategoryItem extends StatelessWidget {
               child: CategoryForm(
                 category: category,
                 onSubmit: onUpdate,
+                onDelete: onDelete,
               ),
             );
           },
