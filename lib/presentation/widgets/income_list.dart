@@ -1,6 +1,9 @@
 import 'package:budgeting_app/domain/entities/income.dart';
 import 'package:budgeting_app/presentation/widgets/income_form.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final curencyFormatter = NumberFormat.simpleCurrency();
 
 class IncomeList extends StatelessWidget {
   final List<Income> incomeList;
@@ -49,7 +52,7 @@ class IncomeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(income.title),
-      subtitle: Text(income.amount.toString()),
+      subtitle: Text(curencyFormatter.format(income.amount / 100)),
       trailing: IconButton(
         onPressed: () {
           onDelete(income.id!);

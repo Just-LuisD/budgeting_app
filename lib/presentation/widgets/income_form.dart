@@ -80,9 +80,9 @@ class _IncomeFormState extends State<IncomeForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Add Income",
-              style: TextStyle(
+            Text(
+              widget.income == null ? "Add Income" : "Edit Income",
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -134,7 +134,7 @@ class _IncomeFormState extends State<IncomeForm> {
             ),
             ElevatedButton(
               onPressed: _onSubmit,
-              child: const Text("Add"),
+              child: Text(widget.income == null ? "Add" : "Save"),
             ),
           ],
         ),
