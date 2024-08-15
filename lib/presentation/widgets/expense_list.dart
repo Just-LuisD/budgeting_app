@@ -1,6 +1,6 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
-import 'package:budgeting_app/presentation/widgets/expense_form_screen.dart';
+import 'package:budgeting_app/presentation/widgets/expense_form.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseList extends StatelessWidget {
