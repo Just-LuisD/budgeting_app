@@ -98,7 +98,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
           child: Column(
             children: [
               Text(
-                widget.expense == null ? 'Add Transaction' : 'Edit Transaction',
+                widget.expense == null ? 'Add Expense' : 'Edit Expense',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -188,7 +188,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
               ),
               ElevatedButton(
                 onPressed: () => _submitForm(context),
-                child: Text(widget.expense == null ? "Add" : "Update"),
+                child: Text(widget.expense == null ? "Add" : "Save"),
               ),
             ],
           ),
