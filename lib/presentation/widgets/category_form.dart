@@ -58,9 +58,9 @@ class _CategoryFormState extends State<CategoryForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Add Category",
-              style: TextStyle(
+            Text(
+              widget.category == null ? "Add Category" : "Edit Category",
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -98,7 +98,7 @@ class _CategoryFormState extends State<CategoryForm> {
             ),
             ElevatedButton(
               onPressed: _onSubmit,
-              child: const Text("Add"),
+              child: Text(widget.category == null ? "Add" : "Save"),
             ),
           ],
         ),
