@@ -1,6 +1,8 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
+import 'package:budgeting_app/presentation/widgets/currency_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseForm extends StatefulWidget {
@@ -118,9 +120,12 @@ class _ExpenseFormState extends State<ExpenseForm> {
               ),
               TextFormField(
                 controller: _amountController,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  CurrencyInputFormatter(),
+                ],
                 decoration: const InputDecoration(
                   labelText: "Amount",
-                  prefixText: '\$',
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {

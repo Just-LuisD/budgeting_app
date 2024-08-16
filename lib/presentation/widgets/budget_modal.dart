@@ -1,5 +1,7 @@
 import 'package:budgeting_app/domain/entities/budget.dart';
+import 'package:budgeting_app/presentation/widgets/currency_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class BudgetModal extends StatefulWidget {
   final Budget? budget;
@@ -75,6 +77,10 @@ class _BudgetModalState extends State<BudgetModal> {
             ),
             TextFormField(
               controller: _incomeController,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyInputFormatter(),
+              ],
               decoration: const InputDecoration(labelText: 'Expected Income'),
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),

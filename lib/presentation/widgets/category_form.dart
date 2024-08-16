@@ -1,5 +1,7 @@
 import 'package:budgeting_app/domain/entities/category.dart';
+import 'package:budgeting_app/presentation/widgets/currency_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CategoryForm extends StatefulWidget {
   final Category? category;
@@ -96,6 +98,10 @@ class _CategoryFormState extends State<CategoryForm> {
             ),
             TextFormField(
               controller: _limitController,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyInputFormatter(),
+              ],
               decoration: const InputDecoration(
                 labelText: "Limit",
               ),
