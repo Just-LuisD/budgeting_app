@@ -39,8 +39,8 @@ class _CategoryFormState extends State<CategoryForm> {
     }
 
     final name = _nameController.text;
-    final limit = int.tryParse(_limitController.text.replaceAll(".", ""));
-
+    final limit =
+        int.tryParse(_limitController.text.replaceAll(RegExp("[.,\$]"), ""));
     Category newCategory;
 
     if (widget.category == null) {
@@ -107,11 +107,12 @@ class _CategoryFormState extends State<CategoryForm> {
               ),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    double.tryParse(value) == null ||
-                    double.tryParse(value)! <= 0) {
-                  return 'Your transaction amount must be a positive value.';
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an limit amount';
+                }
+                String parsedValue = value.replaceAll(RegExp("[.,\$]"), "");
+                if (int.tryParse(parsedValue) == null) {
+                  return 'Please entee a valid number';
                 }
                 return null;
               },

@@ -64,7 +64,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
     }
 
     final title = _titleController.text;
-    final amount = int.tryParse(_amountController.text.replaceAll(".", ""));
+    final amount =
+        int.tryParse(_amountController.text.replaceAll(RegExp("[.,\$]"), ""));
     final notes = _notesController.text;
 
     Expense newExpense;
@@ -129,11 +130,12 @@ class _ExpenseFormState extends State<ExpenseForm> {
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      double.tryParse(value) == null ||
-                      double.tryParse(value)! <= 0) {
-                    return 'Your transaction amount must be a positive value.';
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter an amount';
+                  }
+                  String parsedValue = value.replaceAll(RegExp("[.,\$]"), "");
+                  if (int.tryParse(parsedValue) == null) {
+                    return 'Please entee a valid number';
                   }
                   return null;
                 },

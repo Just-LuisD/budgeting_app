@@ -41,7 +41,8 @@ class _BudgetModalState extends State<BudgetModal> {
   void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
-      final income = int.parse(_incomeController.text.replaceAll(".", ""));
+      final income =
+          int.parse(_incomeController.text.replaceAll(RegExp("[.,\$]"), ""));
       Budget newBudget;
       if (widget.budget == null) {
         newBudget = Budget(
@@ -88,8 +89,9 @@ class _BudgetModalState extends State<BudgetModal> {
                 if (value == null || value.isEmpty) {
                   return 'Please enter an income amount';
                 }
-                if (double.tryParse(value) == null) {
-                  return 'Please enter a valid number';
+                String parsedValue = value.replaceAll(RegExp("[.,\$]"), "");
+                if (int.tryParse(parsedValue) == null) {
+                  return 'Please entee a valid number';
                 }
                 return null;
               },

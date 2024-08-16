@@ -56,8 +56,8 @@ class _IncomeFormState extends State<IncomeForm> {
       return;
     }
     final title = _titleController.text;
-    final amount = int.tryParse(_amountController.text.replaceAll(".", ""));
-
+    final amount =
+        int.tryParse(_amountController.text.replaceAll(RegExp("[.,\$]"), ""));
     Income newIncome;
     if (widget.income == null) {
       newIncome =
@@ -112,11 +112,12 @@ class _IncomeFormState extends State<IncomeForm> {
               ),
               keyboardType: TextInputType.number,
               validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    double.tryParse(value) == null ||
-                    double.tryParse(value)! <= 0) {
-                  return 'Your income amount must be a positive value.';
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an income amount';
+                }
+                String parsedValue = value.replaceAll(RegExp("[.,\$]"), "");
+                if (int.tryParse(parsedValue) == null) {
+                  return 'Please entee a valid number';
                 }
                 return null;
               },
