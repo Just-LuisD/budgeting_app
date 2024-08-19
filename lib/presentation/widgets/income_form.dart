@@ -29,7 +29,8 @@ class _IncomeFormState extends State<IncomeForm> {
     super.initState();
     if (widget.income != null) {
       _titleController.text = widget.income!.title;
-      _amountController.text = widget.income!.amount.toString();
+      _amountController.text =
+          NumberFormat.simpleCurrency().format(widget.income!.amount / 100);
       _incomeDate = DateTime.parse(widget.income!.date);
     }
   }

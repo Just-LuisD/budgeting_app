@@ -35,7 +35,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
     if (widget.expense != null) {
       _titleController.text = widget.expense!.title;
       _selectedCategory = widget.expense!.categoryId;
-      _amountController.text = widget.expense!.amount.toString();
+      _amountController.text =
+          NumberFormat.simpleCurrency().format(widget.expense!.amount / 100);
       _expenseDate = DateTime.parse(widget.expense!.date);
       _notesController.text = widget.expense!.notes ?? "";
     }
