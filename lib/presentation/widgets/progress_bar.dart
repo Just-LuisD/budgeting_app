@@ -35,30 +35,32 @@ class ProgressBar extends StatelessWidget {
       child: Column(
         children: [
           Text("$label: ${curencyFormatter.format(value / 100)}"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: height,
-                width: percantage * barWidth,
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius:
-                      BorderRadius.horizontal(left: Radius.circular(height)),
-                ),
+          Container(
+            alignment: Alignment.center,
+            width: barWidth,
+            height: height,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.horizontal(
+                right: Radius.circular(height),
+                left: Radius.circular(height),
               ),
-              Container(
-                height: height,
-                width: (1 - percantage) * barWidth,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.horizontal(
-                    right: Radius.circular(height),
-                    left: Radius.circular(value > 0 ? 0 : height),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: percantage * barWidth,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.horizontal(
+                      left: Radius.circular(height),
+                      right: Radius.circular(
+                          percantage * barWidth == barWidth ? height : 0),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(
             width: barWidth,
