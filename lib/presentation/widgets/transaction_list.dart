@@ -100,6 +100,7 @@ class IncomeItem extends StatelessWidget {
               child: IncomeForm(
                 onSubmit: onUpdate,
                 income: income,
+                onDelete: onDelete,
               ),
             );
           },
@@ -150,6 +151,7 @@ class ExpenseItem extends StatelessWidget {
                 child: ExpenseForm(
                   expense: expense,
                   onSubmit: onUpdate,
+                  onDelete: onDelete,
                   categories: categories,
                 ),
               ),

@@ -9,10 +9,12 @@ class ExpenseForm extends StatefulWidget {
   final List<Category> categories;
   final Expense? expense;
   final void Function(Expense) onSubmit;
+  final void Function(int)? onDelete;
 
   const ExpenseForm({
     super.key,
     this.expense,
+    this.onDelete,
     required this.categories,
     required this.onSubmit,
   });
@@ -101,12 +103,26 @@ class _ExpenseFormState extends State<ExpenseForm> {
           key: _formKey,
           child: Column(
             children: [
-              Text(
-                widget.expense == null ? 'Add Expense' : 'Edit Expense',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.expense == null ? 'Add Expense' : 'Edit Expense',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  if (widget.onDelete != null && widget.expense != null)
+                    IconButton(
+                      onPressed: () {
+                        widget.onDelete!(widget.expense!.id!);
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(Icons.delete),
+                    ),
+                ],
               ),
               TextFormField(
                 controller: _titleController,

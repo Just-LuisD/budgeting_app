@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 class IncomeForm extends StatefulWidget {
   final Income? income;
   final void Function(Income) onSubmit;
+  final void Function(int)? onDelete;
 
   const IncomeForm({
     super.key,
     required this.onSubmit,
+    this.onDelete,
     this.income,
   });
 
@@ -83,12 +85,26 @@ class _IncomeFormState extends State<IncomeForm> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.income == null ? "Add Income" : "Edit Income",
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.income == null ? "Add Income" : "Edit Income",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                if (widget.onDelete != null && widget.income != null)
+                  IconButton(
+                    onPressed: () {
+                      widget.onDelete!(widget.income!.id!);
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.delete),
+                  ),
+              ],
             ),
             TextFormField(
               controller: _titleController,
