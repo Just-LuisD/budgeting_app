@@ -95,7 +95,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(18.0),
+      padding: EdgeInsets.all(widget.expense == null ? 0 : 18.0),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,

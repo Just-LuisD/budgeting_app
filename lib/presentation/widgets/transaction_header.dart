@@ -1,19 +1,22 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
-import 'package:budgeting_app/presentation/widgets/expense_form.dart';
+import 'package:budgeting_app/domain/entities/income.dart';
+import 'package:budgeting_app/presentation/widgets/transaction_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseHeader extends StatelessWidget {
+class TransactionHeader extends StatelessWidget {
   final bool showingList;
   final Function onToggle;
-  final void Function(Expense) onAdd;
+  final void Function(Expense) addExpense;
+  final void Function(Income) addIncome;
   final Future<List<Category>> Function() getCategories;
 
-  const ExpenseHeader({
+  const TransactionHeader({
     super.key,
     required this.showingList,
     required this.onToggle,
-    required this.onAdd,
+    required this.addExpense,
+    required this.addIncome,
     required this.getCategories,
   });
 
@@ -30,7 +33,7 @@ class ExpenseHeader extends StatelessWidget {
               : Icons.arrow_right_outlined),
         ),
         const Expanded(
-          child: Text("Expenses"),
+          child: Text("Transactions"),
         ),
         IconButton(
           onPressed: () {
@@ -43,8 +46,9 @@ class ExpenseHeader extends StatelessWidget {
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
-                    child: ExpenseForm(
-                      onSubmit: onAdd,
+                    child: TransactionBottomSheet(
+                      addExpense: addExpense,
+                      addIncome: addIncome,
                       categories: categories,
                     ),
                   ),

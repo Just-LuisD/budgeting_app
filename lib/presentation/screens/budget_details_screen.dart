@@ -3,7 +3,7 @@ import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:budgeting_app/presentation/widgets/category_section.dart';
 import 'package:budgeting_app/presentation/widgets/expense_section.dart';
-import 'package:budgeting_app/presentation/widgets/income_section.dart';
+import 'package:budgeting_app/presentation/widgets/income_progress_bar.dart';
 import 'package:flutter/material.dart';
 
 class BudgetDetailsScreen extends StatefulWidget {
@@ -48,13 +48,13 @@ class _BudgetFormScreemState extends State<BudgetDetailsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IncomeSection(
+              IncomeProgressBar(
                 budget: widget.budget,
               ),
               CategorySection(
                 budgetId: widget.budget.id!,
               ),
-              ExpenseSection(
+              TransactionSection(
                 budgetId: widget.budget.id!,
               ),
             ],

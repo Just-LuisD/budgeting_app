@@ -77,7 +77,7 @@ class _IncomeFormState extends State<IncomeForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(18.0),
+      padding: EdgeInsets.all(widget.income == null ? 0 : 18.0),
       child: Form(
         key: _formKey,
         child: Column(
