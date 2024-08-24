@@ -26,9 +26,14 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double barWidth = MediaQuery.sizeOf(context).width - 50;
-    double percantage = (value - minVal) / (maxVal - minVal);
-    if (percantage > 0 && percantage < 0.03) {
-      percantage = 0.03;
+    double percentage = (value - minVal) / (maxVal - minVal);
+    double lowerBound = height / barWidth / 2;
+    double upperBound = 1 - lowerBound;
+    if (percentage > 0 && percentage < lowerBound) {
+      percentage = lowerBound;
+    }
+    if (percentage < 1 && percentage > upperBound) {
+      percentage = upperBound;
     }
     return SizedBox(
       width: barWidth,
@@ -49,13 +54,13 @@ class ProgressBar extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: percantage * barWidth,
+                  width: percentage * barWidth,
                   decoration: BoxDecoration(
                     color: color,
                     borderRadius: BorderRadius.horizontal(
                       left: Radius.circular(height),
                       right: Radius.circular(
-                          percantage * barWidth == barWidth ? height : 0),
+                          percentage * barWidth == barWidth ? height : 0),
                     ),
                   ),
                 ),
