@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 final curencyFormatter = NumberFormat.simpleCurrency();
+final dateFormatter = DateFormat("MMMd");
 
 class TransactionList extends StatelessWidget {
   final List<Income> incomeList;
@@ -77,12 +78,13 @@ class IncomeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(income.title),
-      subtitle: Text(curencyFormatter.format(income.amount / 100)),
-      trailing: IconButton(
-        onPressed: () {
-          onDelete(income.id!);
-        },
-        icon: const Icon(Icons.delete),
+      subtitle: Text(dateFormatter.format(DateTime.parse(income.date))),
+      trailing: Text(
+        "+${curencyFormatter.format(income.amount / 100)}",
+        style: const TextStyle(
+          color: Colors.green,
+          fontSize: 14,
+        ),
       ),
       onTap: () {
         showModalBottomSheet(
@@ -125,12 +127,15 @@ class ExpenseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(expense.title),
-      subtitle: Text(curencyFormatter.format(expense.amount / 100)),
-      trailing: IconButton(
-        onPressed: () {
-          onDelete(expense.id!);
-        },
-        icon: const Icon(Icons.delete),
+      subtitle: Text(
+        "Miscellaneous\n${dateFormatter.format(DateTime.parse(expense.date))}",
+      ),
+      trailing: Text(
+        "-${curencyFormatter.format(expense.amount / 100)}",
+        style: const TextStyle(
+          color: Colors.red,
+          fontSize: 14,
+        ),
       ),
       onTap: () {
         getCategories().then(
