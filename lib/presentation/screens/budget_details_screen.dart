@@ -2,7 +2,7 @@ import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:budgeting_app/presentation/widgets/category_section.dart';
-import 'package:budgeting_app/presentation/widgets/expense_section.dart';
+import 'package:budgeting_app/presentation/widgets/transaction_section.dart';
 import 'package:budgeting_app/presentation/widgets/income_progress_bar.dart';
 import 'package:flutter/material.dart';
 
