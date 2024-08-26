@@ -16,7 +16,7 @@ class TransactionList extends StatelessWidget {
   final void Function(Income) updateIncome;
   final void Function(int) deleteExpense;
   final void Function(Expense) updateExpense;
-  final Future<List<Category>> Function() getCategories;
+  final List<Category> categories;
 
   const TransactionList({
     super.key,
@@ -26,7 +26,7 @@ class TransactionList extends StatelessWidget {
     required this.deleteExpense,
     required this.updateExpense,
     required this.updateIncome,
-    required this.getCategories,
+    required this.categories,
   });
 
   @override
@@ -44,7 +44,7 @@ class TransactionList extends StatelessWidget {
           expense: expense,
           onDelete: deleteExpense,
           onUpdate: updateExpense,
-          getCategories: getCategories,
+          categories: categories,
         ),
       )
     ];
@@ -114,14 +114,14 @@ class ExpenseItem extends StatelessWidget {
   final Expense expense;
   final void Function(int) onDelete;
   final void Function(Expense) onUpdate;
-  final Future<List<Category>> Function() getCategories;
+  final List<Category> categories;
 
   const ExpenseItem({
     super.key,
     required this.expense,
     required this.onDelete,
     required this.onUpdate,
-    required this.getCategories,
+    required this.categories,
   });
 
   @override
@@ -139,24 +139,20 @@ class ExpenseItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-        getCategories().then(
-          (categories) {
-            showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              builder: (context) => Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: ExpenseForm(
-                  expense: expense,
-                  onSubmit: onUpdate,
-                  onDelete: onDelete,
-                  categories: categories,
-                ),
-              ),
-            );
-          },
+        showModalBottomSheet(
+          isScrollControlled: true,
+          context: context,
+          builder: (context) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: ExpenseForm(
+              expense: expense,
+              onSubmit: onUpdate,
+              onDelete: onDelete,
+              categories: categories,
+            ),
+          ),
         );
       },
     );

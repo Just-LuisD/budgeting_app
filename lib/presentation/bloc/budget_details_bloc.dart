@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/domain/repositories/budget_repository.dart';
 import 'package:budgeting_app/domain/repositories/category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_repository.dart';
@@ -8,19 +7,20 @@ import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
 
 class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
-  final Budget budget;
+  final int budgetId;
   final BudgetRepository budgetRepository;
   final IncomeRepository incomeRepository;
   final ExpenseRepository expenseRepository;
   final CategoryRepository categoryRepository;
 
   BudgetDetailsBloc({
-    required this.budget,
+    required this.budgetId,
     required this.budgetRepository,
     required this.categoryRepository,
     required this.expenseRepository,
     required this.incomeRepository,
-  }) : super(BudgetDetailsState(budget: budget)) {
+  }) : super(const BudgetDetailsState()) {
+    on<FetchBudgetDetailsEvent>(_onFetchBudgetDetails);
     on<UpdateBudgetEvent>(_onUpdateBudget);
     on<AddIncomeEvent>(_onAddIncome);
     on<AddExpenseEvent>(_onAddExpense);
@@ -31,6 +31,24 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     on<DeleteIncomeEvent>(_onDeleteIncome);
     on<DeleteExpenseEvent>(_onDeleteExpense);
     on<DeleteCategoryEvent>(_onDeleteCategory);
+  }
+
+  Future<void> _onFetchBudgetDetails(
+    FetchBudgetDetailsEvent event,
+    Emitter<BudgetDetailsState> emit,
+  ) async {
+    final budget = await budgetRepository.getBudgetById(budgetId);
+    final categories =
+        await categoryRepository.getCategoriesByBudgetId(budgetId);
+    final income = await incomeRepository.getBudgetIncome(budgetId);
+    final expenses = await expenseRepository.getExpensesByBudgetId(budgetId);
+    emit(state.copyWith(
+      status: () => BudgetDetailsStatus.success,
+      budget: () => budget,
+      categories: () => categories,
+      income: () => income,
+      expenses: () => expenses,
+    ));
   }
 
   Future<void> _onUpdateBudget(
@@ -47,8 +65,9 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     AddIncomeEvent event,
     Emitter<BudgetDetailsState> emit,
   ) async {
-    await incomeRepository.insertIncome(event.newIncome);
-    final result = await incomeRepository.getBudgetIncome(budget.id!);
+    await incomeRepository
+        .insertIncome(event.newIncome.copy(budgetId: budgetId));
+    final result = await incomeRepository.getBudgetIncome(budgetId);
     emit(state.copyWith(income: () => result));
   }
 
@@ -56,8 +75,9 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     AddExpenseEvent event,
     Emitter<BudgetDetailsState> emit,
   ) async {
-    await expenseRepository.insertExpense(event.newExpense);
-    final result = await expenseRepository.getExpensesByBudgetId(budget.id!);
+    await expenseRepository
+        .insertExpense(event.newExpense.copy(budgetId: budgetId));
+    final result = await expenseRepository.getExpensesByBudgetId(budgetId);
     emit(state.copyWith(expenses: () => result));
   }
 
@@ -65,8 +85,9 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     AddCategoryEvent event,
     Emitter<BudgetDetailsState> emit,
   ) async {
-    await categoryRepository.insertCategory(event.newCategory);
-    final result = await categoryRepository.getCategoriesByBudgetId(budget.id!);
+    await categoryRepository
+        .insertCategory(event.newCategory.copy(budgetId: budgetId));
+    final result = await categoryRepository.getCategoriesByBudgetId(budgetId);
     emit(state.copyWith(categories: () => result));
   }
 
@@ -75,7 +96,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await incomeRepository.updateIncome(event.updatedIncome);
-    final result = await incomeRepository.getBudgetIncome(budget.id!);
+    final result = await incomeRepository.getBudgetIncome(budgetId);
     emit(state.copyWith(income: () => result));
   }
 
@@ -84,7 +105,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await expenseRepository.updateExpense(event.updatedExpense);
-    final result = await expenseRepository.getExpensesByBudgetId(budget.id!);
+    final result = await expenseRepository.getExpensesByBudgetId(budgetId);
     emit(state.copyWith(expenses: () => result));
   }
 
@@ -93,7 +114,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await categoryRepository.updateCategory(event.updatedCategory);
-    final result = await categoryRepository.getCategoriesByBudgetId(budget.id!);
+    final result = await categoryRepository.getCategoriesByBudgetId(budgetId);
     emit(state.copyWith(categories: () => result));
   }
 
@@ -102,7 +123,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await incomeRepository.deleteIncome(event.incomeId);
-    final result = await incomeRepository.getBudgetIncome(budget.id!);
+    final result = await incomeRepository.getBudgetIncome(budgetId);
     emit(state.copyWith(income: () => result));
   }
 
@@ -111,7 +132,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await expenseRepository.deleteExpense(event.expenseId);
-    final result = await expenseRepository.getExpensesByBudgetId(budget.id!);
+    final result = await expenseRepository.getExpensesByBudgetId(budgetId);
     emit(state.copyWith(expenses: () => result));
   }
 
@@ -120,7 +141,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await categoryRepository.deleteCategory(event.categoryId);
-    final result = await categoryRepository.getCategoriesByBudgetId(budget.id!);
+    final result = await categoryRepository.getCategoriesByBudgetId(budgetId);
     emit(state.copyWith(categories: () => result));
   }
 }

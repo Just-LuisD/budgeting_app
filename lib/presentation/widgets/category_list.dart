@@ -7,7 +7,7 @@ class CategoryList extends StatelessWidget {
   final List<Category> categories;
   final void Function(int) deleteItem;
   final void Function(Category) updateItem;
-  final Future<int> Function(int) getItemTotal;
+  final int Function(int) getItemTotal;
 
   const CategoryList({
     super.key,
@@ -27,19 +27,12 @@ class CategoryList extends StatelessWidget {
               shrinkWrap: true,
               itemCount: categories.length,
               itemBuilder: (context, idx) {
-                return FutureBuilder(
-                  future: getItemTotal(categories[idx].id!),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return CategoryItem(
-                        category: categories[idx],
-                        categoryTotal: snapshot.data!,
-                        onDelete: deleteItem,
-                        onUpdate: updateItem,
-                      );
-                    }
-                    return Container();
-                  },
+                int total = getItemTotal(categories[idx].id!);
+                return CategoryItem(
+                  category: categories[idx],
+                  categoryTotal: total,
+                  onDelete: deleteItem,
+                  onUpdate: updateItem,
                 );
               },
             ),

@@ -1,20 +1,16 @@
-import 'package:budgeting_app/data/repositories/category_repository_impl.dart';
-import 'package:budgeting_app/data/repositories/expense_repository_impl.dart';
-import 'package:budgeting_app/data/repositories/income_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:budgeting_app/domain/entities/income.dart';
+import 'package:budgeting_app/presentation/bloc/budget_details_bloc.dart';
+import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
+import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_header.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionSection extends StatefulWidget {
-  final int budgetId;
-
-  const TransactionSection({
-    super.key,
-    required this.budgetId,
-  });
+  const TransactionSection({super.key});
 
   @override
   State<TransactionSection> createState() => _TransactionSectionState();
@@ -22,9 +18,6 @@ class TransactionSection extends StatefulWidget {
 
 class _TransactionSectionState extends State<TransactionSection> {
   bool _showList = true;
-  ExpenseRepositoryImpl expenseRepository = ExpenseRepositoryImpl();
-  CategoryRepositoryImpl categoryRepository = CategoryRepositoryImpl();
-  IncomeRepositoryImpl incomeRepository = IncomeRepositoryImpl();
 
   void _toggleList() {
     setState(() {
@@ -33,37 +26,39 @@ class _TransactionSectionState extends State<TransactionSection> {
   }
 
   void _addExpense(Expense expense) {
-    expenseRepository.insertExpense(expense.copy(budgetId: widget.budgetId));
-    setState(() {});
+    context.read<BudgetDetailsBloc>().add(AddExpenseEvent(newExpense: expense));
   }
 
   void _deleteExpense(int expenseId) {
-    expenseRepository.deleteExpense(expenseId);
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(DeleteExpenseEvent(expenseId: expenseId));
   }
 
   void _updateExpense(Expense newExpense) {
-    expenseRepository.updateExpense(newExpense);
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(UpdateExpenseEvent(updatedExpense: newExpense));
   }
 
   void _addIncome(Income income) {
-    incomeRepository.insertIncome(income.copy(budgetId: widget.budgetId));
-    setState(() {});
+    context.read<BudgetDetailsBloc>().add(AddIncomeEvent(newIncome: income));
   }
 
   void _deleteIncome(int incomeId) {
-    incomeRepository.deleteIncome(incomeId);
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(DeleteIncomeEvent(incomeId: incomeId));
   }
 
   void _updateIncome(Income newIncome) {
-    incomeRepository.updateIncome(newIncome);
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(UpdateIncomeEvent(updatedIncome: newIncome));
   }
 
-  Future<List<Category>> _getCategories() async {
-    return categoryRepository.getCategoriesByBudgetId(widget.budgetId);
+  List<Category> _getCategories() {
+    return context.read<BudgetDetailsBloc>().state.categories;
   }
 
   @override
@@ -79,26 +74,18 @@ class _TransactionSectionState extends State<TransactionSection> {
           getCategories: _getCategories,
         ),
         if (_showList)
-          FutureBuilder(
-            future: Future.wait([
-              expenseRepository.getExpensesByBudgetId(widget.budgetId),
-              incomeRepository.getBudgetIncome(widget.budgetId),
-            ]),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return TransactionList(
-                  expenseList: snapshot.data![0] as List<Expense>,
-                  incomeList: snapshot.data![1] as List<Income>,
-                  deleteExpense: _deleteExpense,
-                  updateExpense: _updateExpense,
-                  deleteIncome: _deleteIncome,
-                  updateIncome: _updateIncome,
-                  getCategories: _getCategories,
-                );
-              }
-              return Container();
-            },
-          ),
+          BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
+              builder: (context, state) {
+            return TransactionList(
+              expenseList: state.expenses,
+              incomeList: state.income,
+              deleteExpense: _deleteExpense,
+              updateExpense: _updateExpense,
+              deleteIncome: _deleteIncome,
+              updateIncome: _updateIncome,
+              categories: state.categories,
+            );
+          })
       ],
     );
   }

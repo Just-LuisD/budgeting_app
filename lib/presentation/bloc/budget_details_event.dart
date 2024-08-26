@@ -11,6 +11,10 @@ final class BudgetDetailsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+final class FetchBudgetDetailsEvent extends BudgetDetailsEvent {
+  const FetchBudgetDetailsEvent();
+}
+
 final class UpdateBudgetEvent extends BudgetDetailsEvent {
   final Budget updatedBudget;
 

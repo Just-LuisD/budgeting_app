@@ -9,7 +9,7 @@ class TransactionHeader extends StatelessWidget {
   final Function onToggle;
   final void Function(Expense) addExpense;
   final void Function(Income) addIncome;
-  final Future<List<Category>> Function() getCategories;
+  final List<Category> Function() getCategories;
 
   const TransactionHeader({
     super.key,
@@ -37,23 +37,20 @@ class TransactionHeader extends StatelessWidget {
         ),
         IconButton(
           onPressed: () {
-            getCategories().then(
-              (categories) {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: TransactionBottomSheet(
-                      addExpense: addExpense,
-                      addIncome: addIncome,
-                      categories: categories,
-                    ),
-                  ),
-                );
-              },
+            final categories = getCategories();
+            showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                child: TransactionBottomSheet(
+                  addExpense: addExpense,
+                  addIncome: addIncome,
+                  categories: categories,
+                ),
+              ),
             );
           },
           icon: const Icon(Icons.add),

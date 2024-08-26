@@ -8,14 +8,14 @@ enum BudgetDetailsStatus { initial, loading, success, failure }
 
 final class BudgetDetailsState extends Equatable {
   final BudgetDetailsStatus status;
-  final Budget budget;
+  final Budget? budget;
   final List<Category> categories;
   final List<Income> income;
   final List<Expense> expenses;
   final int totalIncome;
 
   const BudgetDetailsState({
-    required this.budget,
+    this.budget,
     this.status = BudgetDetailsStatus.initial,
     this.categories = const [],
     this.income = const [],

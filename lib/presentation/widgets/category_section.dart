@@ -1,15 +1,15 @@
-import 'package:budgeting_app/data/repositories/category_repository_impl.dart';
 import 'package:budgeting_app/domain/entities/category.dart';
+import 'package:budgeting_app/domain/entities/expense.dart';
+import 'package:budgeting_app/presentation/bloc/budget_details_bloc.dart';
+import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
+import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
 import 'package:budgeting_app/presentation/widgets/category_header.dart';
 import 'package:budgeting_app/presentation/widgets/category_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategorySection extends StatefulWidget {
-  final int budgetId;
-  const CategorySection({
-    super.key,
-    required this.budgetId,
-  });
+  const CategorySection({super.key});
 
   @override
   State<CategorySection> createState() => _CategorySectionState();
@@ -17,7 +17,6 @@ class CategorySection extends StatefulWidget {
 
 class _CategorySectionState extends State<CategorySection> {
   bool _showList = true;
-  CategoryRepositoryImpl categoryRepository = CategoryRepositoryImpl();
 
   void _toggleList() {
     setState(() {
@@ -26,22 +25,33 @@ class _CategorySectionState extends State<CategorySection> {
   }
 
   void _addCategory(Category category) {
-    categoryRepository.insertCategory(category.copy(budgetId: widget.budgetId));
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(AddCategoryEvent(newCategory: category));
   }
 
   void _deleteCategory(int categoryId) {
-    categoryRepository.deleteCategory(categoryId);
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(DeleteCategoryEvent(categoryId: categoryId));
   }
 
   void _updateCategory(Category newCategory) {
-    categoryRepository.updateCategory(newCategory);
-    setState(() {});
+    context
+        .read<BudgetDetailsBloc>()
+        .add(UpdateCategoryEvent(updatedCategory: newCategory));
   }
 
-  Future<int> _getTotal(int categoryId) {
-    return categoryRepository.getTotalSpent(categoryId);
+  int _getTotal(int categoryId) {
+    final expenses = context.read<BudgetDetailsBloc>().state.expenses;
+    int total = 0;
+    for (Expense expense in expenses) {
+      if (expense.categoryId == categoryId) {
+        total += expense.amount;
+      }
+    }
+
+    return total;
   }
 
   @override
@@ -55,18 +65,16 @@ class _CategorySectionState extends State<CategorySection> {
           onAdd: _addCategory,
         ),
         if (_showList)
-          FutureBuilder(
-            future: categoryRepository.getCategoriesByBudgetId(widget.budgetId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CategoryList(
-                  categories: snapshot.data!,
-                  deleteItem: _deleteCategory,
-                  updateItem: _updateCategory,
-                  getItemTotal: _getTotal,
-                );
-              }
-              return Container();
+          BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
+            buildWhen: (previous, current) =>
+                previous.categories != current.categories,
+            builder: (context, state) {
+              return CategoryList(
+                categories: state.categories,
+                deleteItem: _deleteCategory,
+                updateItem: _updateCategory,
+                getItemTotal: _getTotal,
+              );
             },
           ),
       ],
