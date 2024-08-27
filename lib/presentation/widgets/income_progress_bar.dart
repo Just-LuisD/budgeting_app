@@ -35,7 +35,6 @@ class _IncomeProgressBarState extends State<IncomeProgressBar> {
                 ),
               ),
               ProgressBar(
-                label: "Income",
                 minVal: 0,
                 maxVal: state.budget!.income,
                 value: state.totalSpent,

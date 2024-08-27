@@ -58,7 +58,6 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: ProgressBar(
-        label: category.name,
         minVal: 0,
         maxVal: category.spendingLimit,
         value: categoryTotal,

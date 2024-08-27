@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 final curencyFormatter = NumberFormat.simpleCurrency();
 
 class ProgressBar extends StatelessWidget {
-  final String label;
   final int minVal;
   final int maxVal;
   final int value;
@@ -14,7 +13,6 @@ class ProgressBar extends StatelessWidget {
 
   const ProgressBar({
     super.key,
-    required this.label,
     required this.minVal,
     required this.maxVal,
     required this.value,
