@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:budgeting_app/domain/repositories/budget_repository.dart';
 import 'package:budgeting_app/domain/repositories/category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_repository.dart';
@@ -42,12 +43,18 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
         await categoryRepository.getCategoriesByBudgetId(budgetId);
     final income = await incomeRepository.getBudgetIncome(budgetId);
     final expenses = await expenseRepository.getExpensesByBudgetId(budgetId);
+    int totalSpent = 0;
+    for (Expense expense in expenses) {
+      totalSpent += expense.amount;
+    }
+
     emit(state.copyWith(
       status: () => BudgetDetailsStatus.success,
       budget: () => budget,
       categories: () => categories,
       income: () => income,
       expenses: () => expenses,
+      totalSpent: () => totalSpent,
     ));
   }
 
@@ -78,7 +85,15 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     await expenseRepository
         .insertExpense(event.newExpense.copy(budgetId: budgetId));
     final result = await expenseRepository.getExpensesByBudgetId(budgetId);
-    emit(state.copyWith(expenses: () => result));
+    int totalSpent = 0;
+    for (Expense expense in result) {
+      totalSpent += expense.amount;
+    }
+
+    emit(state.copyWith(
+      expenses: () => result,
+      totalSpent: () => totalSpent,
+    ));
   }
 
   Future<void> _onAddCategory(
@@ -106,7 +121,15 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
   ) async {
     await expenseRepository.updateExpense(event.updatedExpense);
     final result = await expenseRepository.getExpensesByBudgetId(budgetId);
-    emit(state.copyWith(expenses: () => result));
+    int totalSpent = 0;
+    for (Expense expense in result) {
+      totalSpent += expense.amount;
+    }
+
+    emit(state.copyWith(
+      expenses: () => result,
+      totalSpent: () => totalSpent,
+    ));
   }
 
   Future<void> _onUpdateCategory(
@@ -133,7 +156,15 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
   ) async {
     await expenseRepository.deleteExpense(event.expenseId);
     final result = await expenseRepository.getExpensesByBudgetId(budgetId);
-    emit(state.copyWith(expenses: () => result));
+    int totalSpent = 0;
+    for (Expense expense in result) {
+      totalSpent += expense.amount;
+    }
+
+    emit(state.copyWith(
+      expenses: () => result,
+      totalSpent: () => totalSpent,
+    ));
   }
 
   Future<void> _onDeleteCategory(

@@ -38,8 +38,10 @@ class ProgressBar extends StatelessWidget {
     return SizedBox(
       width: barWidth,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("$label: ${curencyFormatter.format(value / 100)}"),
+          Text(
+              "You've spent ${(100 * (value - minVal) / (maxVal - minVal)).round()}% of this month's budget"),
           Container(
             alignment: Alignment.center,
             width: barWidth,
@@ -73,13 +75,7 @@ class ProgressBar extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    curencyFormatter.format(minVal / 100),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    curencyFormatter.format(maxVal / 100),
+                    "${curencyFormatter.format((maxVal - value) / 100)} left",
                     textAlign: TextAlign.right,
                   ),
                 ),

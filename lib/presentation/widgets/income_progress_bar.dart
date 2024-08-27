@@ -1,4 +1,3 @@
-import 'package:budgeting_app/domain/entities/income.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_bloc.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
 import 'package:budgeting_app/presentation/widgets/progress_bar.dart';
@@ -17,33 +16,38 @@ class IncomeProgressBar extends StatefulWidget {
 class _IncomeProgressBarState extends State<IncomeProgressBar> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
-          buildWhen: (previous, current) =>
-              previous.income != current.income ||
-              previous.budget?.income != current.budget?.income,
-          builder: (context, state) {
-            int totalIncome = 0;
-            for (Income income in state.income) {
-              totalIncome += income.amount;
-            }
-            if (state.status == BudgetDetailsStatus.success) {
-              return ProgressBar(
+    return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
+      buildWhen: (previous, current) =>
+          previous.income != current.income ||
+          previous.budget?.income != current.budget?.income ||
+          previous.status != current.status ||
+          previous.totalSpent != current.totalSpent,
+      builder: (context, state) {
+        if (state.status == BudgetDetailsStatus.success) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${curencyFormatter.format(state.totalSpent / 100)} Spent",
+                style: const TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+              ProgressBar(
                 label: "Income",
                 minVal: 0,
                 maxVal: state.budget!.income,
-                value: totalIncome,
-                height: 20,
+                value: state.totalSpent,
+                height: 15,
                 color: Colors.green,
                 backgroundColor: Colors.grey,
-              );
-            }
-            return Container();
-          },
-        ),
-      ],
+              ),
+            ],
+          );
+        }
+        return Container();
+      },
     );
   }
 }

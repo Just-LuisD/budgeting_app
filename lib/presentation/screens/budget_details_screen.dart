@@ -78,7 +78,7 @@ class BudgetDetailsView extends StatelessWidget {
         ),
       ),
       body: const Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(12),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
