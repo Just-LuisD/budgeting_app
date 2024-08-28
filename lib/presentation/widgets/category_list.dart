@@ -20,7 +20,7 @@ class CategoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return categories.isEmpty
-        ? const Text("No Categories Found")
+        ? const Center(child: Text("No Categories Found"))
         : ListView.builder(
             shrinkWrap: true,
             itemCount: categories.length,

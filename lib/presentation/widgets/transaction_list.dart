@@ -49,7 +49,7 @@ class TransactionList extends StatelessWidget {
       )
     ];
     return items.isEmpty
-        ? const Text("No Transactions Found")
+        ? const Center(child: Text("No Transactions Found"))
         : ListView.builder(
             shrinkWrap: true,
             itemCount: items.length,
