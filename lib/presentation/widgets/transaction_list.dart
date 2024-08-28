@@ -123,10 +123,13 @@ class ExpenseItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String categoryName =
+        categories.firstWhere((e) => e.id! == expense.categoryId).name;
+
     return ListTile(
       title: Text(expense.title),
       subtitle: Text(
-        "Miscellaneous\n${dateFormatter.format(DateTime.parse(expense.date))}",
+        "$categoryName\n${dateFormatter.format(DateTime.parse(expense.date))}",
       ),
       trailing: Text(
         "-${curencyFormatter.format(expense.amount / 100)}",
