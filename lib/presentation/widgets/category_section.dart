@@ -3,7 +3,7 @@ import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_bloc.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
-import 'package:budgeting_app/presentation/widgets/category_header.dart';
+import 'package:budgeting_app/presentation/widgets/category_form.dart';
 import 'package:budgeting_app/presentation/widgets/category_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,14 +16,6 @@ class CategorySection extends StatefulWidget {
 }
 
 class _CategorySectionState extends State<CategorySection> {
-  bool _showList = true;
-
-  void _toggleList() {
-    setState(() {
-      _showList = !_showList;
-    });
-  }
-
   void _addCategory(Category category) {
     context
         .read<BudgetDetailsBloc>()
@@ -56,28 +48,45 @@ class _CategorySectionState extends State<CategorySection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CateggoryHeader(
-          showingList: _showList,
-          onToggle: _toggleList,
-          onAdd: _addCategory,
-        ),
-        if (_showList)
-          BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
-            buildWhen: (previous, current) =>
-                previous.categories != current.categories,
-            builder: (context, state) {
-              return CategoryList(
-                categories: state.categories,
-                deleteItem: _deleteCategory,
-                updateItem: _updateCategory,
-                getItemTotal: _getTotal,
-              );
-            },
-          ),
-      ],
+    return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
+      buildWhen: (previous, current) =>
+          previous.categories != current.categories,
+      builder: (context, state) {
+        return Stack(
+          children: [
+            CategoryList(
+              categories: state.categories,
+              deleteItem: _deleteCategory,
+              updateItem: _updateCategory,
+              getItemTotal: _getTotal,
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: CategoryForm(
+                          onSubmit: _addCategory,
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: const Icon(
+                  Icons.add,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

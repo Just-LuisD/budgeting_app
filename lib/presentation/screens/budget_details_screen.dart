@@ -6,9 +6,8 @@ import 'package:budgeting_app/domain/entities/budget.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_bloc.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
+import 'package:budgeting_app/presentation/widgets/budget_details_content.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
-import 'package:budgeting_app/presentation/widgets/category_section.dart';
-import 'package:budgeting_app/presentation/widgets/transaction_section.dart';
 import 'package:budgeting_app/presentation/widgets/income_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,15 +78,14 @@ class BudgetDetailsView extends StatelessWidget {
       ),
       body: const Padding(
         padding: EdgeInsets.all(12),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IncomeProgressBar(),
-              CategorySection(),
-              TransactionSection(),
-            ],
-          ),
+        child: Column(
+          children: [
+            IncomeProgressBar(),
+            SizedBox(height: 15),
+            Expanded(
+              child: BudgetDetailsContent(),
+            ),
+          ],
         ),
       ),
     );

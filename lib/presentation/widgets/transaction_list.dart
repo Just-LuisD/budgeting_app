@@ -50,15 +50,12 @@ class TransactionList extends StatelessWidget {
     ];
     return items.isEmpty
         ? const Text("No Transactions Found")
-        : Flexible(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: items.length,
-              itemBuilder: (context, idx) {
-                return items[idx];
-              },
-            ),
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: items.length,
+            itemBuilder: (context, idx) {
+              return items[idx];
+            },
           );
   }
 }

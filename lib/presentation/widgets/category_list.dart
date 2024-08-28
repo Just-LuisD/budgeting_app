@@ -21,21 +21,18 @@ class CategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return categories.isEmpty
         ? const Text("No Categories Found")
-        : Flexible(
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: categories.length,
-              itemBuilder: (context, idx) {
-                int total = getItemTotal(categories[idx].id!);
-                return CategoryItem(
-                  category: categories[idx],
-                  categoryTotal: total,
-                  onDelete: deleteItem,
-                  onUpdate: updateItem,
-                );
-              },
-            ),
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: categories.length,
+            itemBuilder: (context, idx) {
+              int total = getItemTotal(categories[idx].id!);
+              return CategoryItem(
+                category: categories[idx],
+                categoryTotal: total,
+                onDelete: deleteItem,
+                onUpdate: updateItem,
+              );
+            },
           );
   }
 }

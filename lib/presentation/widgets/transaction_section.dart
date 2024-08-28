@@ -4,7 +4,7 @@ import 'package:budgeting_app/domain/entities/income.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_bloc.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
-import 'package:budgeting_app/presentation/widgets/transaction_header.dart';
+import 'package:budgeting_app/presentation/widgets/transaction_bottom_sheet.dart';
 import 'package:budgeting_app/presentation/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,14 +17,6 @@ class TransactionSection extends StatefulWidget {
 }
 
 class _TransactionSectionState extends State<TransactionSection> {
-  bool _showList = true;
-
-  void _toggleList() {
-    setState(() {
-      _showList = !_showList;
-    });
-  }
-
   void _addExpense(Expense expense) {
     context.read<BudgetDetailsBloc>().add(AddExpenseEvent(newExpense: expense));
   }
@@ -63,20 +55,11 @@ class _TransactionSectionState extends State<TransactionSection> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TransactionHeader(
-          showingList: _showList,
-          onToggle: _toggleList,
-          addExpense: _addExpense,
-          addIncome: _addIncome,
-          getCategories: _getCategories,
-        ),
-        if (_showList)
-          BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
-              builder: (context, state) {
-            return TransactionList(
+    return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            TransactionList(
               expenseList: state.expenses,
               incomeList: state.income,
               deleteExpense: _deleteExpense,
@@ -84,9 +67,35 @@ class _TransactionSectionState extends State<TransactionSection> {
               deleteIncome: _deleteIncome,
               updateIncome: _updateIncome,
               categories: state.categories,
-            );
-          })
-      ],
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                onPressed: () {
+                  final categories = _getCategories();
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: TransactionBottomSheet(
+                        addExpense: _addExpense,
+                        addIncome: _addIncome,
+                        categories: categories,
+                      ),
+                    ),
+                  );
+                },
+                child: const Icon(
+                  Icons.add,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
