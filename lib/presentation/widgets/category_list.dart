@@ -54,12 +54,25 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: ProgressBar(
-        minVal: 0,
-        maxVal: category.spendingLimit,
-        value: categoryTotal,
-        height: 16,
-        color: Colors.red,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              category.name,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            ProgressBar(
+              minVal: 0,
+              maxVal: category.spendingLimit,
+              value: categoryTotal,
+              height: 12,
+              color: Colors.red,
+            ),
+          ],
+        ),
       ),
       onTap: () {
         showModalBottomSheet(
