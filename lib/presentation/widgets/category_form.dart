@@ -68,7 +68,9 @@ class _CategoryFormState extends State<CategoryForm> {
               children: [
                 Expanded(
                   child: Text(
-                    widget.category == null ? "Add Category" : "Edit Category",
+                    widget.category == null || widget.category!.id == null
+                        ? "Add Category"
+                        : "Edit Category",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 24,
@@ -124,7 +126,9 @@ class _CategoryFormState extends State<CategoryForm> {
             ),
             ElevatedButton(
               onPressed: _onSubmit,
-              child: Text(widget.category == null ? "Add" : "Save"),
+              child: Text(widget.category == null || widget.category!.id == null
+                  ? "Add"
+                  : "Save"),
             ),
           ],
         ),

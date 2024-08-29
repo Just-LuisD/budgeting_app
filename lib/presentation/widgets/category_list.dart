@@ -2,6 +2,7 @@ import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/presentation/widgets/category_form.dart';
 import 'package:budgeting_app/presentation/widgets/progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CategoryList extends StatelessWidget {
   final List<Category> categories;
@@ -59,7 +60,7 @@ class CategoryItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              category.name,
+              "${category.name}: ${NumberFormat.simpleCurrency().format(category.spendingLimit / 100)}",
               style: const TextStyle(
                 fontSize: 18,
               ),

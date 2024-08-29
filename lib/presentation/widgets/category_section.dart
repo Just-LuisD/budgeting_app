@@ -5,6 +5,7 @@ import 'package:budgeting_app/presentation/bloc/budget_details_event.dart';
 import 'package:budgeting_app/presentation/bloc/budget_details_state.dart';
 import 'package:budgeting_app/presentation/widgets/category_form.dart';
 import 'package:budgeting_app/presentation/widgets/category_list.dart';
+import 'package:budgeting_app/presentation/widgets/remainder_warning.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +17,24 @@ class CategorySection extends StatefulWidget {
 }
 
 class _CategorySectionState extends State<CategorySection> {
+  void _addMiscellaneousCategory(int limit) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: CategoryForm(
+            category: Category(name: "Miscellaneous", spendingLimit: limit),
+            onSubmit: _addCategory,
+          ),
+        );
+      },
+    );
+  }
+
   void _addCategory(Category category) {
     context
         .read<BudgetDetailsBloc>()
@@ -52,36 +71,53 @@ class _CategorySectionState extends State<CategorySection> {
       buildWhen: (previous, current) =>
           previous.categories != current.categories,
       builder: (context, state) {
-        return Stack(
+        int remainder = state.budget!.income;
+        for (Category category in state.categories) {
+          remainder -= category.spendingLimit;
+        }
+
+        return Column(
           children: [
-            CategoryList(
-              categories: state.categories,
-              deleteItem: _deleteCategory,
-              updateItem: _updateCategory,
-              getItemTotal: _getTotal,
-            ),
-            Container(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: (context) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: CategoryForm(
-                          onSubmit: _addCategory,
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: const Icon(
-                  Icons.add,
-                ),
+            if (remainder > 0)
+              RemainderWarning(
+                remainder: remainder,
+                onAllocate: _addMiscellaneousCategory,
+              ),
+            Expanded(
+              child: Stack(
+                children: [
+                  CategoryList(
+                    categories: state.categories,
+                    deleteItem: _deleteCategory,
+                    updateItem: _updateCategory,
+                    getItemTotal: _getTotal,
+                  ),
+                  Container(
+                    alignment: Alignment.bottomRight,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: CategoryForm(
+                                onSubmit: _addCategory,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
