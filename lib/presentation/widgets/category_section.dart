@@ -69,7 +69,8 @@ class _CategorySectionState extends State<CategorySection> {
   Widget build(BuildContext context) {
     return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
       buildWhen: (previous, current) =>
-          previous.categories != current.categories,
+          previous.categories != current.categories ||
+          previous.budget?.income != current.budget?.income,
       builder: (context, state) {
         int remainder = state.budget!.income;
         for (Category category in state.categories) {
