@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 final curencyFormatter = NumberFormat.simpleCurrency();
-final dateFormatter = DateFormat("MMMd");
+final dateFormatter = DateFormat("yMd");
 
 class TransactionList extends StatelessWidget {
   final List<Income> incomeList;
@@ -31,23 +31,64 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> items = [
-      ...incomeList.map(
-        (income) => IncomeItem(
-          income: income,
-          onDelete: deleteIncome,
-          onUpdate: updateIncome,
-        ),
-      ),
-      ...expenseList.map(
-        (expense) => ExpenseItem(
-          expense: expense,
-          onDelete: deleteExpense,
-          onUpdate: updateExpense,
-          categories: categories,
-        ),
-      )
-    ];
+    List<Widget> items = [];
+    if (incomeList.isNotEmpty || expenseList.isNotEmpty) {
+      var sortedIncome = incomeList.toList()
+        ..sort(
+            (a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
+      var sortedExpenses = expenseList.toList()
+        ..sort(
+            (a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
+      while (sortedIncome.isNotEmpty && sortedExpenses.isNotEmpty) {
+        int result = DateTime.parse(sortedIncome[0].date)
+            .compareTo(DateTime.parse(sortedExpenses[0].date));
+        if (result >= 0) {
+          items.add(
+            IncomeItem(
+              income: sortedIncome[0],
+              onDelete: deleteIncome,
+              onUpdate: updateIncome,
+            ),
+          );
+          sortedIncome.removeAt(0);
+        } else {
+          items.add(
+            ExpenseItem(
+              expense: sortedExpenses[0],
+              onDelete: deleteExpense,
+              onUpdate: updateExpense,
+              categories: categories,
+            ),
+          );
+          sortedExpenses.removeAt(0);
+        }
+      }
+      if (sortedIncome.isNotEmpty) {
+        items = [
+          ...items,
+          ...sortedIncome.map(
+            (income) => IncomeItem(
+              income: income,
+              onDelete: deleteIncome,
+              onUpdate: updateIncome,
+            ),
+          )
+        ];
+      } else {
+        items = [
+          ...items,
+          ...sortedExpenses.map(
+            (expense) => ExpenseItem(
+              expense: expense,
+              onDelete: deleteExpense,
+              onUpdate: updateExpense,
+              categories: categories,
+            ),
+          )
+        ];
+      }
+    }
+
     return items.isEmpty
         ? const Center(child: Text("No Transactions Found"))
         : ListView.builder(
