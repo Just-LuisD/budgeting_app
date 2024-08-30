@@ -76,17 +76,14 @@ class BudgetDetailsView extends StatelessWidget {
           },
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(12),
-        child: Column(
-          children: [
-            IncomeProgressBar(),
-            SizedBox(height: 15),
-            Expanded(
-              child: BudgetDetailsContent(),
-            ),
-          ],
-        ),
+      body: const Column(
+        children: [
+          IncomeProgressBar(),
+          SizedBox(height: 10),
+          Expanded(
+            child: BudgetDetailsContent(),
+          ),
+        ],
       ),
     );
   }

@@ -94,6 +94,7 @@ class _CategorySectionState extends State<CategorySection> {
                     getItemTotal: _getTotal,
                   ),
                   Container(
+                    padding: const EdgeInsets.all(16),
                     alignment: Alignment.bottomRight,
                     child: FloatingActionButton(
                       onPressed: () {

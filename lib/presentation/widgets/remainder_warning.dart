@@ -13,6 +13,10 @@ class RemainderWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.symmetric(
+        vertical: 6,
+        horizontal: 14,
+      ),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 14),
@@ -26,6 +30,7 @@ class RemainderWarning extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              const SizedBox(height: 6),
               Text(
                   "You have ${NumberFormat.simpleCurrency().format(remainder / 100)} left to allocated in your budget."),
               Container(

@@ -69,6 +69,7 @@ class _TransactionSectionState extends State<TransactionSection> {
               categories: state.categories,
             ),
             Container(
+              padding: const EdgeInsets.all(16),
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
                 onPressed: () {
