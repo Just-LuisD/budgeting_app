@@ -94,3 +94,11 @@ final class DeleteCategoryEvent extends BudgetDetailsEvent {
     required this.categoryId,
   });
 }
+
+final class ClipCategoryEvent extends BudgetDetailsEvent {
+  final int categoryId;
+
+  const ClipCategoryEvent({
+    required this.categoryId,
+  });
+}

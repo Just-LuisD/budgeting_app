@@ -9,6 +9,7 @@ class CategoryList extends StatelessWidget {
   final void Function(int) deleteItem;
   final void Function(Category) updateItem;
   final int Function(int) getItemTotal;
+  final void Function(int) clipCategory;
 
   const CategoryList({
     super.key,
@@ -16,6 +17,7 @@ class CategoryList extends StatelessWidget {
     required this.deleteItem,
     required this.updateItem,
     required this.getItemTotal,
+    required this.clipCategory,
   });
 
   @override
@@ -32,6 +34,7 @@ class CategoryList extends StatelessWidget {
                 categoryTotal: total,
                 onDelete: deleteItem,
                 onUpdate: updateItem,
+                onClip: clipCategory,
               );
             },
           );
@@ -43,6 +46,7 @@ class CategoryItem extends StatelessWidget {
   final int categoryTotal;
   final void Function(int) onDelete;
   final void Function(Category) onUpdate;
+  final void Function(int) onClip;
 
   const CategoryItem({
     super.key,
@@ -50,6 +54,7 @@ class CategoryItem extends StatelessWidget {
     required this.categoryTotal,
     required this.onDelete,
     required this.onUpdate,
+    required this.onClip,
   });
 
   @override
@@ -88,6 +93,7 @@ class CategoryItem extends StatelessWidget {
                 category: category,
                 onSubmit: onUpdate,
                 onDelete: onDelete,
+                onClip: onClip,
               ),
             );
           },

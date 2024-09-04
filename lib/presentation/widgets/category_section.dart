@@ -65,6 +65,12 @@ class _CategorySectionState extends State<CategorySection> {
     return total;
   }
 
+  void _clipCategory(int categoryId) {
+    context
+        .read<BudgetDetailsBloc>()
+        .add(ClipCategoryEvent(categoryId: categoryId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
@@ -91,6 +97,7 @@ class _CategorySectionState extends State<CategorySection> {
                     categories: state.categories,
                     deleteItem: _deleteCategory,
                     updateItem: _updateCategory,
+                    clipCategory: _clipCategory,
                     getItemTotal: _getTotal,
                   ),
                   Container(

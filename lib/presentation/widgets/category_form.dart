@@ -8,11 +8,13 @@ class CategoryForm extends StatefulWidget {
   final Category? category;
   final void Function(Category) onSubmit;
   final void Function(int)? onDelete;
+  final void Function(int)? onClip;
 
   const CategoryForm({
     super.key,
     required this.onSubmit,
     this.onDelete,
+    this.onClip,
     this.category,
   });
 
@@ -66,6 +68,14 @@ class _CategoryFormState extends State<CategoryForm> {
           children: [
             Row(
               children: [
+                if (widget.category != null)
+                  IconButton(
+                    onPressed: () {
+                      widget.onClip!(widget.category!.id!);
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.cut),
+                  ),
                 Expanded(
                   child: Text(
                     widget.category == null || widget.category!.id == null

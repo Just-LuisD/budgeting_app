@@ -32,6 +32,7 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     on<DeleteIncomeEvent>(_onDeleteIncome);
     on<DeleteExpenseEvent>(_onDeleteExpense);
     on<DeleteCategoryEvent>(_onDeleteCategory);
+    on<ClipCategoryEvent>(_onClipCategory);
   }
 
   Future<void> _onFetchBudgetDetails(
@@ -172,6 +173,27 @@ class BudgetDetailsBloc extends Bloc<BudgetDetailsEvent, BudgetDetailsState> {
     Emitter<BudgetDetailsState> emit,
   ) async {
     await categoryRepository.deleteCategory(event.categoryId);
+    final result = await categoryRepository.getCategoriesByBudgetId(budgetId);
+    emit(state.copyWith(categories: () => result));
+  }
+
+  Future<void> _onClipCategory(
+    ClipCategoryEvent event,
+    Emitter<BudgetDetailsState> emit,
+  ) async {
+    int categoryTotal = 0;
+    for (Expense expense in state.expenses) {
+      if (expense.categoryId == event.categoryId) {
+        categoryTotal += expense.amount;
+      }
+    }
+    final targetCategory = state.categories
+        .firstWhere((category) => category.id! == event.categoryId);
+
+    await categoryRepository.updateCategory(
+      targetCategory.copy(spendingLimit: categoryTotal),
+    );
+
     final result = await categoryRepository.getCategoriesByBudgetId(budgetId);
     emit(state.copyWith(categories: () => result));
   }
