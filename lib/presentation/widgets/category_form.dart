@@ -68,7 +68,7 @@ class _CategoryFormState extends State<CategoryForm> {
           children: [
             Row(
               children: [
-                if (widget.category != null)
+                if (widget.category != null && widget.onClip != null)
                   IconButton(
                     onPressed: () {
                       widget.onClip!(widget.category!.id!);
