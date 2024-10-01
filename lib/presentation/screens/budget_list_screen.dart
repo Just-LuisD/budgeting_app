@@ -1,4 +1,7 @@
 import 'package:budgeting_app/data/repositories/budget_repository_impl.dart';
+import 'package:budgeting_app/data/repositories/category_repository_impl.dart';
+import 'package:budgeting_app/domain/entities/budget.dart';
+import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/presentation/widgets/budget_card.dart';
 import 'package:budgeting_app/presentation/widgets/budget_modal.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,25 @@ class BudgetListScreen extends StatefulWidget {
 
 class _BudgetListScreenState extends State<BudgetListScreen> {
   BudgetRepositoryImpl budgetRepository = BudgetRepositoryImpl();
+  CategoryRepositoryImpl categoryRepository = CategoryRepositoryImpl();
+
+  void copyBudget(Budget templateBudget) async {
+    Budget newBudget = Budget(
+      name: "${templateBudget.name}(Copy)",
+      income: templateBudget.income,
+    );
+    int budgetId = await budgetRepository.insertBudget(newBudget);
+    List<Category> templateCategories =
+        await categoryRepository.getCategoriesByBudgetId(templateBudget.id!);
+    for (Category category in templateCategories) {
+      Category copyCategory = Category(
+          name: category.name,
+          spendingLimit: category.spendingLimit,
+          budgetId: budgetId);
+      categoryRepository.insertCategory(copyCategory);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +59,9 @@ class _BudgetListScreenState extends State<BudgetListScreen> {
                         onDelete: () {
                           budgetRepository.deleteBudget(budget.id!);
                           setState(() {});
+                        },
+                        onCopy: () {
+                          copyBudget(budget);
                         },
                       );
                     },
