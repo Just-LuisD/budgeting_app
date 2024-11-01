@@ -1,6 +1,53 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+Map<int, List<String>> migrationScripts = {
+  1: [
+    '''
+      CREATE TABLE Budgets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE NOT NULL,
+        income INTEGER NOT NULL
+      )
+    ''',
+    '''
+      CREATE TABLE Categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        budget_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        spending_limit INTEGER NOT NULL,
+        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
+      )
+    ''',
+    '''
+      CREATE TABLE Expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        category_id INTEGER NOT NULL,
+        budget_id INTEGER NOT NULL,
+        amount INTEGER NOT NULL,
+        date TEXT NOT NULL,
+        notes TEXT,
+        FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
+        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
+      )
+    ''',
+    '''
+        CREATE TABLE Income (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT NOT NULL,
+          budget_id INTEGER NOT NULL,
+          amount INTEGER NOT NULL,
+          date TEXT NOT NULL,
+          FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
+        )
+      ''',
+  ],
+  2: [
+    "ALTER TABLE Categories ADD tag TEXT",
+  ],
+};
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
@@ -17,59 +64,33 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'budget.db');
+    int latestVersion = migrationScripts.length;
+
     return await openDatabase(
       path,
-      version: 1,
-      onCreate: _onCreate,
+      version: latestVersion,
+      onCreate: (Database db, int version) async {
+        print("WE ARE RUNNING ON CREATE");
+        for (int idx = 1; idx <= latestVersion; idx++) {
+          for (String script in migrationScripts[idx]!) {
+            print("Running: \n$script");
+            await db.execute(script);
+          }
+        }
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        print("WE ARE RUNNING ON UPGRADE");
+        for (int idx = oldVersion + 1; idx <= latestVersion; idx++) {
+          for (String script in migrationScripts[idx]!) {
+            print("Running: \n$script");
+            await db.execute(script);
+          }
+        }
+      },
       onOpen: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
     );
-  }
-
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE Budgets (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE NOT NULL,
-        income INTEGER NOT NULL
-      )
-    ''');
-
-    await db.execute('''
-      CREATE TABLE Categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        budget_id INTEGER NOT NULL,
-        name TEXT NOT NULL,
-        spending_limit INTEGER NOT NULL,
-        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
-      )
-    ''');
-
-    await db.execute('''
-      CREATE TABLE Expenses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        category_id INTEGER NOT NULL,
-        budget_id INTEGER NOT NULL,
-        amount INTEGER NOT NULL,
-        date TEXT NOT NULL,
-        notes TEXT,
-        FOREIGN KEY (category_id) REFERENCES Categories(id) ON DELETE CASCADE
-        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
-      )
-    ''');
-
-    await db.execute('''
-      CREATE TABLE Income (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        budget_id INTEGER NOT NULL,
-        amount INTEGER NOT NULL,
-        date TEXT NOT NULL,
-        FOREIGN KEY (budget_id) REFERENCES Budgets(id) ON DELETE CASCADE
-      )
-    ''');
   }
 
   // Insert a new budget

@@ -3,12 +3,14 @@ class Category {
   final int? budgetId;
   final String name;
   final int spendingLimit;
+  final String? tag;
 
   Category({
     this.id,
     this.budgetId,
     required this.name,
     required this.spendingLimit,
+    this.tag,
   });
 
   Map<String, dynamic> toMap() {
@@ -17,6 +19,7 @@ class Category {
       'budget_id': budgetId,
       'name': name,
       'spending_limit': spendingLimit,
+      'tag': tag,
     };
   }
 
@@ -26,6 +29,7 @@ class Category {
       budgetId: map['budget_id'],
       name: map['name'],
       spendingLimit: map['spending_limit'],
+      tag: map['tag'],
     );
   }
 
@@ -34,12 +38,14 @@ class Category {
     int? budgetId,
     String? name,
     int? spendingLimit,
+    String? tag,
   }) {
     return Category(
       id: id ?? this.id,
       budgetId: budgetId ?? this.budgetId,
       name: name ?? this.name,
       spendingLimit: spendingLimit ?? this.spendingLimit,
+      tag: tag ?? this.tag,
     );
   }
 }
