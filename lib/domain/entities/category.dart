@@ -1,3 +1,5 @@
+List<String> validTags = ["", "fixed", "savings", "fun"];
+
 class Category {
   final int? id;
   final int? budgetId;
@@ -10,8 +12,8 @@ class Category {
     this.budgetId,
     required this.name,
     required this.spendingLimit,
-    this.tag,
-  });
+    String? tag,
+  }) : tag = validTags.contains(tag) ? tag : "";
 
   Map<String, dynamic> toMap() {
     return {
