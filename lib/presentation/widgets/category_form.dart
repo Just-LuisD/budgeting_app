@@ -139,7 +139,9 @@ class _CategoryFormState extends State<CategoryForm> {
             ),
             DropdownMenu(
               label: const Text("Tag"),
-              initialSelection: 0,
+              initialSelection: widget.category == null
+                  ? 0
+                  : validTags.indexOf(widget.category!.tag!),
               onSelected: (value) {
                 setState(() {
                   selectedTag = validTags[value ?? 0];
