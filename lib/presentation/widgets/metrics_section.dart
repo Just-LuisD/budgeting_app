@@ -21,17 +21,30 @@ class MetricsSection extends StatelessWidget {
             tagTotals[tag] = category.spendingLimit;
           }
         }
-        return Container(
-          child: PieChart(
-            PieChartData(
-              sections: tagTotals.keys.map((tag) {
-                int percentage =
-                    (100 * tagTotals[tag]! / state.budget!.income).round();
-                return PieChartSectionData(
-                  value: tagTotals[tag]!.toDouble(),
-                  title: "$tag - $percentage",
-                );
-              }).toList(),
+        return AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            child: PieChart(
+              PieChartData(
+                sections: tagTotals.keys.map((tag) {
+                  // TODO: make rounded percentages add up to 100%
+                  int percentage =
+                      (100 * tagTotals[tag]! / state.budget!.income).round();
+                  return PieChartSectionData(
+                    value: tagTotals[tag]!.toDouble(),
+                    title: "${pieSectionConfig[tag]!["title"]}: $percentage%",
+                    color: pieSectionConfig[tag]!["color"],
+                    titleStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                    radius: 160,
+                  );
+                }).toList(),
+                centerSpaceRadius: 0,
+              ),
             ),
           ),
         );
@@ -39,3 +52,22 @@ class MetricsSection extends StatelessWidget {
     );
   }
 }
+
+Map<String, Map<String, dynamic>> pieSectionConfig = {
+  "": {
+    "color": Colors.grey,
+    "title": "Misc",
+  },
+  "fixed": {
+    "color": Colors.red,
+    "title": "Fixed",
+  },
+  "savings": {
+    "color": Colors.green,
+    "title": "Savings",
+  },
+  "fun": {
+    "color": Colors.blue,
+    "title": "Fun",
+  },
+};
