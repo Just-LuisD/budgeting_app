@@ -70,19 +70,15 @@ class DatabaseHelper {
       path,
       version: latestVersion,
       onCreate: (Database db, int version) async {
-        print("WE ARE RUNNING ON CREATE");
         for (int idx = 1; idx <= latestVersion; idx++) {
           for (String script in migrationScripts[idx]!) {
-            print("Running: \n$script");
             await db.execute(script);
           }
         }
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        print("WE ARE RUNNING ON UPGRADE");
         for (int idx = oldVersion + 1; idx <= latestVersion; idx++) {
           for (String script in migrationScripts[idx]!) {
-            print("Running: \n$script");
             await db.execute(script);
           }
         }
