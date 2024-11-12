@@ -26,6 +26,7 @@ class _CategoryFormState extends State<CategoryForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _limitController = TextEditingController();
+  String selectedTag = "";
 
   @override
   void initState() {
@@ -48,9 +49,14 @@ class _CategoryFormState extends State<CategoryForm> {
     Category newCategory;
 
     if (widget.category == null) {
-      newCategory = Category(name: name, spendingLimit: limit!);
+      newCategory =
+          Category(name: name, spendingLimit: limit!, tag: selectedTag);
     } else {
-      newCategory = widget.category!.copy(name: name, spendingLimit: limit!);
+      newCategory = widget.category!.copy(
+        name: name,
+        spendingLimit: limit!,
+        tag: selectedTag,
+      );
     }
 
     widget.onSubmit(newCategory);
@@ -130,6 +136,22 @@ class _CategoryFormState extends State<CategoryForm> {
                 }
                 return null;
               },
+            ),
+            DropdownMenu(
+              label: const Text("Tag"),
+              initialSelection: widget.category == null
+                  ? 0
+                  : validTags.indexOf(widget.category!.tag!),
+              onSelected: (value) {
+                setState(() {
+                  selectedTag = validTags[value ?? 0];
+                });
+              },
+              dropdownMenuEntries: validTags.map((tag) {
+                String label = tag == "" ? "none" : tag;
+                int value = validTags.indexOf(tag);
+                return DropdownMenuEntry(value: value, label: label);
+              }).toList(),
             ),
             const SizedBox(
               height: 16,
