@@ -35,6 +35,7 @@ class _CategoryFormState extends State<CategoryForm> {
       _nameController.text = widget.category!.name;
       _limitController.text = NumberFormat.simpleCurrency()
           .format(widget.category!.spendingLimit / 100);
+      selectedTag = widget.category!.tag!;
     }
   }
 
