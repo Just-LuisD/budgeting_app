@@ -60,24 +60,29 @@ class CategoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${category.name}: ${NumberFormat.simpleCurrency().format(category.spendingLimit / 100)}",
-              style: const TextStyle(
-                fontSize: 18,
+      child: Container(
+        alignment: const Alignment(0, 0),
+        child: Badge(
+          label: Text(category.tag!),
+          offset: const Offset(-18, 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${category.name}: ${NumberFormat.simpleCurrency().format(category.spendingLimit / 100)}",
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            ),
-            ProgressBar(
-              minVal: 0,
-              maxVal: category.spendingLimit,
-              value: categoryTotal,
-              height: 12,
-              color: Colors.red,
-            ),
-          ],
+              ProgressBar(
+                minVal: 0,
+                maxVal: category.spendingLimit,
+                value: categoryTotal,
+                height: 12,
+                color: Colors.red,
+              ),
+            ],
+          ),
         ),
       ),
       onTap: () {
