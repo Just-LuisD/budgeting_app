@@ -30,7 +30,8 @@ class MetricsSection extends StatelessWidget {
                 sections: tagTotals.keys.map((tag) {
                   // TODO: make rounded percentages add up to 100%
                   int percentage =
-                      (100 * tagTotals[tag]! / state.budget!.income).round();
+                      (100 * tagTotals[tag]! / state.getEffectiveIncome())
+                          .round();
                   return PieChartSectionData(
                     value: tagTotals[tag]!.toDouble(),
                     title: "${pieSectionConfig[tag]!["title"]}: $percentage%",

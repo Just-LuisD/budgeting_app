@@ -61,7 +61,7 @@ class _TransactionSectionState extends State<TransactionSection> {
           children: [
             TransactionList(
               expenseList: state.expenses,
-              incomeList: state.income,
+              incomeList: state.incomeList,
               deleteExpense: _deleteExpense,
               updateExpense: _updateExpense,
               deleteIncome: _deleteIncome,

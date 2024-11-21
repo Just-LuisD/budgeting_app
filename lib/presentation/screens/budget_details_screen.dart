@@ -42,14 +42,14 @@ class BudgetDetailsView extends StatelessWidget {
           .add(UpdateBudgetEvent(updatedBudget: b));
     }
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
-          buildWhen: (previous, current) => previous.budget != current.budget,
-          builder: (context, state) {
-            if (state.status == BudgetDetailsStatus.success) {
-              return AppBar(
+    return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
+      buildWhen: (previous, current) => previous.budget != current.budget,
+      builder: (context, state) {
+        if (state.status == BudgetDetailsStatus.success) {
+          return Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: AppBar(
                 title: Text(
                   state.budget!.name,
                 ),
@@ -70,21 +70,22 @@ class BudgetDetailsView extends StatelessWidget {
                     icon: const Icon(Icons.edit),
                   ),
                 ],
-              );
-            }
-            return Container();
-          },
-        ),
-      ),
-      body: const Column(
-        children: [
-          IncomeProgressBar(),
-          SizedBox(height: 10),
-          Expanded(
-            child: BudgetDetailsContent(),
-          ),
-        ],
-      ),
+              ),
+            ),
+            body: const Column(
+              children: [
+                IncomeProgressBar(),
+                SizedBox(height: 10),
+                Expanded(
+                  child: BudgetDetailsContent(),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 }

@@ -10,7 +10,7 @@ final class BudgetDetailsState extends Equatable {
   final BudgetDetailsStatus status;
   final Budget? budget;
   final List<Category> categories;
-  final List<Income> income;
+  final List<Income> incomeList;
   final List<Expense> expenses;
   final int totalSpent;
 
@@ -18,10 +18,24 @@ final class BudgetDetailsState extends Equatable {
     this.budget,
     this.status = BudgetDetailsStatus.initial,
     this.categories = const [],
-    this.income = const [],
+    this.incomeList = const [],
     this.expenses = const [],
     this.totalSpent = 0,
   });
+
+  int getEffectiveIncome() {
+    int totalIncome = getTotalIncome();
+    return totalIncome > budget!.income ? totalIncome : budget!.income;
+  }
+
+  int getTotalIncome() {
+    int totalIncome = 0;
+    for (Income income in incomeList) {
+      totalIncome += income.amount;
+    }
+
+    return totalIncome;
+  }
 
   BudgetDetailsState copyWith({
     BudgetDetailsStatus Function()? status,
@@ -35,7 +49,7 @@ final class BudgetDetailsState extends Equatable {
       status: status != null ? status() : this.status,
       budget: budget != null ? budget() : this.budget,
       categories: categories != null ? categories() : this.categories,
-      income: income != null ? income() : this.income,
+      incomeList: income != null ? income() : this.incomeList,
       expenses: expenses != null ? expenses() : this.expenses,
       totalSpent: totalSpent != null ? totalSpent() : this.totalSpent,
     );
@@ -46,7 +60,7 @@ final class BudgetDetailsState extends Equatable {
         status,
         budget,
         categories,
-        income,
+        incomeList,
         expenses,
         totalSpent,
       ];

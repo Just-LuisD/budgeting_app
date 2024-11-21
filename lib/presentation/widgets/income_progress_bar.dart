@@ -18,7 +18,7 @@ class _IncomeProgressBarState extends State<IncomeProgressBar> {
   Widget build(BuildContext context) {
     return BlocBuilder<BudgetDetailsBloc, BudgetDetailsState>(
       buildWhen: (previous, current) =>
-          previous.income != current.income ||
+          previous.incomeList != current.incomeList ||
           previous.budget?.income != current.budget?.income ||
           previous.status != current.status ||
           previous.totalSpent != current.totalSpent,
@@ -36,7 +36,7 @@ class _IncomeProgressBarState extends State<IncomeProgressBar> {
               ),
               ProgressBar(
                 minVal: 0,
-                maxVal: state.budget!.income,
+                maxVal: state.getEffectiveIncome(),
                 value: state.totalSpent,
                 height: 15,
                 color: Colors.green,

@@ -78,7 +78,7 @@ class _CategorySectionState extends State<CategorySection> {
           previous.categories != current.categories ||
           previous.budget?.income != current.budget?.income,
       builder: (context, state) {
-        int remainder = state.budget!.income;
+        int remainder = state.getEffectiveIncome();
         for (Category category in state.categories) {
           remainder -= category.spendingLimit;
         }
