@@ -33,10 +33,24 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> items = [];
     if (incomeList.isNotEmpty || expenseList.isNotEmpty) {
+      var pendingExpenses = expenseList.where((expense) => expense.isPending);
+
+      for (Expense expense in pendingExpenses) {
+        items.add(
+          ExpenseItem(
+            expense: expense,
+            onDelete: deleteExpense,
+            onUpdate: updateExpense,
+            categories: categories,
+          ),
+        );
+      }
+
       var sortedIncome = incomeList.toList()
         ..sort(
             (a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
-      var sortedExpenses = expenseList.toList()
+      // only sort non-pending expenses
+      var sortedExpenses = expenseList.where((e) => !e.isPending).toList()
         ..sort(
             (a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
       while (sortedIncome.isNotEmpty && sortedExpenses.isNotEmpty) {
@@ -88,7 +102,7 @@ class TransactionList extends StatelessWidget {
         ];
       }
     }
-
+    assert(items.length == incomeList.length + expenseList.length);
     return items.isEmpty
         ? const Center(child: Text("No Transactions Found"))
         : ListView.builder(
@@ -168,7 +182,7 @@ class ExpenseItem extends StatelessWidget {
         categories.firstWhere((e) => e.id! == expense.categoryId).name;
 
     return ListTile(
-      title: Text(expense.title),
+      title: Text("${expense.title}${expense.isPending ? " (pending)" : ""}"),
       subtitle: Text(
         "$categoryName\n${dateFormatter.format(DateTime.parse(expense.date))}",
       ),
