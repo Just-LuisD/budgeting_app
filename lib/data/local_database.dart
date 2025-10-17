@@ -46,6 +46,9 @@ Map<int, List<String>> migrationScripts = {
   2: [
     "ALTER TABLE Categories ADD tag TEXT",
   ],
+  3: [
+    "ALTER TABLE Expenses ADD is_pending INTEGER DEFAULT 0",
+  ],
 };
 
 class DatabaseHelper {

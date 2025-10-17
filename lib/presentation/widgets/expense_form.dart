@@ -1,6 +1,7 @@
 import 'package:budgeting_app/domain/entities/category.dart';
 import 'package:budgeting_app/domain/entities/expense.dart';
 import 'package:budgeting_app/currency_input_formatter.dart';
+import 'package:budgeting_app/presentation/widgets/pending_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +31,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
   final _amountController = TextEditingController();
   var _expenseDate = DateTime.now();
   final _notesController = TextEditingController();
+  bool _isPending = false;
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
           NumberFormat.simpleCurrency().format(widget.expense!.amount / 100);
       _expenseDate = DateTime.parse(widget.expense!.date);
       _notesController.text = widget.expense!.notes ?? "";
+      _isPending = widget.expense!.isPending;
     }
   }
 
@@ -61,6 +64,12 @@ class _ExpenseFormState extends State<ExpenseForm> {
     }
   }
 
+  void _onPendingChange(bool newValue) {
+    setState(() {
+      _isPending = newValue;
+    });
+  }
+
   void _submitForm(BuildContext context) async {
     if (!_formKey.currentState!.validate() || _selectedCategory == null) {
       return;
@@ -79,6 +88,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
         amount: amount!,
         date: _expenseDate.toString(),
         notes: notes,
+        isPending: _isPending,
       );
     } else {
       newExpense = widget.expense!.copy(
@@ -87,6 +97,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
         amount: amount,
         date: _expenseDate.toString(),
         notes: notes,
+        isPending: _isPending,
       );
     }
 
@@ -113,6 +124,10 @@ class _ExpenseFormState extends State<ExpenseForm> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
+                  PendingSwitch(
+                    isPending: _isPending,
+                    onChange: _onPendingChange,
                   ),
                   if (widget.onDelete != null && widget.expense != null)
                     IconButton(

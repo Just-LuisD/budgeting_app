@@ -6,6 +6,7 @@ class Expense {
   final int amount;
   final String date;
   final String? notes;
+  final bool isPending;
 
   Expense({
     this.id,
@@ -15,6 +16,7 @@ class Expense {
     required this.amount,
     required this.date,
     this.notes,
+    required this.isPending,
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +28,7 @@ class Expense {
       'amount': amount,
       'date': date,
       'notes': notes,
+      'is_pending': isPending ? 1 : 0,
     };
   }
 
@@ -38,6 +41,7 @@ class Expense {
       amount: map['amount'],
       date: map['date'],
       notes: map['notes'],
+      isPending: map['is_pending'] == 1,
     );
   }
 
@@ -49,6 +53,7 @@ class Expense {
     int? amount,
     String? date,
     String? notes,
+    bool? isPending,
   }) {
     return Expense(
       id: id ?? this.id,
@@ -58,6 +63,7 @@ class Expense {
       amount: amount ?? this.amount,
       date: date ?? this.date,
       notes: notes ?? this.notes,
+      isPending: isPending ?? this.isPending,
     );
   }
 }
